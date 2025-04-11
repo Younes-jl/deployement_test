@@ -15,17 +15,24 @@
     <title>Boostrap Login | Ludiflex</title>
   </head>
   <body>
-
     <!-- MESSAGES ALERT -->
     {% if messages %}
-      <div class="container position-absolute top-0 start-50 translate-middle-x mt-4" style="z-index: 1000;">
-        {% for message in messages %}
-          <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        {% endfor %}
+    <div
+      class="container position-absolute top-0 start-50 translate-middle-x mt-4"
+      style="z-index: 1000"
+    >
+      {% for message in messages %}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
       </div>
+      {% endfor %}
+    </div>
     {% endif %}
 
     <!----------------------- Main Container -------------------------->
@@ -34,7 +41,6 @@
     >
       <!----------------------- Login Container -------------------------->
       <div class="row border rounded-5 p-3 bg-white shadow box-area">
-
         <!--------------------------- Left Box ----------------------------->
         <div
           class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box"
@@ -50,7 +56,10 @@
           </div>
           <p
             class="text-white fs-2"
-            style="font-family: 'Courier New', Courier, monospace; font-weight: 600;"
+            style="
+              font-family: 'Courier New', Courier, monospace;
+              font-weight: 600;
+            "
           >
             Log In
           </p>
@@ -79,8 +88,15 @@
               </div>
               <div class="input-group mb-5 d-flex justify-content-between">
                 <div class="form-check">
-                  <input type="checkbox" class="form-check-input" id="formCheck" />
-                  <label for="formCheck" class="form-check-label text-secondary">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="formCheck"
+                  />
+                  <label
+                    for="formCheck"
+                    class="form-check-label text-secondary"
+                  >
                     <small>Remember Me</small>
                   </label>
                 </div>
@@ -104,7 +120,10 @@
               </button>
             </div>
             <div class="row">
-              <small>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></small>
+              <small
+                >Don't have an account?
+                <a href="{% url 'signup' %}">Sign Up</a></small
+              >
             </div>
           </div>
         </div>
@@ -114,8 +133,8 @@
     <!-- Bootstrap JS (for alert dismissal) -->
     <script>
       // Fermer automatiquement les alertes après 5 secondes (5000 ms)
-      setTimeout(function() {
-        var alertNode = document.querySelector('.alert');
+      setTimeout(function () {
+        var alertNode = document.querySelector(".alert");
         if (alertNode) {
           // Utilise la classe Bootstrap pour une fermeture en douceur
           var alert = new bootstrap.Alert(alertNode);
@@ -124,5 +143,5 @@
       }, 5000);
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    
+  </body>
+</html>
