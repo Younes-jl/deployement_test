@@ -1,3 +1,4 @@
+from pyexpat.errors import messages
 from django.shortcuts import render,HttpResponse
 from .models import evenement
 from django.shortcuts import render, redirect
@@ -15,12 +16,7 @@ def main_page(request):
 def home(request):
     return render(request,"home.html")
 
-from django.contrib import messages
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import AuthenticationForm
-from django.shortcuts import render, redirect
-from django.urls import reverse
-from django.http import HttpResponse
+
 
 def user_login(request):
     if request.method == 'POST':
@@ -38,14 +34,18 @@ def user_login(request):
                 else:
                     login(request, user)
                     return redirect('home')
-            else:
-                messages.error(request, "Nom d'utilisateur ou mot de passe incorrect.")
-        else:
-            messages.error(request, "Formulaire invalide. Veuillez réessayer.")
+        
+        # Afficher l'erreur ici directement, peu importe la raison
+        messages.error(request, "Nom d'utilisateur ou mot de passe incorrect.")
+        
     else:
         form = AuthenticationForm()
 
     return render(request, 'login.html', {'form': form})
+
+
+
+from django.contrib import messages
 
 
 
@@ -55,6 +55,7 @@ def signup(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if not form.is_valid():
+            # Si le formulaire est invalide, renvoyer les erreurs sous chaque champ
             return render(request, 'signup.html', {'form': form})
 
         user = form.save()
@@ -63,9 +64,11 @@ def signup(request):
         user = authenticate(request, username=username, password=password)
 
         if user is None:
-            return HttpResponse("Erreur d'authentification")
+            # Si l'utilisateur ne peut pas être authentifié, renvoyer sans message d'erreur
+            return render(request, 'signup.html', {'form': form})
 
         login(request, user)
+        
         return redirect('home')
     else:
         form = CustomUserCreationForm()
