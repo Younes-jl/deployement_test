@@ -7,6 +7,8 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse
 from .models import CustomUserCreationForm  # Importez le formulaire personnalisé
+from django.contrib import messages
+from django.contrib.auth import login, authenticate
 
 # Create your views here.
 
@@ -45,7 +47,6 @@ def user_login(request):
 
 
 
-from django.contrib import messages
 
 
 

@@ -30,21 +30,18 @@ class evenement(models.Model):
     lieu = models.CharField(max_length=200)
     categorie = models.CharField(max_length=200)
 
-class billet(models.Model):
-    id = models.AutoField(primary_key=True)
-    nom = models.CharField(max_length=200)
-    prenom = models.CharField(max_length=200)
+# class billet(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     nom = models.CharField(max_length=200)
+#     prenom = models.CharField(max_length=200)
 
-class compte(models.Model):
-     id = models.AutoField(primary_key=True)
-     email = models.EmailField(max_length=200, unique=True)
-     mot_de_passe = models.CharField(max_length=200)
-     username = models.CharField(max_length=200, unique=True)   
+# class compte(models.Model):
+#      id = models.AutoField(primary_key=True)
+#      email = models.EmailField(max_length=200, unique=True)
+#      mot_de_passe = models.CharField(max_length=200)
+#      username = models.CharField(max_length=200, unique=True)   
 
 class admin(personne):
-      pass
-
-class organisateur(personne):
       pass
 
 
