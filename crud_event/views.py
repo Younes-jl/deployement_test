@@ -12,6 +12,9 @@ from django.contrib.auth import login, authenticate
 
 # Create your views here.
 
+def home(request):
+    return render(request,"home.html")
+
 def creer_organisateur(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
