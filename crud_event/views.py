@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse
-from .models import CustomUserCreationForm  # Importez le formulaire personnalisé
+from .models import CustomUserCreationForm,evenement,EvenementForm  # Importez le formulaire personnalisé
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
 
@@ -15,20 +15,19 @@ from django.contrib.auth import login, authenticate
 def home(request):
     return render(request,"home.html")
 
-def creer_organisateur(request):
+def creer_evenement(request):
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+        form = EvenementForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('organisateur')  # à adapter selon ton URL de redirection
+            return redirect('home')  # à adapter selon ton URL de redirection
         
         else:
             messages.error(request, "Donnes invalide")
     else:
-         form = CustomUserCreationForm()        
+         form = EvenementForm()
    
-    
-    return render(request, 'organisateur.html', {'form': form})
+    return render(request, 'creerEvent.html', {'form': form})
 
 
 def signin(request):
@@ -51,7 +50,7 @@ def signin(request):
     else:
              form = AuthenticationForm()
 
-    return render(request, 'creerEvent.html', {'form': form})
+    return render(request, 'home.html', {'form': form})
         
 
 

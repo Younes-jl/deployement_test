@@ -2,6 +2,7 @@ from django.db import models
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 import os
+
 # Create your models here.
 
 def file_path(instance, filename):
@@ -16,9 +17,9 @@ class personne(models.Model):
     prenom = models.CharField(max_length=200)
     num_tel = models.IntegerField() 
 
-class organisateur(personne):
-    email = models.EmailField(max_length=200, unique=True)
-    description = models.TextField()
+# class organisateur(personne):
+#     email = models.EmailField(max_length=200, unique=True)
+#     description = models.TextField()
 
 
 class evenement(models.Model):
@@ -38,3 +39,11 @@ def save(self, commit=True):
         if commit:
             user.save()
         return user
+
+class EvenementForm(forms.ModelForm):
+    class Meta:
+        model = evenement
+        fields = '__all__'
+        widgets = {
+            'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }
