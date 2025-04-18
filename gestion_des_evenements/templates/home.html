@@ -165,83 +165,31 @@
             Discover our exciting lineup of events and workshops
           </p>
         </div>
-
-        <div class="row">
-          <!-- Event 1 -->
+        <div class="row" id="event">
+          {% for event in evenements %}
           <div class="col-md-4">
-            <!-- <div class="card event-card h-100">
-              <img
-                src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-                class="card-img-top event-img"
-                alt="Event 1"
-              />
+            <div class="card event-card h-100">
+              {% if event.image %}
+              <img src="{{ event.image.url }}" class="card-img-top event-img" alt="{{ event.nom_event }}" />
+              {% endif %}
               <div class="card-body">
-                <h5 class="card-title">Marketing Strategies 2025</h5>
+                <h5 class="card-title">{{ event.nom_event }}</h5>
                 <p class="card-text">
-                  Learn the latest marketing trends and strategies to grow your
-                  business in the coming year.
+                  <strong>Date:</strong> {{ event.date }}<br>
+                  <strong>Lieu:</strong> {{ event.lieu }}<br>
+                  <strong>Catégorie:</strong> {{ event.categorie }}
                 </p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span class="badge bg-primary">Dec 10, 9:00 AM</span>
-                  <span class="text-muted">$199</span>
-                </div>
               </div>
               <div class="card-footer bg-white">
                 <a href="#" class="btn btn-outline-primary w-100">Register</a>
               </div>
-            </div> -->
+            </div>
           </div>
-
-          <!-- Event 2 -->
-          <!-- <div class="col-md-4">
-            <div class="card event-card h-100">
-              <img
-                src="https://images.unsplash.com/photo-1527525443983-6e60c75fff46?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1405&q=80"
-                class="card-img-top event-img"
-                alt="Event 2"
-              />
-              <div class="card-body">
-                <h5 class="card-title">Digital Transformation</h5>
-                <p class="card-text">
-                  Explore how digital transformation is reshaping industries and
-                  how to adapt your business.
-                </p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span class="badge bg-primary">Dec 11, 10:30 AM</span>
-                  <span class="text-muted">$249</span>
-                </div>
-              </div>
-              <div class="card-footer bg-white">
-                <a href="#" class="btn btn-outline-primary w-100">Register</a>
-              </div>
-            </div>
-          </div> -->
-
-          <!-- Event 3 -->
-          <!-- <div class="col-md-4">
-            <div class="card event-card h-100">
-              <img
-                src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-                class="card-img-top event-img"
-                alt="Event 3"
-              />
-              <div class="card-body">
-                <h5 class="card-title">Data-Driven Marketing</h5>
-                <p class="card-text">
-                  Learn how to leverage data analytics to optimize your
-                  marketing campaigns and ROI.
-                </p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span class="badge bg-primary">Dec 12, 1:00 PM</span>
-                  <span class="text-muted">$179</span>
-                </div>
-              </div>
-              <div class="card-footer bg-white">
-                <a href="#" class="btn btn-outline-primary w-100">Register</a>
-              </div>
-            </div>
-          </div> -->
+          {% empty %}
+          <p class="text-center">Aucun événement trouvé.</p>
+          {% endfor %}
         </div>
+        
       </div>
     </section>
 
@@ -406,12 +354,11 @@
       </div>
     </footer>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-      // Smooth scrolling for anchor links
-      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+
+   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
         anchor.addEventListener("click", function (e) {
           e.preventDefault();
 

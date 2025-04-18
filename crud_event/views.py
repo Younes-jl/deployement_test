@@ -13,11 +13,12 @@ from django.contrib.auth import login, authenticate
 # Create your views here.
 
 def home(request):
-    return render(request,"home.html")
+    evenements = evenement.objects.all()  # Fetch all events from the database
+    return render(request, 'home.html', {'evenements': evenements})
 
 def creer_evenement(request):
     if request.method == 'POST':
-        form = EvenementForm(request.POST)
+        form = EvenementForm(request.POST, request.FILES)  
         if form.is_valid():
             form.save()
             return redirect('home')  # à adapter selon ton URL de redirection
@@ -52,7 +53,9 @@ def signin(request):
 
     return render(request, 'home.html', {'form': form})
         
-
+def liste_evenements(request):
+    evenements = evenement.objects.all()
+    return render(request, 'home.html', {'evenements': evenements})
 
 
     

@@ -1,6 +1,9 @@
 from django.urls import path
 from . import views
 from django.urls import include
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('', views.main_page, name='index'),
     path('home/', views.home, name='home'),
@@ -12,3 +15,5 @@ urlpatterns = [
    # path('todos/<int:todo_id>/', views.todo_detail, name='todo_detail'),
 ]
 
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
