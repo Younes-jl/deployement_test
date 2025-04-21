@@ -1,6 +1,6 @@
 from pyexpat.errors import messages
 from django.shortcuts import render,HttpResponse
-from .models import evenement
+# from .models import evenement
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
@@ -9,6 +9,8 @@ from django.urls import reverse
 from .models import CustomUserCreationForm  # Importez le formulaire personnalisé
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
+from django.contrib.auth import logout as django_logout
+from django.shortcuts import redirect, render
 
 # Create your views here.
 
@@ -81,8 +83,6 @@ def signup(request):
 
 
 
-from django.contrib.auth import logout as django_logout
-from django.shortcuts import redirect, render
 
 def logout_view(request):
     if request.method == 'POST':
@@ -99,6 +99,6 @@ def logout_view(request):
 
 
 
-def todos(request):
-    items = evenement.objects.all()
-    return render(request,"Todo.html",{"todos":items})
+# def todos(request):
+#     items = evenement.objects.all()
+#     return render(request,"Todo.html",{"todos":items})

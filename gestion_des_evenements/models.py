@@ -13,22 +13,22 @@ def file_path(instance, filename):
     return os.path.join('uploads', filename)
 
 
-class personne(models.Model):
-    id = models.AutoField(primary_key=True)
-    nom = models.CharField(max_length=200)
-    prenom = models.CharField(max_length=200)
-    num_tel = models.IntegerField() 
+# class personne(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     nom = models.CharField(max_length=200)
+#     prenom = models.CharField(max_length=200)
+#     num_tel = models.IntegerField() 
 
-class utilisateur(personne):
-      pass
+# class utilisateur(personne):
+#       pass
 
-class evenement(models.Model):
-    id = models.AutoField(primary_key=True)
-    nom = models.CharField(max_length=200)
-    image = models.ImageField(upload_to=file_path, blank=True, null=True)
-    date = models.DateTimeField()
-    lieu = models.CharField(max_length=200)
-    categorie = models.CharField(max_length=200)
+# class evenement(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     nom = models.CharField(max_length=200)
+#     image = models.ImageField(upload_to=file_path, blank=True, null=True)
+#     date = models.DateTimeField()
+#     lieu = models.CharField(max_length=200)
+#     categorie = models.CharField(max_length=200)
 
 # class billet(models.Model):
 #     id = models.AutoField(primary_key=True)
@@ -41,8 +41,8 @@ class evenement(models.Model):
 #      mot_de_passe = models.CharField(max_length=200)
 #      username = models.CharField(max_length=200, unique=True)   
 
-class admin(personne):
-      pass
+# class admin(personne):
+#       pass
 
 
 class CustomUserCreationForm(UserCreationForm):

@@ -12,11 +12,11 @@ def file_path(instance, filename):
     filename = f"{timenow}_{filename}"
     return os.path.join('uploads', filename)
 
-class personne(models.Model):
-    id = models.AutoField(primary_key=True)
-    nom = models.CharField(max_length=200)
-    prenom = models.CharField(max_length=200)
-    num_tel = models.IntegerField() 
+# class personne(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     nom = models.CharField(max_length=200)
+#     prenom = models.CharField(max_length=200)
+#     num_tel = models.IntegerField() 
 
 # class organisateur(personne):
 #     email = models.EmailField(max_length=200, unique=True)

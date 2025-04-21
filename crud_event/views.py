@@ -31,27 +31,27 @@ def creer_evenement(request):
     return render(request, 'creerEvent.html', {'form': form})
 
 
-def signin(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
+# def signin(request):
+#     if request.method == 'POST':
+#         form = AuthenticationForm(request, data=request.POST)
         
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
+#         if form.is_valid():
+#             username = form.cleaned_data['username']
+#             password = form.cleaned_data['password']
 
-            user = authenticate(request, username=username, password=password)
+#             user = authenticate(request, username=username, password=password)
 
-            if user is not None:
-                    login(request, user)
-                    return redirect('creerEvent')
+#             if user is not None:
+#                     login(request, user)
+#                     return redirect('creerEvent')
         
-        # Afficher l'erreur ici directement, peu importe la raison
-        messages.error(request, "Nom d'utilisateur ou mot de passe incorrect.")
+#         # Afficher l'erreur ici directement, peu importe la raison
+#         messages.error(request, "Nom d'utilisateur ou mot de passe incorrect.")
         
-    else:
-             form = AuthenticationForm()
+#     else:
+#              form = AuthenticationForm()
 
-    return render(request, 'home.html', {'form': form})
+#     return render(request, 'home.html', {'form': form})
         
 def liste_evenements(request):
     evenements = evenement.objects.all()
