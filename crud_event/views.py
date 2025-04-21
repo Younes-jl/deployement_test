@@ -9,6 +9,7 @@ from django.urls import reverse
 from .models import CustomUserCreationForm,evenement,EvenementForm  # Importez le formulaire personnalisé
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
@@ -58,4 +59,12 @@ def liste_evenements(request):
     return render(request, 'home.html', {'evenements': evenements})
 
 
+
+def register_event(request, event_id):
+    event = get_object_or_404(evenement, id=event_id)
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        # Handle registration logic here (e.g., save to database, send email, etc.)
+    return render(request, 'register.html', {'event': event})
     

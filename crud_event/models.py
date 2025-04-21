@@ -30,6 +30,7 @@ class evenement(models.Model):
     date = models.DateTimeField()
     lieu = models.CharField(max_length=200)
     categorie = models.CharField(max_length=200)
+    description = models.TextField(max_length=2000 , blank=True, null=True)
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True, label="Adresse email")
