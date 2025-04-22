@@ -39,10 +39,11 @@ class participation(models.Model):
       date_inscription = models.DateTimeField(auto_now_add=True)
       phone_num=models.CharField(max_length=200, blank=True, null=True)
       name_event=models.CharField(max_length=200, blank=True, null=True)
+      participant=models.CharField(max_length=200, blank=True, null=True)
       
 
       def __str__(self):
-        return f"{self.name.first_name} participe à {self.event_id.id}"
+        return f"{self.name.username} participe à l'evenement de  {self.event_id.nom_event}"
 
 class ParticipationForm(forms.ModelForm):
     class Meta:
