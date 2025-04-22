@@ -10,6 +10,9 @@ from .models import CustomUserCreationForm,evenement,EvenementForm  # Importez l
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.shortcuts import get_object_or_404
+from .models import participation
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 
@@ -59,12 +62,27 @@ def liste_evenements(request):
     return render(request, 'home.html', {'evenements': evenements})
 
 
-
+@login_required
 def register_event(request, event_id):
     event = get_object_or_404(evenement, id=event_id)
     if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
+        name = request.user  # Assuming the user is logged in
+        phone_num = request.POST.get('phone_num')
+        nom_event = event.nom_event,
+       
+        # name = request.POST.get('name')
+        # email = request.POST.get('email')
+
+        participation_instance = participation.objects.create(
+            name=name,
+            event_id=event,
+            name_event = nom_event,
+            phone_num=phone_num
+        )
+        participation_instance.save()
+        messages.success(request, "Inscription réussie à l'événement.")
+        return redirect('home')
+    
         # Handle registration logic here (e.g., save to database, send email, etc.)
     return render(request, 'register.html', {'event': event})
     

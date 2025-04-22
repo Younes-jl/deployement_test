@@ -80,10 +80,6 @@ def signup(request):
 
     return render(request, 'signup.html', {'form': form})
 
-
-
-
-
 def logout_view(request):
     if request.method == 'POST':
         django_logout(request)

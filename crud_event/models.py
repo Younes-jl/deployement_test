@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 import os
 import datetime
-
+from django.contrib.auth.models import User
 # Create your models here.
 
 def file_path(instance, filename):
@@ -31,6 +31,26 @@ class evenement(models.Model):
     lieu = models.CharField(max_length=200)
     categorie = models.CharField(max_length=200)
     description = models.TextField(max_length=2000 , blank=True, null=True)
+
+
+class participation(models.Model):
+      name=models.ForeignKey(User,on_delete=models.CASCADE)
+      event_id=models.ForeignKey(evenement, on_delete=models.CASCADE)
+      date_inscription = models.DateTimeField(auto_now_add=True)
+      phone_num=models.CharField(max_length=200, blank=True, null=True)
+      name_event=models.CharField(max_length=200, blank=True, null=True)
+      
+
+      def __str__(self):
+        return f"{self.name.first_name} participe à {self.event_id.id}"
+
+class ParticipationForm(forms.ModelForm):
+    class Meta:
+        model = participation
+        fields = ['phone_num']
+        widgets = {
+            'phone_num': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Votre numéro de téléphone'})
+        }
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True, label="Adresse email")
