@@ -15,23 +15,27 @@ from .models import participation
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 
-
 # Create your views here.
 
 
 
 def creer_evenement(request):
     if request.method == 'POST':
-        form = EvenementForm(request.POST, request.FILES)  
+        form = EvenementForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('home')  # à adapter selon ton URL de redirection
-        
+            event = form.save(commit=False)  
+            event.organisateur = request.user
+
+            event.fullname = request.user.username
+
+            event.save()  # Save the event to the database
+            return redirect('home')  # Redirect to the home page after successful creation
+
         else:
-            messages.error(request, "Donnes invalide")
+            messages.error(request, "Données invalides")  # Show error if form is invalid
     else:
-         form = EvenementForm()
-   
+        form = EvenementForm()
+
     return render(request, 'creerEvent.html', {'form': form})
 
 
