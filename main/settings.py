@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "gestion_des_evenements",
-    "crud_event"
+    "crud_event",
+    "dashboard",
 ]
 
 MIDDLEWARE = [

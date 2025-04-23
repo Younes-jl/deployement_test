@@ -17,8 +17,10 @@ from django.views.decorators.cache import never_cache
 
 # Create your views here.
 
+from django.contrib import messages
 
 
+@login_required
 def creer_evenement(request):
     if request.method == 'POST':
         form = EvenementForm(request.POST, request.FILES)
@@ -33,10 +35,22 @@ def creer_evenement(request):
 
         else:
             messages.error(request, "Données invalides")  # Show error if form is invalid
+            evenement = form.save(commit=False)
+            evenement.organisateur = request.user # Affecter l'utilisateur connecté
+            evenement.organisateur_name = request.user.username 
+            evenement.save()
+            return redirect('home')
     else:
         form = EvenementForm()
 
     return render(request, 'creerEvent.html', {'form': form})
+
+
+
+
+
+
+
 
 
 # def signin(request):
@@ -77,12 +91,10 @@ def register_event(request, event_id):
     if request.method == 'POST':
         name = request.user  # Assuming the user is logged in
         phone_num = request.POST.get('phone_num')
-        nom_event = event.nom_event,
-       # nam = request.user.username
-       
+        nom_event = event.nom_event
         nam = request.POST.get('name')
           # Store the username of the logged-in user
-        participation_instance = participation.objects.create(name=name,event_id=event, name_event = nom_event, phone_num=phone_num,participant=nam )
+        participation_instance = participation.objects.create(participan=name,event=event, name_event = nom_event, phone_num=phone_num,participant=nam )
         participation_instance.save()
         messages.success(request, "Inscription réussie à l'événement.")
         return redirect('home')

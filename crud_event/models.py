@@ -31,14 +31,11 @@ class evenement(models.Model):
     lieu = models.CharField(max_length=200)
     categorie = models.CharField(max_length=200)
     description = models.TextField(max_length=2000 , blank=True, null=True)
-    organisateur = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
-    fullname = models.CharField(max_length=200, null=False , blank=True)
-    def __str__(self):
-        return f"{self.fullname} a crée évenement {self.nom_event}"
+
 
 class participation(models.Model):
-      name=models.ForeignKey(User,on_delete=models.CASCADE)
-      event_id=models.ForeignKey(evenement, on_delete=models.CASCADE)
+      participan=models.ForeignKey(User,on_delete=models.CASCADE)
+      event=models.ForeignKey(evenement, on_delete=models.CASCADE)
       date_inscription = models.DateTimeField(auto_now_add=True)
       phone_num=models.CharField(max_length=200, blank=True, null=True)
       name_event=models.CharField(max_length=200, blank=True, null=True)
@@ -47,7 +44,7 @@ class participation(models.Model):
       
 
       def __str__(self):
-        return f"{self.name.username} participe à l'evenement de  {self.event_id.nom_event}"
+        return f"{self.participan.username} participe à l'evenement de  {self.event.nom_event}"
 
 class ParticipationForm(forms.ModelForm):
     class Meta:
@@ -70,7 +67,6 @@ def save(self, commit=True):
 class EvenementForm(forms.ModelForm):
     class Meta:
         model = evenement
-        exclude = ['organisateur','fullname']  
         fields = '__all__'
         widgets = {
             'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
