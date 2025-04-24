@@ -1,0 +1,23 @@
+{% extends 'base.html' %} {% block content %}
+<h2>Événements</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nom</th>
+      <th>Date</th>
+      <th>Lieu</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for evenement in evenements %}
+    <tr>
+      <td>{{ evenement.id }}</td>
+      <td>{{ evenement.nom_event }}</td>
+      <td>{{ evenement.date }}</td>
+      <td>{{ evenement.lieu }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock content %}

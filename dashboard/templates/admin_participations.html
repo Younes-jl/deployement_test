@@ -1,0 +1,27 @@
+{% extends 'base.html' %} {% block content %}
+<h2>Participations</h2>
+<table class="table table-striped">
+  <head>
+    <tr>
+      <th>ID</th>
+      <th>Événement</th>
+      <th>Date de participation</th>
+    </tr>
+  </head>
+  <body>
+    {% for participation in participations %}
+    <tr>
+      <td>{{ participation.id }}</td>
+      <!-- Afficher le nom d'utilisateur -->
+      <td>{{ participation.event.nom_event }}</td>
+      <!-- Afficher le nom de l'événement -->
+      <td>{{ participation.date_inscription }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="4">Aucune participation trouvée.</td>
+    </tr>
+    {% endfor %}
+  </body>
+</table>
+{% endblock %}
