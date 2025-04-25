@@ -12,10 +12,10 @@ from django import forms
 
 @staff_member_required
 def mon_dashboard(request):
-
     nb_users = User.objects.count()
     nb_events = evenement.objects.count()
-    return render(request, 'dashboard.html',{'nb_users':nb_users,'nb_events':nb_events})
+    nb_participations = participation.objects.count()
+    return render(request,'dashboard.html',{'nb_users':nb_users,'nb_events':nb_events,'nb_participations':nb_participations})
 
 @staff_member_required
 def admin_events(request):
