@@ -5,8 +5,13 @@
     <tr>
       <th>ID</th>
       <th>Nom</th>
+      <th>Organisateur</th>
       <th>Date</th>
+      <th>Categorie</th>
       <th>Lieu</th>
+      <th>Actions</th>
+
+
     </tr>
   </thead>
   <tbody>
@@ -14,7 +19,9 @@
     <tr>
       <td>{{ evenement.id }}</td>
       <td>{{ evenement.nom_event }}</td>
+      <td>{{ evenement.organisateur_name}}</td>
       <td>{{ evenement.date }}</td>
+      <td>{{ evenement.categorie}}</td>
       <td>{{ evenement.lieu }}</td>
       <td>
         <a

@@ -8,6 +8,7 @@
     <tr>
       <th>ID</th>
       <th>Utilisateur</th>
+      <th>phone_number</th>
       <th>Événement</th>
       <th>Date de participation</th>
       <th>Actions</th>
@@ -17,8 +18,9 @@
     {% for participation in participations %}
     <tr>
       <td>{{ participation.id }}</td>
-      <td>{{ participation.participan.username }}</td>
-      <td>{{ participation.event.nom_event }}</td>
+      <td>{{ participation.participant }}</td>
+      <td>{{ participation.phone_num }}</td>
+      <td>{{ participation.name_event }}</td>
       <td>{{ participation.date_inscription }}</td>
       <td>
         <a href="{% url 'participation_update' participation.id %}" class="btn btn-warning btn-sm">Modifier</a>

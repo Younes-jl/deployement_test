@@ -8,6 +8,9 @@
       <th>ID</th>
       <th>Username</th>
       <th>Email</th>
+      <th>first_name</th>
+      <th>last_name</th>
+      <th>date_joined</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -17,8 +20,18 @@
       <td>{{ user.id }}</td>
       <td>{{ user.username }}</td>
       <td>{{ user.email }}</td>
+      <td>{{ user.first_name }}</td>
+      <td>{{ user.last_name }}</td>
+      <td>{{ user.date_joined }}</td>
+      <td>{{ user.is_staff }}</td>
+
       <td>
-        <a href="{% url 'user_delete' user.id %}" class="btn btn-danger btn-sm">Delete</a>
+        <a href="{% url 'supprimer_utilisateur' utilisateur.id %}" 
+           class="btn btn-sm btn-danger"
+           onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
+          Supprimer
+        </a>
+        
       </td>
     </tr>
     {% endfor %}
