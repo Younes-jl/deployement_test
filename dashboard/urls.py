@@ -5,9 +5,10 @@ from . import views
 from .views import (
    EventListView, EventCreateView, EventUpdateView, EventDeleteView,
     ParticipationListView, ParticipationDeleteView,
-    UserListView, UserUpdateView, SupprimerUtilisateurView,
+     UserUpdateView, SupprimerUtilisateurView,
     ParticipationCreateView, ParticipationUpdateView,AjouterUtilisateurView 
     ,ParticipationCreateView
+    # UserListView
 )
 
 
@@ -29,7 +30,7 @@ urlpatterns = [
     path('participations/delete/<int:pk>/', ParticipationDeleteView.as_view(), name='participation_delete'),
 
 # User URLs
-    path('users/', UserListView.as_view(), name='user_list'),
+    # path('users/', UserListView.as_view(), name='user_list'),
     path('users/supprimer/<int:pk>/', SupprimerUtilisateurView.as_view(), name='supprimer_utilisateur'),
     path('users/update/<int:pk>/', UserUpdateView.as_view(), name='modifier_utilisateur'),
     path('users/ajouter/', AjouterUtilisateurView.as_view(), name='ajouter_utilisateur'),

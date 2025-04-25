@@ -45,20 +45,20 @@ class EventCreateView(CreateView):
     fields = ['nom_event', 'image', 'date', 'lieu', 'categorie', 'description']
     template_name = 'event_form.html'
     success_url = reverse_lazy('event_list')
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        form.fields['date'].widget = forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
-        return form
+    # def get_form(self, form_class=None):
+    #     form = super().get_form(form_class)
+    #     form.fields['date'].widget = forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
+    #     return form   
 
 class EventUpdateView(UpdateView):
     model = evenement
     fields = ['nom_event', 'image', 'date', 'lieu', 'categorie', 'description']
     template_name = 'event_form.html'
     success_url = reverse_lazy('event_list')
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        form.fields['date'].widget = forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
-        return form
+    # def get_form(self, form_class=None):
+    #     form = super().get_form(form_class)
+    #     form.fields['date'].widget = forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
+    #     return form
 
 class EventDeleteView(DeleteView):
     model = evenement
@@ -67,10 +67,10 @@ class EventDeleteView(DeleteView):
 
 
 # CRUD for Users
-class UserListView(ListView):
-    model = User
-    template_name = 'user_list.html'
-    context_object_name = 'users'
+# class UserListView(ListView):
+#     model = User
+#     template_name = 'user_list.html'
+#     context_object_name = 'users'
 
 class UserUpdateView(UpdateView):
     model = User
