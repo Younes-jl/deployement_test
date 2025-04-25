@@ -3,7 +3,10 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 import os
 import datetime
+from django.utils import timezone
 from django.contrib.auth.models import User
+from django import forms
+
 # Create your models here.
 
 def file_path(instance, filename):
@@ -36,7 +39,7 @@ class evenement(models.Model):
 class participation(models.Model):
       participan=models.ForeignKey(User,on_delete=models.CASCADE)
       event=models.ForeignKey(evenement, on_delete=models.CASCADE)
-      date_inscription = models.DateTimeField(auto_now_add=True)
+      date_inscription = models.DateTimeField(default=timezone.now)
       phone_num=models.CharField(max_length=200, blank=True, null=True)
       name_event=models.CharField(max_length=200, blank=True, null=True)
       participant=models.CharField(max_length=200, blank=True, null=True)
@@ -47,12 +50,17 @@ class participation(models.Model):
         return f"{self.participan.username} participe à l'evenement de  {self.event.nom_event}"
 
 class ParticipationForm(forms.ModelForm):
+    email = forms.EmailField(required=True)  # Add email field
+    
     class Meta:
         model = participation
-        fields = ['phone_num']
+        fields = ['event', 'participan', 'date_inscription', 'phone_num', 'name_event']
         widgets = {
-            'phone_num': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Votre numéro de téléphone'})
+            'date_inscription': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'}),
+            'event': forms.Select(attrs={'class': 'form-control'}),
+            'participan': forms.Select(attrs={'class': 'form-control'}),
         }
+
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True, label="Adresse email")

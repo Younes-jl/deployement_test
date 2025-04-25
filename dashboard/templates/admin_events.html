@@ -16,6 +16,18 @@
       <td>{{ evenement.nom_event }}</td>
       <td>{{ evenement.date }}</td>
       <td>{{ evenement.lieu }}</td>
+      <td>
+        <a
+          href="{% url 'event_update' evenement.id %}"
+          class="btn btn-warning btn-sm"
+          >Edit</a
+        >
+        <a
+          href="{% url 'event_delete' evenement.id %}"
+          class="btn btn-danger btn-sm"
+          >Delete</a
+        >
+      </td>
     </tr>
     {% endfor %}
   </tbody>

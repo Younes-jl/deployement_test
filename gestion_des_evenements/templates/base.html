@@ -72,9 +72,9 @@
 
   <body>
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
-        <a class="navbar-brand fw-bold" href="#">EventPro</a>
+        <a class="navbar-brand" href="{% url 'home' %}">EventPro</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -86,7 +86,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link active" href="#home">Home</a>
+              <a class="nav-link" href="{% url 'home' %}">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#events">Events</a>
@@ -95,13 +95,62 @@
               <a class="nav-link" href="#sponsors">Sponsors</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'creerEvent' %}"
-                >Créer un événement</a
-              >
-            </li>
-            <li class="nav-item">
               <a class="nav-link" href="#contact">Contact</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'creerEvent' %}">create Event</a>
+            </li>
+            {% if user.is_authenticated %} {% if user.is_staff %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+            </li>
+            {% endif %} {% comment %}
+            <li class="nav-item">
+              <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-link nav-link">
+                  Logout
+                </button>
+              </form>
+            </li>
+            {% endcomment %} {% else %} {% comment %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'signup' %}">Register</a>
+            </li>
+            {% endcomment %} {% endif %} {% if user.is_authenticated %}
+            <div class="d-flex align-items-center ms-lg-3">
+              <!-- Avatar rond avec la première lettre du nom -->
+              <div
+                class="rounded-circle bg-primary text-white text-uppercase d-flex align-items-center justify-content-center me-2"
+                style="width: 35px; height: 35px; font-weight: bold"
+              >
+                {{ user.username|first }}
+              </div>
+
+              <!-- Bouton de déconnexion -->
+              <form
+                action="{% url 'logout' %}"
+                method="post"
+                style="display: inline"
+              >
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger btn-sm">
+                  <i class="fas fa-sign-out-alt me-1"></i> Logout
+                </button>
+              </form>
+            </div>
+            {% else %}
+            <!-- Si l'utilisateur n'est pas connecté, afficher Login/Register -->
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'signup' %}">Register</a>
+            </li>
+            {% endif %}
           </ul>
         </div>
       </div>
