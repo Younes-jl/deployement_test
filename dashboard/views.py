@@ -1,3 +1,5 @@
+
+from pyexpat.errors import messages
 from django.shortcuts import get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
@@ -134,3 +136,23 @@ class ParticipationDeleteView(DeleteView):
     model = participation
     template_name = 'participation_confirm_delete.html'
     success_url = reverse_lazy('participation_list')
+
+
+
+
+def evenements_en_attente(request):
+    # Récupérer tous les événements en attente de validation (supposons que tu as un champ 'valide' qui définit si l'événement est validé ou non)
+    evenements = evenement.objects.filter(is_validated=False) # Exemple, adapte en fonction de ton modèle
+    return render(request, 'validerEvenements.html', {'evenements': evenements})
+
+
+
+
+
+
+def valider_evenement(request, id):
+    if request.method == 'POST':
+        evt = get_object_or_404(evenement, id=id)
+        evt.is_validated = True
+        evt.save()
+    return redirect('evenements_en_attente')

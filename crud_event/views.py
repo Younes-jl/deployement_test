@@ -27,19 +27,14 @@ def creer_evenement(request):
         if form.is_valid():
             event = form.save(commit=False)  
             event.organisateur = request.user
-
             event.fullname = request.user.username
-
-            event.save()  # Save the event to the database
-            return redirect('home')  # Redirect to the home page after successful creation
+            event.is_validated = False  # L'événement n'est pas encore validé par l'admin
+            event.save()  # Sauvegarder l'événement dans la base de données
+            messages.success(request, "Votre événement a été créé avec succès, en attente de validation par l'administrateur.")
+            return redirect('creerEvent')  # Rediriger vers la page d'accueil après la création
 
         else:
-            messages.error(request, "Données invalides")  # Show error if form is invalid
-            evenement = form.save(commit=False)
-            evenement.organisateur = request.user # Affecter l'utilisateur connecté
-            evenement.organisateur_name = request.user.username 
-            evenement.save()
-            return redirect('home')
+            messages.error(request, "Données invalides")  # Afficher un message d'erreur si le formulaire est invalide
     else:
         form = EvenementForm()
 
@@ -76,7 +71,7 @@ def creer_evenement(request):
 #     return render(request, 'home.html', {'form': form})
 
 def home(request):
-    evenements = evenement.objects.all()
+    evenements = evenement.objects.filter(is_validated=True)
     return render(request, 'home.html', {'evenements': evenements})
 
 

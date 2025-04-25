@@ -34,5 +34,9 @@ urlpatterns = [
     path('users/update/<int:pk>/', UserUpdateView.as_view(), name='modifier_utilisateur'),
     path('users/ajouter/', AjouterUtilisateurView.as_view(), name='ajouter_utilisateur'),
 
+# Events validation
+
+    path('evenements-en-attente/', views.evenements_en_attente, name='evenements_en_attente'),
+    path('valider-evenement/<int:id>/', views.valider_evenement, name='valider_evenement'),  # URL pour la validation
 ]
 

@@ -36,6 +36,7 @@ class evenement(models.Model):
     description = models.TextField(max_length=2000 , blank=True, null=True)
     organisateur = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     organisateur_name = models.CharField(max_length=200, blank=True, null=True)
+    is_validated = models.BooleanField(default=False)
     def save(self, *args, **kwargs):
         if self.organisateur and not self.organisateur_name:
             self.organisateur_name = self.organisateur.username
@@ -79,7 +80,7 @@ def save(self, commit=True):
 class EvenementForm(forms.ModelForm):
     class Meta:
         model = evenement
-        exclude = ['organisateur', 'organisateur_name']
+        exclude = ['organisateur', 'organisateur_name', 'is_validated']
         widgets = {
             'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }

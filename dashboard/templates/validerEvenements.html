@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>Événements en attente de validation</h1>
+    
+    {% if evenements %}
+        <ul>
+            {% for evenement in evenements %}
+                <li>
+                    <strong>{{ evenement.nom_event }}</strong><br>
+                    ID : {{ evenement.id }}<br>
+                    Description : {{ evenement.description }}<br>
+                    Date : {{ evenement.date }}<br>
+                    Lieu : {{ evenement.lieu }}<br>
+                    {% if evenement.id %}
+                        <form method="POST" action="{% url 'valider_evenement' evenement.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Valider l'événement</button>
+                        </form>
+                    {% else %}
+                        <p>ID manquant pour cet événement.</p>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucun événement en attente de validation.</p>
+    {% endif %}
+
+{% endblock %}
