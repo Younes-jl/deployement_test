@@ -134,26 +134,3 @@ class ParticipationDeleteView(DeleteView):
     model = participation
     template_name = 'participation_confirm_delete.html'
     success_url = reverse_lazy('participation_list')
-
-
-def participation_form_view(request):
-    if request.method == 'POST':
-        form = ParticipationManualForm(request.POST)
-        if form.is_valid():
-            # Use the cleaned data however you want
-            data = form.cleaned_data
-            print("Submitted data:", data)
-            # Do something with it (e.g., save it manually)
-            return redirect('participation_list')
-    else:
-        form = ParticipationManualForm()
-
-    return render(request, 'participation_form.html', {'form': form})
-
-class ParticipationManualForm(forms.Form):
-    username = forms.CharField(label="Nom du participant", max_length=100)
-    event_name = forms.CharField(label="Nom de l'événement", max_length=100)
-    event_date = forms.DateTimeField(
-        label="Date de l'événement",
-        widget=forms.DateTimeInput(attrs={'type': 'datetime-local'})
-    )
