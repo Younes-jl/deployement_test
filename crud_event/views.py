@@ -92,4 +92,4 @@ def annuler_participation(request, participation_id):
     participation_instance = get_object_or_404(participation, id=participation_id, participan=request.user)
     participation_instance.delete()
     messages.success(request, "Votre participation a été annulée avec succès.")
-    return redirect('history')  # Redirection vers la liste après annulation
+    return redirect('history')  # Redirection vers la liste après 

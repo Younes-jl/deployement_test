@@ -1,44 +1,124 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+
+{% block content %}
 <div class="container">
-  <h2 class="text-center mb-4">Créer un événement</h2>
+  <h2 class="text-center mb-4 animate__animated animate__fadeInUp">Créer un événement</h2>
 
   <!-- Affichage des messages -->
-  {% if messages %} {% for message in messages %}
-  <div
-    class="alert alert-{{ message.tags }} alert-dismissible fade show"
-    role="alert"
-  >
-    {{ message }}
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="alert"
-      aria-label="Close"
-    ></button>
-  </div>
-  {% endfor %} {% endif %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show animate__animated animate__fadeInUp" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
 
   <!-- Formulaire de création d'événement -->
-  <form
-    method="POST"
-    enctype="multipart/form-data"
-    class="shadow p-4 rounded bg-light"
-  >
-    {% csrf_token %} {% for field in form %}
-    <div class="mb-3">
-      <label for="{{ field.id_for_label }}" class="form-label"
-        >{{ field.label }}</label
-      >
-      {{ field }} {% if field.errors %}
-      <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
-      {% endif %}
-    </div>
+  <form method="POST" enctype="multipart/form-data" class="shadow p-4 rounded bg-light form-card">
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="mb-3">
+        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+          <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+        {% endif %}
+      </div>
     {% endfor %}
 
     <!-- Bouton de soumission -->
-    <button type="submit" class="btn btn-primary w-100 py-2">
+    <button type="submit" class="btn btn-primary w-100 py-2 btn-submit">
       Créer un événement
     </button>
   </form>
 </div>
 {% endblock %}
+
+<!-- CSS personnalisé -->
+<style>
+  /* Animation de la page et des alertes */
+  .alert {
+    animation: fadeInAlert 0.8s ease-in-out;
+  }
+
+  @keyframes fadeInAlert {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Animation du titre */
+  .animate__fadeInUp {
+    animation: fadeInTitle 1s ease-out;
+  }
+
+  @keyframes fadeInTitle {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Effet de survol du formulaire */
+  .form-card {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+  }
+
+  .form-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Effet de transition pour les champs du formulaire */
+  .form-control {
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.25);
+  }
+
+  /* Bouton de soumission avec effet de vague */
+  .btn-submit {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-submit::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: width 0.4s, height 0.4s, top 0.4s, left 0.4s;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .btn-submit:hover::after {
+    width: 0;
+    height: 0;
+    top: 50%;
+    left: 50%;
+  }
+
+  /* Effet au survol du bouton */
+  .btn-submit:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+</style>

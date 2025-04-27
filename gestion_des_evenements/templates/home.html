@@ -1,45 +1,99 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} 
+{% block content %} 
+{% load static %}
 
 <!-- Hero Section -->
 <section id="home" class="hero-section">
-  <div class="container">
+  <div class="container" id="container1">
     <h1 class="display-3 fw-bold mb-3">Annual Marketing Conference</h1>
     <p class="lead mb-4">
       Join industry leaders for three days of networking and learning
     </p>
-    <a href="#events" class="btn btn-primary btn-lg px-4 me-2">View Events</a>
-    <a href="#" class="btn btn-outline-light btn-lg px-4">Learn More</a>
+    <a href="#events" class="btn btn-primary btn-lg px-4 me-2" id="btn">View Events</a>
+  </div>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="py-5 bg-light">
+  <div class="container">
+    <div class="section-title text-center mb-5">
+      <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px">
+        <i class="fas fa-cogs fa-2x text-white"></i>
+      </div>
+      <h2>Our Services</h2>
+      <p class="lead">Discover the solutions we offer to make your events unforgettable</p>
+    </div>
+    <div class="row text-center">
+      <div class="col-md-4">
+        <div class="mb-4">
+          <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px">
+            <i class="fas fa-calendar-alt fa-3x text-white"></i>
+          </div>
+        </div>
+        <h4 class="fw-bold">Event Planning</h4>
+        <p>
+          We manage all aspects of your event, from concept to execution,
+          ensuring a seamless experience.
+        </p>
+      </div>
+      <div class="col-md-4">
+        <div class="mb-4">
+          <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px">
+            <i class="fas fa-laptop fa-3x text-white"></i>
+          </div>
+        </div>
+        <h4 class="fw-bold">Virtual Events</h4>
+        <p>
+          Host professional online conferences, webinars, and hybrid events with
+          our advanced tech solutions.
+        </p>
+      </div>
+      <div class="col-md-4">
+        <div class="mb-4">
+          <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px">
+            <i class="fas fa-shield-alt fa-3x text-white"></i>
+          </div>
+        </div>
+        <h4 class="fw-bold">Security & Support</h4>
+        <p>
+          We provide full technical support and ensure your event’s data and
+          activities are safe and secure.
+        </p>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- Events Section -->
 <section id="events" class="py-5">
-  <div class="container">
-    <div class="section-title">
-      <h2>Upcoming Events</h2>
-      <p class="lead">
-        Discover our exciting lineup of events and workshops
-      </p>
+  <div class="container-fluid">
+    <div class="section-title text-center mb-5">
+      <div class="d-inline-flex align-items-center mb-3">
+        <i class="fas fa-calendar-alt fa-3x text-primary me-3"></i>
+        <h2>Upcoming Events</h2>
+      </div>
+      <p class="lead">Discover our exciting lineup of events and workshops</p>
     </div>
     <div class="row" id="event">
       {% for event in evenements %}
-      <div class="col-md-4">
-        <div class="card event-card h-100">
+      <div class="col-md-4 mb-4">
+        <div class="card event-card h-100 position-relative overflow-hidden">
           {% if event.image %}
           <img src="{{ event.image.url }}" class="card-img-top event-img" alt="{{ event.nom_event }}" />
           {% endif %}
-          <div class="card-body">
+
+          <!-- Hover overlay -->
+          <div class="hover-overlay d-flex align-items-center justify-content-center">
+            <a href="{% url 'register_event' event.id %}" class="btn btn-light" id="btn">Register Now</a>
+          </div>
+
+          <div class="card-body text-center">
             <h5 class="card-title">{{ event.nom_event }}</h5>
             <p class="card-text">
-              <strong>Date:</strong> {{ event.date }}<br>
-              <strong>Lieu:</strong> {{ event.lieu }}<br>
+              <strong>Date:</strong> {{ event.date }}<br />
+              <strong>Lieu:</strong> {{ event.lieu }}<br />
               <strong>Catégorie:</strong> {{ event.categorie }}
             </p>
-          </div>
-          <div class="card-footer bg-white">
-            <a href="{% url 'register_event' event.id %}" class="btn btn-outline-primary w-100">Register</a>
           </div>
         </div>
       </div>
@@ -54,53 +108,30 @@
 <section id="sponsors" class="py-5 bg-light">
   <div class="container">
     <div class="section-title">
-      <h2>Our Sponsors</h2>
-      <p class="lead">
-        Thank you to our amazing sponsors who make this event possible
-      </p>
+      <div class="d-inline-flex align-items-center mb-3">
+        <i class="fas fa-handshake fa-3x text-primary me-3"></i>
+        <h2>Our Sponsors</h2>
+      </div>
+      <p class="lead">Thank you to our amazing sponsors who make this event possible</p>
     </div>
     <div class="row align-items-center justify-content-center g-4">
       <div class="col-6 col-md-3 col-lg-2">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/2560px-Amazon_logo.svg.png"
-          class="img-fluid sponsor-img"
-          alt="Amazon"
-        />
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/2560px-Amazon_logo.svg.png" class="img-fluid sponsor-img" alt="Amazon" />
       </div>
       <div class="col-6 col-md-3 col-lg-2">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/1667px-Apple_logo_black.svg.png"
-          class="img-fluid sponsor-img"
-          alt="Apple"
-        />
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/1667px-Apple_logo_black.svg.png" class="img-fluid sponsor-img" alt="Apple" />
       </div>
       <div class="col-6 col-md-3 col-lg-2">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/2048px-Microsoft_logo.svg.png"
-          class="img-fluid sponsor-img"
-          alt="Microsoft"
-        />
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/2048px-Microsoft_logo.svg.png" class="img-fluid sponsor-img" alt="Microsoft" />
       </div>
       <div class="col-6 col-md-3 col-lg-2">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Google_logo_%282013-2015%29.svg/2560px-Google_logo_%282013-2015%29.svg.png"
-          class="img-fluid sponsor-img"
-          alt="Google"
-        />
+        <img src="media/uploads/google_logo.jpeg" class="img-fluid sponsor-img" alt="Google" />
       </div>
       <div class="col-6 col-md-3 col-lg-2">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/IBM_logo.svg/2560px-IBM_logo.svg.png"
-          class="img-fluid sponsor-img"
-          alt="IBM"
-        />
+        <img src="media/uploads/ibm.jpeg" class="img-fluid sponsor-img" alt="IBM" />
       </div>
       <div class="col-6 col-md-3 col-lg-2">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Samsung_Logo.svg/2560px-Samsung_Logo.svg.png"
-          class="img-fluid sponsor-img"
-          alt="Samsung"
-        />
+        <img src="media/uploads/Samsung-Logo-1993.png" class="img-fluid sponsor-img" alt="Samsung" />
       </div>
     </div>
   </div>
@@ -110,7 +141,10 @@
 <section id="contact" class="py-5">
   <div class="container">
     <div class="section-title">
-      <h2>Contact Us</h2>
+      <div class="d-inline-flex align-items-center mb-3">
+        <i class="fas fa-phone-alt fa-3x text-primary me-3"></i>
+        <h2>Contact Us</h2>
+      </div>
       <p class="lead">Have questions? Get in touch with our team</p>
     </div>
     <div class="row">
@@ -120,69 +154,42 @@
             <h5 class="card-title">Send us a message</h5>
             <form>
               <div class="mb-3">
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Your Name"
-                  required
-                />
+                <input type="text" class="form-control" placeholder="Your Name" required />
               </div>
               <div class="mb-3">
-                <input
-                  type="email"
-                  class="form-control"
-                  placeholder="Your Email"
-                  required
-                />
+                <input type="email" class="form-control" placeholder="Your Email" required />
               </div>
               <div class="mb-3">
-                <textarea
-                  class="form-control"
-                  rows="4"
-                  placeholder="Your Message"
-                  required
-                ></textarea>
+                <textarea class="form-control" rows="4" placeholder="Your Message" required></textarea>
               </div>
-              <button type="submit" class="btn btn-primary">
-                Send Message
-              </button>
+              <button type="submit" class="btn btn-primary">Send Message</button>
             </form>
           </div>
         </div>
       </div>
+
       <div class="col-md-6">
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Contact Information</h5>
             <ul class="list-unstyled">
               <li class="mb-3">
-                <i class="fas fa-map-marker-alt me-2 text-primary"></i>
-                <span>123 Conference Center, New York, NY 10001</span>
+                <i class="fas fa-map-marker-alt me-2 text-primary"></i> 123 Conference Center, New York, NY 10001
               </li>
               <li class="mb-3">
-                <i class="fas fa-phone me-2 text-primary"></i>
-                <span>+1 (555) 123-4567</span>
+                <i class="fas fa-phone me-2 text-primary"></i> +1 (555) 123-4567
               </li>
               <li class="mb-3">
-                <i class="fas fa-envelope me-2 text-primary"></i>
-                <span>info@eventpro.com</span>
+                <i class="fas fa-envelope me-2 text-primary"></i> info@eventpro.com
               </li>
             </ul>
             <div class="mt-4">
               <h6>Follow Us</h6>
               <div class="social-links">
-                <a href="#" class="text-decoration-none me-3"
-                  ><i class="fab fa-facebook-f"></i
-                ></a>
-                <a href="#" class="text-decoration-none me-3"
-                  ><i class="fab fa-twitter"></i
-                ></a>
-                <a href="#" class="text-decoration-none me-3"
-                  ><i class="fab fa-instagram"></i
-                ></a>
-                <a href="#" class="text-decoration-none me-3"
-                  ><i class="fab fa-linkedin-in"></i
-                ></a>
+                <a href="#" class="text-decoration-none me-3"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="text-decoration-none me-3"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-decoration-none me-3"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-decoration-none me-3"><i class="fab fa-linkedin-in"></i></a>
               </div>
             </div>
           </div>
@@ -191,4 +198,35 @@
     </div>
   </div>
 </section>
+
+<!-- Footer Section -->
+<footer class="bg-dark text-light py-4 mt-5">
+  <div class="container text-center">
+    <div class="row">
+      <div class="col-md-6 mb-3 mb-md-0">
+        <h5>Eventify</h5>
+        <p>Bringing people together through amazing events.</p>
+      </div>
+      <div class="col-md-6">
+        <ul class="list-inline">
+          <li class="list-inline-item mx-2">
+            <a href="#" class="text-light text-decoration-none">Home</a>
+          </li>
+          <li class="list-inline-item mx-2">
+            <a href="#events" class="text-light text-decoration-none">Events</a>
+          </li>
+          <li class="list-inline-item mx-2">
+            <a href="#about" class="text-light text-decoration-none">About</a>
+          </li>
+          <li class="list-inline-item mx-2">
+            <a href="#contact" class="text-light text-decoration-none">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <hr class="bg-light" />
+    <p class="mb-0">&copy; 2025 Eventify. All rights reserved.</p>
+  </div>
+</footer>
+
 {% endblock %}

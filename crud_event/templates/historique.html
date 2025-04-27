@@ -2,38 +2,159 @@
 
 {% block content %}
 
-
+<!-- Messages d'alerte -->
 {% if messages %}
-      {% for message in messages %}
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-          {{ message }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      {% endfor %}
-    {% endif %}
-
   <div class="container mt-4">
-    <h2>Mon Historique de Participations</h2>
-
-    {% if participations %}
-      <ul class="list-group">
-        {% for participation in participations %}
-          <li class="list-group-item">
-            <strong>Événement :</strong> {{ participation.name_event }} <br>
-            <strong>Date d'inscription :</strong> {{ participation.date_inscription|date:"d/m/Y H:i" }} <br>
-
-            <!-- Bouton pour annuler -->
-            <a href="{% url 'cancel_participation' participation.id %}" class="btn btn-danger btn-sm mt-2"
-            onclick="return confirm('Es-tu sûr de vouloir annuler cette participation ?');">
-            Annuler la participation </a>
-
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p>Vous n'avez pas encore participé à un événement.</p>
-    {% endif %}
+    {% for message in messages %}
+      <div class="alert alert-info alert-dismissible fade show animate__animated animate__fadeInUp" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
   </div>
+{% endif %}
+
+<!-- Section Historique -->
+<div class="container mt-5">
+  <div class="card shadow-lg border-0 hover-card">
+    <div class="card-body">
+      <h2 class="card-title text-center mb-4 animate__animated animate__fadeInUp animate__delay-1s">🗓️ Mon Historique de Participations</h2>
+
+      {% if participations %}
+        <ul class="list-group list-group-flush">
+          {% for participation in participations %}
+            <li class="list-group-item d-flex justify-content-between align-items-center hover-list-item">
+              <div>
+                <h5 class="mb-1">{{ participation.name_event }}</h5>
+                <small class="text-muted">
+                  Inscrit le : {{ participation.date_inscription|date:"d/m/Y H:i" }}
+                </small>
+              </div>
+              <div>
+                <a href="{% url 'cancel_participation' participation.id %}" 
+                   class="btn btn-outline-primary btn-sm btn-hover"
+                   onclick="return confirm('Es-tu sûr de vouloir annuler cette participation ?');">
+                  Annuler
+                </a>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <div class="text-center">
+          <p class="text-muted">Vous n'avez pas encore participé à un événement.</p>
+          <a href="{% url 'events_list' %}" class="btn btn-info mt-3 btn-hover">
+            Explorer les événements
+          </a>
+        </div>
+      {% endif %}
+      
+    </div>
+  </div>
+</div>
+
 {% endblock %}
 
- 
+<!-- CSS personnalisé -->
+<style>
+  /* Animation des alertes */
+  .alert {
+    animation: fadeInAlert 0.8s ease-in-out;
+  }
+
+  @keyframes fadeInAlert {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Effet de survol de la carte */
+  .hover-card {
+    transition: transform 0.4s ease, box-shadow 0.4s ease-in-out;
+  }
+
+  .hover-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 12px 18px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Effet de survol des éléments de liste */
+  .hover-list-item {
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .hover-list-item:hover {
+    background-color: #f1f1f1;
+    transform: translateX(10px);
+  }
+
+  /* Animation du bouton survolé */
+  .btn-hover {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-hover::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: rgba(0, 123, 255, 0.2);
+    transition: width 0.4s, height 0.4s, top 0.4s, left 0.4s;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .btn-hover:hover::after {
+    width: 0;
+    height: 0;
+    top: 50%;
+    left: 50%;
+  }
+
+  /* Animation du titre */
+  .card-title {
+    animation: fadeInTitle 0.8s ease-out;
+  }
+
+  @keyframes fadeInTitle {
+    from {
+      opacity: 0;
+      transform: translateY(-15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Effet de transition sur les boutons */
+  .btn-outline-primary,
+  .btn-info {
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  .btn-outline-primary:hover,
+  .btn-info:hover {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+  }
+
+  /* Transition douce sur les éléments de liste */
+  .list-group-item {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .list-group-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+  }
+</style>
