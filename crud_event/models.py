@@ -37,6 +37,8 @@ class evenement(models.Model):
     organisateur = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     organisateur_name = models.CharField(max_length=200, blank=True, null=True)
     is_validated = models.BooleanField(default=False)
+    def __str__(self):
+        return self.nom_event
     def save(self, *args, **kwargs):
         if self.organisateur and not self.organisateur_name:
             self.organisateur_name = self.organisateur.username

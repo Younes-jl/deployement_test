@@ -14,11 +14,11 @@ from django.shortcuts import redirect, render
 from django.contrib.admin.views.decorators import staff_member_required
 # Create your views here.
 
-def main_page(request):
-    return HttpResponse("Hello world")
+# def main_page(request):
+#     return HttpResponse("Hello world")
 
-def home(request):
-    return render(request,"home.html")
+# def home(request):
+#     return render(request,"home.html")
 
 
 
@@ -47,9 +47,15 @@ def user_login(request):
 
     return render(request, 'login.html', {'form': form})
 
+
+
 @staff_member_required
 def dashboard(request):
         return render(request, 'dashboard.html')
+
+
+
+
 
 def signup(request):
     if request.method == 'POST':
@@ -75,6 +81,10 @@ def signup(request):
 
     return render(request, 'signup.html', {'form': form})
 
+
+
+
+
 def logout_view(request):
     if request.method == 'POST':
         django_logout(request)
@@ -90,6 +100,4 @@ def logout_view(request):
 
 
 
-# def todos(request):
-#     items = evenement.objects.all()
-#     return render(request,"Todo.html",{"todos":items})
+

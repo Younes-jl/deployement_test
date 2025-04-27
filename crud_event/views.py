@@ -48,27 +48,7 @@ def creer_evenement(request):
 
 
 
-# def signin(request):
-#     if request.method == 'POST':
-#         form = AuthenticationForm(request, data=request.POST)
-        
-#         if form.is_valid():
-#             username = form.cleaned_data['username']
-#             password = form.cleaned_data['password']
 
-#             user = authenticate(request, username=username, password=password)
-
-#             if user is not None:
-#                     login(request, user)
-#                     return redirect('creerEvent')
-        
-#         # Afficher l'erreur ici directement, peu importe la raison
-#         messages.error(request, "Nom d'utilisateur ou mot de passe incorrect.")
-        
-#     else:
-#              form = AuthenticationForm()
-
-#     return render(request, 'home.html', {'form': form})
 
 def home(request):
     evenements = evenement.objects.filter(is_validated=True)
@@ -97,3 +77,19 @@ def register_event(request, event_id):
         # Handle registration logic here (e.g., save to database, send email, etc.)
     return render(request, 'register.html', {'event': event})
     
+
+@login_required
+def participation_history(request):
+    participations = participation.objects.filter(participan=request.user).order_by('-date_inscription')
+    return render(request, 'historique.html', {'participations': participations})
+
+
+
+
+
+@login_required
+def annuler_participation(request, participation_id):
+    participation_instance = get_object_or_404(participation, id=participation_id, participan=request.user)
+    participation_instance.delete()
+    messages.success(request, "Votre participation a été annulée avec succès.")
+    return redirect('history')  # Redirection vers la liste après annulation

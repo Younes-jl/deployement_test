@@ -19,27 +19,27 @@ def mon_dashboard(request):
     nb_participations = participation.objects.count()
     return render(request,'dashboard.html',{'nb_users':nb_users,'nb_events':nb_events,'nb_participations':nb_participations})
 
-@staff_member_required
-def admin_events(request):
-    evenements = evenement.objects.all()
-    return render(request, 'admin_events.html', {'evenements': evenements})
+# @staff_member_required
+# def admin_events(request):
+#     evenements = evenement.objects.all()
+#     return render(request, 'admin_events.html', {'evenements': evenements})
 
 @staff_member_required
 def admin_users(request):
     utilisateurs = User.objects.all()
     return render(request, 'admin_users.html', {'utilisateurs': utilisateurs})
 
-@staff_member_required
-def admin_participations(request):
-    participations = participation.objects.all  # Use select_related for optimization
-    return render(request, 'admin_participations.html', {'participations': participations})
+# @staff_member_required
+# def admin_participations(request):
+#     participations = participation.objects.all  # Use select_related for optimization
+#     return render(request, 'admin_participations.html', {'participations': participations})
 
 
 # -------------------------------------------------------------
-# CRUD for Users 
+# CRUD for events 
 class EventListView(ListView):
     model = evenement
-    template_name = 'event_list.html'
+    template_name = 'admin_events.html'
     context_object_name = 'events'
 
 class EventCreateView(CreateView):
@@ -98,44 +98,55 @@ class AjouterUtilisateurView(CreateView):
         user.save()
         return super().form_valid(form)
 
-# CRUD for Participations
+
+
+
 class ParticipationListView(ListView):
     model = participation
-    template_name = 'participation_list.html'
-    context_object_name = 'participations'
+    template_name = "list_particpation.html"
+    context_object_name = "participations"
+    ordering = ['-date_inscription']  
 
-class ParticipationDeleteView(DeleteView):
-    model = participation
-    template_name = 'participation_confirm_delete.html'
-    success_url = reverse_lazy('participation_list')
 
-# Créer une participation
 class ParticipationCreateView(CreateView):
     model = participation
-    fields = ['participan', 'event', 'date_inscription']
-    template_name = 'participation_form.html'
-    success_url = reverse_lazy('participation_list')
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        form.fields['date_inscription'].widget = forms.DateInput(attrs={'type': 'datetime-local', 'class': 'form-control'})
-        return form
+    template_name = "add_participation.html"
+    fields = ['participan', 'event', 'phone_num']  # Admin choisit Utilisateur + Evénement + Téléphone
+    success_url = reverse_lazy('participations')
 
-# Modifier une participation
+    def form_valid(self, form):
+        # Remplir automatiquement name_event
+        form.instance.name_event = form.instance.event.nom_event
+        # Remplir automatiquement participant avec le nom de l'utilisateur
+        form.instance.participant = form.instance.participan.get_full_name() or form.instance.participan.username
+        return super().form_valid(form)
+
+
+
 class ParticipationUpdateView(UpdateView):
     model = participation
-    fields = ['participan', 'event', 'date_inscription']
-    template_name = 'participation_form.html'
-    success_url = reverse_lazy('participation_list')
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        form.fields['date_inscription'].widget = forms.DateInput(attrs={'type': 'datetime-local', 'class': 'form-control'})
-        return form
+    template_name = "edit_participation.html"
+    fields = ['participan', 'event', 'phone_num']  # Choix de l'utilisateur, l'événement, et téléphone
+    success_url = reverse_lazy('participations')
 
-# Supprimer une participation
+
+
 class ParticipationDeleteView(DeleteView):
     model = participation
-    template_name = 'participation_confirm_delete.html'
-    success_url = reverse_lazy('participation_list')
+    template_name = "delete_participation.html"  # On va créer une page de confirmation
+    success_url = reverse_lazy('participations')
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -144,10 +155,6 @@ def evenements_en_attente(request):
     # Récupérer tous les événements en attente de validation (supposons que tu as un champ 'valide' qui définit si l'événement est validé ou non)
     evenements = evenement.objects.filter(is_validated=False) # Exemple, adapte en fonction de ton modèle
     return render(request, 'validerEvenements.html', {'evenements': evenements})
-
-
-
-
 
 
 def valider_evenement(request, id):
