@@ -80,10 +80,11 @@ class UserUpdateView(UpdateView):
     template_name = 'user_form.html'
     success_url = reverse_lazy('admin_users')  # ou 'user_list' selon ce que tu veux
 
-class SupprimerUtilisateurView(DeleteView):
+class UserDeleteView(DeleteView):
     model = User
     template_name = 'supprimer_utilisateur.html'
     success_url = reverse_lazy('admin_users')  # ou 'user_list' selon ce que tu veux
+
 
 class AjouterUtilisateurView(CreateView):
     model = User
@@ -149,4 +150,10 @@ def valider_evenement(request, id):
         evt = get_object_or_404(evenement, id=id)
         evt.is_validated = True
         evt.save()
+    return redirect('evenements_en_attente')
+
+def refuser_evenement(request, id):
+    if request.method == 'POST':
+        evt = get_object_or_404(evenement, id=id)
+        evt.delete()  # Supprimer l'événement
     return redirect('evenements_en_attente')

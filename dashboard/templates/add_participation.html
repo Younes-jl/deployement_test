@@ -1,14 +1,297 @@
-
+{% extends 'based.html' %}
+{% block title %}Ajouter une Participation{% endblock %}
 
 {% block content %}
-  <h1>Ajouter une participation</h1>
-  
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    
-    <button type="submit">Ajouter</button>
-  </form>
+<div class="participation-form-container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="form-card">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <div class="icon-wrapper pulse-animation">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <h3 class="gradient-text">Ajouter une Participation</h3>
+                        <p class="text-muted">Enregistrer une nouvelle participation à un événement</p>
+                    </div>
 
-  <a href="{% url 'participations' %}">Retour à la liste des participations</a>
+                    <form method="POST" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        {% for field in form %}
+                        <div class="form-group animate-field">
+                            <div class="input-group">
+                                <div class="input-icon">
+                                    {% if 'event' in field.name %}
+                                        <i class="fas fa-calendar-alt"></i>
+                                    {% elif 'participant' in field.name %}
+                                        <i class="fas fa-user"></i>
+                                    {% elif 'phone' in field.name %}
+                                        <i class="fas fa-phone"></i>
+                                    {% elif 'date' in field.name %}
+                                        <i class="fas fa-clock"></i>
+                                    {% else %}
+                                        <i class="fas fa-pencil-alt"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="input-wrapper">
+                                    <label class="form-label">
+                                        {{ field.label }}
+                                        {% if field.field.required %}
+                                            <span class="required-star">*</span>
+                                        {% endif %}
+                                    </label>
+                                    {{ field }}
+                                    {% if field.errors %}
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ field.errors|striptags }}
+                                        </div>
+                                    {% endif %}
+                                    {% if field.help_text %}
+                                        <small class="help-text">
+                                            <i class="fas fa-info-circle"></i>
+                                            {{ field.help_text }}
+                                        </small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        <div class="button-group">
+                            <button type="submit" class="btn-submit">
+                                <span class="btn-content">
+                                    <i class="fas fa-save"></i>
+                                    <span>Enregistrer</span>
+                                </span>
+                            </button>
+                            <a href="{% url 'participations' %}" class="btn-cancel">
+                                <span class="btn-content">
+                                    <i class="fas fa-times"></i>
+                                    <span>Annuler</span>
+                                </span>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .participation-form-container {
+        padding: 2rem;
+        min-height: calc(100vh - 4rem);
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+
+    .form-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        padding: 2rem;
+    }
+
+    .icon-wrapper {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        position: relative;
+    }
+
+    .icon-wrapper i {
+        font-size: 2rem;
+        color: white;
+        z-index: 1;
+    }
+
+    .pulse-animation::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: inherit;
+        border-radius: inherit;
+        animation: pulse 2s ease-out infinite;
+    }
+
+    .gradient-text {
+        background: linear-gradient(135deg, #2B2D5E 0%, #4F46E5 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+
+    .form-group {
+        margin-bottom: 2rem;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: slideUp 0.5s ease forwards;
+    }
+
+    .input-group {
+        display: flex;
+        gap: 1rem;
+        position: relative;
+    }
+
+    .input-icon {
+        width: 45px;
+        height: 45px;
+        background: #F3F4F6;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .input-icon i {
+        color: #6B7280;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+    }
+
+    .input-wrapper {
+        flex: 1;
+    }
+
+    .form-control, .form-select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #E5E7EB;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #F9FAFB;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #6366F1;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .form-label {
+        display: block;
+        font-weight: 600;
+        color: #2B2D5E;
+        margin-bottom: 0.5rem;
+    }
+
+    .required-star {
+        color: #EF4444;
+        margin-left: 4px;
+    }
+
+    .error-message {
+        color: #EF4444;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .help-text {
+        color: #6B7280;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 1rem;
+        margin-top: 3rem;
+        justify-content: center;
+    }
+
+    .btn-submit, .btn-cancel {
+        padding: 0.75rem 2rem;
+        border-radius: 12px;
+        border: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        min-width: 180px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        text-decoration: none;
+        color: white;
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+    }
+
+    .btn-cancel {
+        background: #EF4444;
+    }
+
+    .btn-submit:hover, .btn-cancel:hover {
+        transform: translateY(-2px);
+        color: white;
+    }
+
+    .btn-submit:hover {
+        box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-cancel:hover {
+        box-shadow: 0 10px 20px rgba(239, 68, 68, 0.4);
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); opacity: 0.5; }
+        50% { transform: scale(1.2); opacity: 0; }
+        100% { transform: scale(1); opacity: 0; }
+    }
+
+    @keyframes slideUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Animation séquentielle */
+    .animate-field:nth-child(1) { animation-delay: 0.1s; }
+    .animate-field:nth-child(2) { animation-delay: 0.2s; }
+    .animate-field:nth-child(3) { animation-delay: 0.3s; }
+    .animate-field:nth-child(4) { animation-delay: 0.4s; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .input-group {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .input-icon {
+            width: 100%;
+            height: 40px;
+        }
+
+        .button-group {
+            flex-direction: column;
+        }
+
+        .btn-submit, .btn-cancel {
+            width: 100%;
+        }
+    }
+</style>
 {% endblock %}

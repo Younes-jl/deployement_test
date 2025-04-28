@@ -4,13 +4,12 @@ from django.urls import path
 from . import views 
 from .views import (
    EventListView, EventCreateView, EventUpdateView, EventDeleteView,
-    ParticipationListView, ParticipationDeleteView,
-     UserUpdateView, SupprimerUtilisateurView,
+    ParticipationListView, ParticipationDeleteView, UserDeleteView,
+     UserUpdateView, 
     ParticipationCreateView, ParticipationUpdateView,AjouterUtilisateurView ,ParticipationCreateView,
     # UserListView
-   EventListView, EventCreateView, EventUpdateView, EventDeleteView, ParticipationCreateView, ParticipationDeleteView, ParticipationListView, ParticipationUpdateView,
-   
-     UserUpdateView, SupprimerUtilisateurView,AjouterUtilisateurView 
+    EventListView, EventCreateView, EventUpdateView, EventDeleteView, ParticipationCreateView, ParticipationDeleteView, ParticipationListView, ParticipationUpdateView,
+    UserUpdateView,AjouterUtilisateurView 
     # UserListView,
 )
 
@@ -36,13 +35,16 @@ urlpatterns = [
 
 # User URLs
     # path('users/', UserListView.as_view(), name='user_list'),
-    path('users/supprimer/<int:pk>/', SupprimerUtilisateurView.as_view(), name='supprimer_utilisateur'),
+  
     path('users/update/<int:pk>/', UserUpdateView.as_view(), name='modifier_utilisateur'),
     path('users/ajouter/', AjouterUtilisateurView.as_view(), name='ajouter_utilisateur'),
+    path('users/<int:pk>/delete/', UserDeleteView.as_view(), name='supprimer_utilisateur'),  # URL pour supprimer un utilisateur
+   
 
 # Events validation
 
     path('evenements-en-attente/', views.evenements_en_attente, name='evenements_en_attente'),
     path('valider-evenement/<int:id>/', views.valider_evenement, name='valider_evenement'),  # URL pour la validation
+    path('refuser-evenement/<int:id>/', views.refuser_evenement, name='refuser_evenement'),  # URL pour le refus
 ]
 

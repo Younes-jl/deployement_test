@@ -1,57 +1,231 @@
 {% extends 'base.html' %} 
 {% block body_class %}white-navbar{% endblock %}
 {% block content %}
-<div class="container mt-5">
-  <h2 class="text-center mb-4">Register for Event</h2>
 
-  <!-- Event Details -->
-  <div class="card shadow mb-4">
-    <div class="card-body">
-      <h3 class="card-title">{{ event.nom_event }}</h3>
-      <p class="card-text">
-        <strong>Date:</strong> {{ event.date }}<br />
-        <strong>Lieu:</strong> {{ event.lieu }}<br />
-        <strong>Catégorie:</strong> {{ event.categorie }}<br />
-        <strong>Description:</strong> {{ event.description }}
-      </p>
-    </div>
-  </div>
+<div class="register-container py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="registration-card">
+                    <!-- Event Details Card -->
+                    <div class="event-details-card mb-4">
+                        <div class="card-icon mb-3">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <h2 class="text-center gradient-text mb-4">Inscription à l'événement</h2>
+                        
+                        <div class="event-info p-4">
+                            <h3 class="event-title">{{ event.nom_event }}</h3>
+                            <div class="event-meta">
+                                <p class="mb-2">
+                                    <i class="far fa-calendar-alt me-2"></i>
+                                    <strong>Date:</strong> {{ event.date }}
+                                </p>
+                                <p class="mb-2">
+                                    <i class="fas fa-map-marker-alt me-2"></i>
+                                    <strong>Lieu:</strong> {{ event.lieu }}
+                                </p>
+                                <p class="mb-2">
+                                    <i class="fas fa-tag me-2"></i>
+                                    <strong>Catégorie:</strong> {{ event.categorie }}
+                                </p>
+                                <p class="mb-0">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <strong>Description:</strong> {{ event.description }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
 
-  <!-- Registration Form -->
-  <form method="POST" class="shadow p-4 rounded bg-light">
-    {% csrf_token %}
-    <div class="mb-3">
-      <label for="name" class="form-label">Your Name</label>
-      <input type="text" id="name" name="name" class="form-control" required />
+                    <!-- Registration Form -->
+                    <form method="POST" class="registration-form">
+                        {% csrf_token %}
+                        <div class="form-floating mb-3">
+                            <input type="text" id="name" name="name" class="form-control" placeholder="Votre nom" required />
+                            <label for="name">Votre nom</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="tel" id="phone_num" name="phone_num" class="form-control" placeholder="Votre numéro" required />
+                            <label for="phone_num">Votre numéro</label>
+                        </div>
+                        <div class="form-floating mb-4">
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Votre email" required />
+                            <label for="email">Votre email</label>
+                        </div>
+                        <button type="submit" class="btn-register w-100">
+                            <span class="button-content">
+                                <i class="fas fa-check-circle me-2"></i>
+                                Confirmer l'inscription
+                            </span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="mb-3">
-      <label for="phone_num" class="form-label">Your number</label>
-      <input
-        type="phone_num"
-        id="phone_num"
-        name="phone_num"
-        class="form-control"
-        required
-      />
-    </div>
-    <div class="mb-3">
-      <label for="email" class="form-label">Your Email</label>
-      <input
-        type="email"
-        id="email"
-        name="email"
-        class="form-control"
-        required
-      />
-    </div>
-    <button type="submit" class="btn btn-primary w-100 py-2">Register</button>
-  </form>
 </div>
-{% endblock %}
 
 <style>
-.navbar .nav-link,
-.navbar .navbar-brand {
-  color: black !important;
-}
+    .register-container {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+    }
+
+    .registration-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .event-details-card {
+        text-align: center;
+        padding: 1rem;
+        border-radius: 15px;
+        background: linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(255,255,255,0.95));
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .card-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    .card-icon i {
+        font-size: 2rem;
+        color: white;
+    }
+
+    .gradient-text {
+        background: linear-gradient(135deg, #2B2D5E 0%, #4F46E5 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: bold;
+    }
+
+    .event-title {
+        color: #2B2D5E;
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
+
+    .event-info {
+        background: rgba(255,255,255,0.5);
+        border-radius: 10px;
+        backdrop-filter: blur(5px);
+    }
+
+    .event-meta {
+        text-align: left;
+        color: #4B5563;
+    }
+
+    .event-meta p {
+        font-size: 0.95rem;
+    }
+
+    .event-meta i {
+        color: #6366F1;
+    }
+
+    .form-floating {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-control {
+        border: 2px solid #e1e1e1;
+        border-radius: 10px;
+        padding: 1rem;
+        height: calc(3.5rem + 2px);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #6366F1;
+        box-shadow: 0 0 0 0.25rem rgba(99, 102, 241, 0.25);
+        transform: translateY(-2px);
+    }
+
+    .form-floating > label {
+        padding: 1rem;
+    }
+
+    .btn-register {
+        background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 1rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .btn-register:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4);
+    }
+
+    .button-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+
+    /* Animation des champs du formulaire */
+    .form-floating {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: slideUp 0.5s ease forwards;
+    }
+
+    .form-floating:nth-child(1) { animation-delay: 0.1s; }
+    .form-floating:nth-child(2) { animation-delay: 0.2s; }
+    .form-floating:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes slideUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .registration-card {
+            padding: 1.5rem;
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+        }
+
+        .card-icon i {
+            font-size: 1.5rem;
+        }
+
+        .event-title {
+            font-size: 1.25rem;
+        }
+    }
 </style>
+
+{% endblock %}

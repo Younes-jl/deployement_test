@@ -2,159 +2,215 @@
 {% block body_class %}white-navbar{% endblock %}
 {% block content %}
 
-<!-- Messages d'alerte -->
-{% if messages %}
-  <div class="container mt-4">
-    {% for message in messages %}
-      <div class="alert alert-info alert-dismissible fade show animate__animated animate__fadeInUp" role="alert">
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    {% endfor %}
-  </div>
-{% endif %}
-
-<!-- Section Historique -->
-<div class="container mt-5">
-  <div class="card shadow-lg border-0 hover-card">
-    <div class="card-body">
-      <h2 class="card-title text-center mb-4 animate__animated animate__fadeInUp animate__delay-1s">🗓️ Mon Historique de Participations</h2>
-
-      {% if participations %}
-        <ul class="list-group list-group-flush">
-          {% for participation in participations %}
-            <li class="list-group-item d-flex justify-content-between align-items-center hover-list-item">
-              <div>
-                <h5 class="mb-1">{{ participation.name_event }}</h5>
-                <small class="text-muted">
-                  Inscrit le : {{ participation.date_inscription|date:"d/m/Y H:i" }}
-                </small>
-              </div>
-              <div>
-                <a href="{% url 'cancel_participation' participation.id %}" 
-                   class="btn btn-outline-primary btn-sm btn-hover"
-                   onclick="return confirm('Es-tu sûr de vouloir annuler cette participation ?');">
-                  Annuler
-                </a>
-              </div>
-            </li>
-          {% endfor %}
-        </ul>
-      {% else %}
-        <div class="text-center">
-          <p class="text-muted">Vous n'avez pas encore participé à un événement.</p>
-          <a href="{% url 'events_list' %}" class="btn btn-info mt-3 btn-hover">
-            Explorer les événements
-          </a>
+<div class="history-container py-5">
+    <div class="container">
+        <!-- En-tête de la page -->
+        <div class="page-header text-center mb-5">
+            <div class="header-icon mb-3">
+                <i class="fas fa-history"></i>
+            </div>
+            <h2 class="gradient-text">Historique des Participations</h2>
+            <p class="text-muted">Suivez vos inscriptions aux événements</p>
         </div>
-      {% endif %}
-      
+
+        <!-- Messages d'alerte -->
+        {% if messages %}
+            <div class="messages-container mb-4">
+                {% for message in messages %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Liste des participations -->
+        {% if participations %}
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="participation-list">
+                        {% for participation in participations %}
+                            <div class="participation-card">
+                                <div class="card border-0 shadow-sm mb-4 participation-item">
+                                    <div class="card-body p-4">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-2 text-center mb-3 mb-md-0">
+                                                <div class="event-icon">
+                                                    <i class="fas fa-calendar-check"></i>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-7 mb-3 mb-md-0">
+                                                <h5 class="event-title mb-2">{{ participation.name_event }}</h5>
+                                                <div class="event-details">
+                                                    <p class="mb-1">
+                                                        <i class="far fa-clock me-2"></i>
+                                                        {{ participation.date_inscription|date:"d/m/Y H:i" }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 text-md-end">
+                                                <a href="{% url 'cancel_participation' participation.id %}" 
+                                                   class="btn btn-outline-danger btn-cancel"
+                                                   onclick="return confirm('Êtes-vous sûr de vouloir annuler cette participation ?');">
+                                                    <i class="fas fa-times me-2"></i>
+                                                    Annuler
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="empty-state text-center">
+                <div class="empty-icon mb-4">
+                    <i class="far fa-calendar-times"></i>
+                </div>
+                <h3 class="mb-3">Aucune participation pour le moment</h3>
+                <p class="text-muted mb-4">Vous n'avez pas encore participé à un événement.</p>
+                <a href="{% url 'home' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-search me-2"></i>
+                    Découvrir les événements
+                </a>
+            </div>
+        {% endif %}
     </div>
-  </div>
 </div>
 
-{% endblock %}
-
-<!-- CSS personnalisé -->
 <style>
-  /* Animation des alertes */
-  .alert {
-    animation: fadeInAlert 0.8s ease-in-out;
-  }
-
-  @keyframes fadeInAlert {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
+    .history-container {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        min-height: 100vh;
     }
-    to {
-      opacity: 1;
-      transform: translateY(0);
+
+    .header-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        animation: float 3s ease-in-out infinite;
     }
-  }
 
-  /* Effet de survol de la carte */
-  .hover-card {
-    transition: transform 0.4s ease, box-shadow 0.4s ease-in-out;
-  }
-
-  .hover-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0px 12px 18px rgba(0, 0, 0, 0.1);
-  }
-
-  /* Effet de survol des éléments de liste */
-  .hover-list-item {
-    transition: background-color 0.3s ease, transform 0.3s ease;
-  }
-
-  .hover-list-item:hover {
-    background-color: #f1f1f1;
-    transform: translateX(10px);
-  }
-
-  /* Animation du bouton survolé */
-  .btn-hover {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .btn-hover::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 300%;
-    height: 300%;
-    background: rgba(0, 123, 255, 0.2);
-    transition: width 0.4s, height 0.4s, top 0.4s, left 0.4s;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  .btn-hover:hover::after {
-    width: 0;
-    height: 0;
-    top: 50%;
-    left: 50%;
-  }
-
-  /* Animation du titre */
-  .card-title {
-    animation: fadeInTitle 0.8s ease-out;
-  }
-
-  @keyframes fadeInTitle {
-    from {
-      opacity: 0;
-      transform: translateY(-15px);
+    .header-icon i {
+        font-size: 2rem;
+        color: white;
     }
-    to {
-      opacity: 1;
-      transform: translateY(0);
+
+    .gradient-text {
+        background: linear-gradient(135deg, #2B2D5E 0%, #4F46E5 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: bold;
     }
-  }
 
-  /* Effet de transition sur les boutons */
-  .btn-outline-primary,
-  .btn-info {
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-  }
+    .participation-item {
+        transition: all 0.3s ease;
+        border-radius: 15px;
+        overflow: hidden;
+    }
 
-  .btn-outline-primary:hover,
-  .btn-info:hover {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
-  }
+    .participation-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
 
-  /* Transition douce sur les éléments de liste */
-  .list-group-item {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
+    .event-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-  .list-group-item:hover {
-    transform: translateX(5px);
-    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
-  }
+    .event-icon i {
+        font-size: 1.5rem;
+        color: white;
+    }
+
+    .event-title {
+        color: #2B2D5E;
+        font-weight: 600;
+    }
+
+    .event-details {
+        color: #6B7280;
+        font-size: 0.9rem;
+    }
+
+    .btn-cancel {
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-cancel:hover {
+        background-color: #DC2626;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .empty-state {
+        padding: 4rem 0;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        color: #6B7280;
+        opacity: 0.5;
+    }
+
+    .empty-icon i {
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    .alert {
+        border-radius: 10px;
+        border: none;
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    @media (max-width: 768px) {
+        .event-icon {
+            width: 50px;
+            height: 50px;
+        }
+
+        .event-icon i {
+            font-size: 1.25rem;
+        }
+
+        .header-icon {
+            width: 60px;
+            height: 60px;
+        }
+
+        .header-icon i {
+            font-size: 1.5rem;
+        }
+    }
 </style>
+{% endblock %}
