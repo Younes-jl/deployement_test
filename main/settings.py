@@ -126,7 +126,17 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'gestion_des_evenements/static')
+
 ]
+
+
+STATIC_URL = '/static/'
+
+# Facultatif, mais utile si tu veux collecter les fichiers pour la production
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

@@ -1,0 +1,14 @@
+
+
+{% block content %}
+  <h1>Ajouter une participation</h1>
+  
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    
+    <button type="submit">Ajouter</button>
+  </form>
+
+  <a href="{% url 'participations' %}">Retour à la liste des participations</a>
+{% endblock %}

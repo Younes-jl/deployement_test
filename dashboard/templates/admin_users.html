@@ -1,4 +1,5 @@
-{% extends 'base.html' %} {% block content %}
+
+ {% extends 'based.html' %} {% block content %}
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -26,6 +27,10 @@
             <th>ID</th>
             <th>Nom</th>
             <th>Email</th>
+            <th>first_name</th>
+            <th>last_name</th>
+            <th>date_joined</th>
+            <th>is_staff</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -35,19 +40,21 @@
             <td>{{ utilisateur.id }}</td>
             <td>{{ utilisateur.username }}</td>
             <td>{{ utilisateur.email }}</td>
+            <td>{{ user.first_name }}</td>
+            <td>{{ user.last_name }}</td>
+            <td>{{ user.date_joined }}</td>
+            <td>{{ user.is_staff }}</td>
             <td>
               <a
                 href="{% url 'modifier_utilisateur' utilisateur.id %}"
                 class="btn btn-warning btn-sm me-1"
                 >Modifier</a
               >
-              <a
-                href="{% url 'supprimer_utilisateur' utilisateur.id %}"
-                class="btn btn-danger btn-sm"
-                onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');"
-              >
-                Supprimer
-              </a>
+              <a href="{% url 'supprimer_utilisateur' utilisateur.id %}" 
+           class="btn btn-sm btn-danger"
+           onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
+          Supprimer
+        </a>
             </td>
           </tr>
           {% endfor %}

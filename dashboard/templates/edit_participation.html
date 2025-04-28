@@ -1,0 +1,13 @@
+
+
+{% block content %}
+  <h2>Modifier une participation</h2>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+  </form>
+
+  <a href="{% url 'participations' %}" class="btn btn-secondary mt-3">Annuler</a>
+{% endblock %}

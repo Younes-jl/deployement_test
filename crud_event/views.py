@@ -27,19 +27,13 @@ def creer_evenement(request):
         if form.is_valid():
             event = form.save(commit=False)  
             event.organisateur = request.user
-
             event.fullname = request.user.username
-
-            event.save()  # Save the event to the database
-            return redirect('home')  # Redirect to the home page after successful creation
-
+            event.is_validated = False  # L'événement n'est pas encore validé par l'admin
+            event.save()  # Sauvegarder l'événement dans la base de données
+            messages.success(request, "Votre événement a été créé avec succès, en attente de validation par l'administrateur.")
+            return redirect('creerEvent')  # Rediriger vers la page d'accueil après la création        
         else:
-            messages.error(request, "Données invalides")  # Show error if form is invalid
-            evenement = form.save(commit=False)
-            evenement.organisateur = request.user # Affecter l'utilisateur connecté
-            evenement.organisateur_name = request.user.username 
-            evenement.save()
-            return redirect('home')
+            messages.error(request, "Données invalides")  # Afficher un message d'erreur si le formulaire est invalide
     else:
         form = EvenementForm()
 
@@ -53,30 +47,10 @@ def creer_evenement(request):
 
 
 
-# def signin(request):
-#     if request.method == 'POST':
-#         form = AuthenticationForm(request, data=request.POST)
-        
-#         if form.is_valid():
-#             username = form.cleaned_data['username']
-#             password = form.cleaned_data['password']
 
-#             user = authenticate(request, username=username, password=password)
-
-#             if user is not None:
-#                     login(request, user)
-#                     return redirect('creerEvent')
-        
-#         # Afficher l'erreur ici directement, peu importe la raison
-#         messages.error(request, "Nom d'utilisateur ou mot de passe incorrect.")
-        
-#     else:
-#              form = AuthenticationForm()
-
-#     return render(request, 'home.html', {'form': form})
 
 def home(request):
-    evenements = evenement.objects.all()
+    evenements = evenement.objects.filter(is_validated=True)
     return render(request, 'home.html', {'evenements': evenements})
 
 
@@ -94,6 +68,7 @@ def register_event(request, event_id):
         nom_event = event.nom_event
         nam = request.POST.get('name')
           # Store the username of the logged-in user
+          ###############appelle la methode paiement
         participation_instance = participation.objects.create(participan=name,event=event, name_event = nom_event, phone_num=phone_num,participant=nam )
         participation_instance.save()
         messages.success(request, "Inscription réussie à l'événement.")
@@ -102,3 +77,19 @@ def register_event(request, event_id):
         # Handle registration logic here (e.g., save to database, send email, etc.)
     return render(request, 'register.html', {'event': event})
     
+
+@login_required
+def participation_history(request):
+    participations = participation.objects.filter(participan=request.user).order_by('-date_inscription')
+    return render(request, 'historique.html', {'participations': participations})
+
+
+
+
+
+@login_required
+def annuler_participation(request, participation_id):
+    participation_instance = get_object_or_404(participation, id=participation_id, participan=request.user)
+    participation_instance.delete()
+    messages.success(request, "Votre participation a été annulée avec succès.")
+    return redirect('history')  # Redirection vers la liste après 

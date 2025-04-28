@@ -1,0 +1,32 @@
+{% extends 'based.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4 text-center">Événements en attente de validation</h1>
+    
+    {% if evenements %}
+        <ul class="list-group">
+            {% for evenement in evenements %}
+                <li class="list-group-item mb-3 shadow-sm rounded">
+                    <h5 class="mb-2">{{ evenement.nom_event }}</h5>
+                    <p><strong>ID :</strong> {{ evenement.id }}</p>
+                    <p><strong>Description :</strong> {{ evenement.description }}</p>
+                    <p><strong>Date :</strong> {{ evenement.date }}</p>
+                    <p><strong>Lieu :</strong> {{ evenement.lieu }}</p>
+                    
+                    {% if evenement.id %}
+                        <form method="POST" action="{% url 'valider_evenement' evenement.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success">Valider l'événement</button>
+                        </form>
+                    {% else %}
+                        <p class="text-danger">ID manquant pour cet événement.</p>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-center text-muted">Aucun événement en attente de validation.</p>
+    {% endif %}
+</div>
+{% endblock %}

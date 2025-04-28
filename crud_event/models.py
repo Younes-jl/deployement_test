@@ -34,6 +34,15 @@ class evenement(models.Model):
     lieu = models.CharField(max_length=200)
     categorie = models.CharField(max_length=200)
     description = models.TextField(max_length=2000 , blank=True, null=True)
+    organisateur = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    organisateur_name = models.CharField(max_length=200, blank=True, null=True)
+    is_validated = models.BooleanField(default=False)
+    def __str__(self):
+        return self.nom_event
+    def save(self, *args, **kwargs):
+        if self.organisateur and not self.organisateur_name:
+            self.organisateur_name = self.organisateur.username
+        super(evenement, self).save(*args, **kwargs)
 
 
 class participation(models.Model):
@@ -43,11 +52,9 @@ class participation(models.Model):
       phone_num=models.CharField(max_length=200, blank=True, null=True)
       name_event=models.CharField(max_length=200, blank=True, null=True)
       participant=models.CharField(max_length=200, blank=True, null=True)
-      
-      
-
       def __str__(self):
         return f"{self.participan.username} participe à l'evenement de  {self.event.nom_event}"
+
 
 class ParticipationForm(forms.ModelForm):
     email = forms.EmailField(required=True)  # Add email field
@@ -75,7 +82,10 @@ def save(self, commit=True):
 class EvenementForm(forms.ModelForm):
     class Meta:
         model = evenement
-        fields = '__all__'
+        exclude = ['organisateur', 'organisateur_name', 'is_validated']
         widgets = {
             'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
+
+ 
+ 
