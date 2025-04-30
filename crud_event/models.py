@@ -37,6 +37,7 @@ class evenement(models.Model):
     organisateur = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     organisateur_name = models.CharField(max_length=200, blank=True, null=True)
     is_validated = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.nom_event
     def save(self, *args, **kwargs):
@@ -69,6 +70,33 @@ class ParticipationForm(forms.ModelForm):
         }
 
 
+
+
+
+class paiement(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey(evenement,null=True, on_delete=models.CASCADE)  # <-- Add this
+    card_number = models.CharField(max_length=16, blank=True, null=True)  
+    card_holder_name = models.CharField(max_length=200, blank=True, null=True)  
+    expiry_date = models.DateField(blank=True, null=True)  
+    cvv = models.CharField(max_length=3, blank=True, null=True) 
+    payment_method = models.CharField(max_length=200, blank=True, null=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True, label="Adresse email")
 
@@ -85,7 +113,7 @@ class EvenementForm(forms.ModelForm):
         exclude = ['organisateur', 'organisateur_name', 'is_validated']
         widgets = {
             'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-        }
+                  }
 
  
  

@@ -1,6 +1,7 @@
+from datetime import datetime
 from pyexpat.errors import messages
 from django.shortcuts import render,HttpResponse
-from .models import evenement
+from .models import evenement, paiement
 from crud_event.models import evenement, participation
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
@@ -62,19 +63,52 @@ def home(request):
 @login_required
 def register_event(request, event_id):
     event = get_object_or_404(evenement, id=event_id)
-    if request.method == 'POST':
-        name = request.user  # Assuming the user is logged in
-        phone_num = request.POST.get('phone_num')
-        nom_event = event.nom_event
-        nam = request.POST.get('name')
-          # Store the username of the logged-in user
-          ###############appelle la methode paiement
-        participation_instance = participation.objects.create(participan=name,event=event, name_event = nom_event, phone_num=phone_num,participant=nam )
-        participation_instance.save()
-        messages.success(request, "Inscription réussie à l'événement.")
-        return redirect('home')
     
-        # Handle registration logic here (e.g., save to database, send email, etc.)
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')  
+        phone_num = request.POST.get('phone_num')  
+        payment_method = request.POST.get('payment_method')
+
+        # Payment details
+        card_number = request.POST.get('card_number')
+        card_holder_name = request.POST.get('card_holder_name')
+        expiry_date = request.POST.get('expiry_date')
+        cvv = request.POST.get('cvv')
+
+        # Validate payment date format
+        try:
+            expiry_year, expiry_month = map(int, expiry_date.split('-'))
+            expiry_date_obj = datetime(expiry_year, expiry_month, 1)
+        except (ValueError, AttributeError):
+            messages.error(request, "Date d'expiration invalide.")
+            return render(request, 'register.html', {'event': event})
+
+        # Save participation
+        participation_instance = participation.objects.create(
+            participan=request.user,
+            event=event,
+            name_event=event.nom_event,
+            phone_num=phone_num,
+            participant=name,
+            
+            
+        )
+
+        # Save payment
+        paiement_instance = paiement.objects.create(
+            user_id=request.user,
+            event=event,  # Assuming you added event field in the model
+            card_number=card_number,
+            card_holder_name=card_holder_name,
+            expiry_date=expiry_date_obj,
+            cvv=cvv,
+            payment_method=payment_method
+        )
+
+        messages.success(request, "Paiement et inscription réussis.")
+        return redirect('home')
+
     return render(request, 'register.html', {'event': event})
     
 
