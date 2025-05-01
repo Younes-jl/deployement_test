@@ -46,5 +46,6 @@ urlpatterns = [
     path('evenements-en-attente/', views.evenements_en_attente, name='evenements_en_attente'),
     path('valider-evenement/<int:id>/', views.valider_evenement, name='valider_evenement'),  # URL pour la validation
     path('refuser-evenement/<int:id>/', views.refuser_evenement, name='refuser_evenement'),  # URL pour le refus
+    path('download-participants/', views.download_participants_csv, name='download_participants_csv'),
 ]
 

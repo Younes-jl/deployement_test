@@ -1,5 +1,7 @@
 
+import csv
 from pyexpat.errors import messages
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
@@ -157,3 +159,31 @@ def refuser_evenement(request, id):
         evt = get_object_or_404(evenement, id=id)
         evt.delete()  # Supprimer l'événement
     return redirect('evenements_en_attente')
+
+
+
+@staff_member_required
+def download_participants_csv(request):
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="participants.csv"'
+
+    # Create a CSV writer object
+    writer = csv.writer(response)
+
+    # Write the header row
+    writer.writerow(['Participant Name', 'Event Name', 'Phone Number', 'Date of Registration'])
+
+    # Fetch all participations
+    participations = participation.objects.select_related('participan', 'event').all()
+
+    # Write data rows
+    for p in participations:
+        writer.writerow([
+            p.participan.get_full_name() or p.participan.username,
+            p.event.nom_event,
+            p.phone_num,
+            p.date_inscription
+        ])
+
+    return response

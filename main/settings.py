@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "gestion_des_evenements",
     "crud_event",
     "dashboard",
+    
 ]
 
 MIDDLEWARE = [
@@ -57,6 +58,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',  # Pour compatibilité Bootstrap
+}
 ROOT_URLCONF = 'main.urls'
 
 TEMPLATES = [

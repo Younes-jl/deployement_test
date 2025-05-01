@@ -53,6 +53,7 @@ class participation(models.Model):
       phone_num=models.CharField(max_length=200, blank=True, null=True)
       name_event=models.CharField(max_length=200, blank=True, null=True)
       participant=models.CharField(max_length=200, blank=True, null=True)
+      email=models.EmailField(max_length=200, blank=True, null=True)
       def __str__(self):
         return f"{self.participan.username} participe à l'evenement de  {self.event.nom_event}"
 
@@ -76,6 +77,7 @@ class ParticipationForm(forms.ModelForm):
 class paiement(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     event = models.ForeignKey(evenement,null=True, on_delete=models.CASCADE)  # <-- Add this
+    participation = models.ForeignKey(participation, on_delete=models.CASCADE, blank=True, null=True)
     card_number = models.CharField(max_length=16, blank=True, null=True)  
     card_holder_name = models.CharField(max_length=200, blank=True, null=True)  
     expiry_date = models.DateField(blank=True, null=True)  

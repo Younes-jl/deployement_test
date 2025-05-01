@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import generate_ticket
 
 urlpatterns = [
     #path('home/', views.home, name='home'),
@@ -10,6 +11,7 @@ urlpatterns = [
     path('register_evenements/<int:event_id>/', views.register_event, name='register_event'),
     path('history/', views.participation_history, name='history'),
      path('annuler/<int:participation_id>/', views.annuler_participation, name='cancel_participation'),
+    path('ticket/<int:participation_id>/', generate_ticket, name='download_ticket'),
 
 ]
 
