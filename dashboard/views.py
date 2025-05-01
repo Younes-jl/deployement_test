@@ -12,6 +12,7 @@ from django.views.generic.edit import UpdateView
 from django.urls import reverse_lazy
 from crud_event.models import evenement,participation
 from django import forms
+from django.contrib import messages
 # from crud_event.models import ParticipationCustomForm
 
 @staff_member_required
@@ -114,15 +115,39 @@ class ParticipationListView(ListView):
 class ParticipationCreateView(CreateView):
     model = participation
     template_name = "add_participation.html"
-    fields = ['participan', 'event', 'phone_num']  # Admin choisit Utilisateur + Evénement + Téléphone
+    fields = ['participan', 'event', 'phone_num']
     success_url = reverse_lazy('participations')
 
     def form_valid(self, form):
+        # Vérifier si l'utilisateur est déjà inscrit à cet événement
+        existing_participation = participation.objects.filter(
+            participan=form.cleaned_data['participan'],
+            event=form.cleaned_data['event']
+        ).exists()
+
+        if existing_participation:
+            messages.error(self.request, "Cet utilisateur est déjà inscrit à cet événement.")
+            return redirect('participation_add')  # Redirige vers le formulaire d'ajout
+
         # Remplir automatiquement name_event
         form.instance.name_event = form.instance.event.nom_event
-        # Remplir automatiquement participant avec le nom de l'utilisateur
-        form.instance.participant = form.instance.participan.get_full_name() or form.instance.participan.username
+        # Remplir automatiquement participant avec le nom complet ou le username
+        form.instance.participant = (
+            form.instance.participan.get_full_name() or form.instance.participan.username
+        )
         return super().form_valid(form)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
