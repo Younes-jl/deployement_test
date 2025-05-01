@@ -76,7 +76,7 @@ class ParticipationForm(forms.ModelForm):
 
 class paiement(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    event = models.ForeignKey(evenement,null=True, on_delete=models.CASCADE)  # <-- Add this
+    event = models.ForeignKey(evenement,null=True, on_delete=models.CASCADE)  
     participation = models.ForeignKey(participation, on_delete=models.CASCADE, blank=True, null=True)
     card_number = models.CharField(max_length=16, blank=True, null=True)  
     card_holder_name = models.CharField(max_length=200, blank=True, null=True)  
