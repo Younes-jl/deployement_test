@@ -12,6 +12,212 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="{% static 'style/login.css' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      :root {
+        --primary-color: #4A90E2;
+        --secondary-color: #5C6BC0;
+        --accent-color: #FF6B6B;
+        --dark-color: #2C3E50;
+        --light-color: #FFFFFF;
+        --bg-color: #F8F9FA;
+        --text-color: #2C3E50;
+      }
+
+      body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      }
+
+      .box-area {
+        max-width: 1000px;
+        position: relative;
+        display: flex;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border: none !important;
+      }
+
+      .left-box {
+        position: relative;
+        background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)) !important;
+        padding: 4rem 2rem !important;
+        overflow: hidden;
+      }
+
+      .left-box::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FFFFFF' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        z-index: 0;
+      }
+
+      .login-icon {
+        font-size: 5rem;
+        color: rgba(255, 255, 255, 0.9);
+        background: rgba(255, 255, 255, 0.1);
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 2rem;
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+        animation: float 6s ease-in-out infinite;
+      }
+
+      .login-icon i {
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+        100% { transform: translateY(0px); }
+      }
+
+      .right-box {
+        background: white;
+        padding: 3rem 2rem;
+      }
+
+      .header-text h2 {
+        font-weight: 600;
+        color: var(--dark-color);
+        margin-bottom: 0.5rem;
+        font-size: 2rem;
+      }
+
+      .header-text p {
+        color: #6B7280;
+        font-size: 1.1rem;
+      }
+
+      .input-group {
+        position: relative;
+        margin-bottom: 1.5rem;
+      }
+
+      .form-control {
+        height: 50px;
+        background: #F3F4F6;
+        border: 2px solid transparent;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .form-control:focus {
+        background: white;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .btn-primary {
+        background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+        border: none;
+        border-radius: 10px;
+        padding: 0.75rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4);
+      }
+
+      .btn-light {
+        background: white;
+        border: 2px solid #E5E7EB;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+      }
+
+      .btn-light:hover {
+        background: #F3F4F6;
+        transform: translateY(-2px);
+      }
+
+      .form-check-input {
+        border-color: #E5E7EB;
+        width: 1.1em;
+        height: 1.1em;
+      }
+
+      .form-check-input:checked {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+      }
+
+      .forgot a {
+        color: var(--primary-color);
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+
+      .forgot a:hover {
+        color: var(--secondary-color);
+      }
+
+      .alert {
+        border: none;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        animation: slideDown 0.5s ease forwards;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      small a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      small a:hover {
+        color: var(--secondary-color);
+      }
+
+      .google-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        background-color: white;
+        border: 1px solid #E5E7EB;
+        transition: all 0.3s ease;
+      }
+
+      .google-btn:hover {
+        background-color: #F8F9FA;
+        box-shadow: 0 4px 12px rgba(66, 133, 244, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .google-btn i {
+        font-size: 1.2rem;
+      }
+    </style>
     <title>Boostrap Login | Ludiflex</title>
   </head>
   <body>
@@ -44,15 +250,9 @@
         <!--------------------------- Left Box ----------------------------->
         <div
           class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box"
-          style="background: #103cbe"
         >
-          <div class="featured-image mb-3">
-            <img
-              src="{% static 'style/1.png' %}"
-              alt="Mon image"
-              class="img-fluid"
-              style="width: 250px"
-            />
+          <div class="login-icon">
+            <i class="fas fa-user-circle"></i>
           </div>
           <p
             class="text-white fs-2"
@@ -111,12 +311,9 @@
               </div>
             </form>
             <div class="input-group mb-3">
-              <button class="btn btn-lg btn-light w-100 fs-6">
-                <img
-                  src="{% static 'style/google.png' %}"
-                  style="width: 20px"
-                  class="me-2"
-                /><small>Sign In with Google</small>
+              <button class="btn btn-lg w-100 fs-6 google-btn">
+                <i class="fab fa-google" style="color: #4285F4;"></i>
+                <span>Sign In with Google</span>
               </button>
             </div>
             <div class="row">

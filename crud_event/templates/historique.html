@@ -2,7 +2,7 @@
 {% block body_class %}white-navbar{% endblock %}
 {% block content %}
 
-<div class="history-container py-5">
+<div class="history-container py-5" style="margin-top: 80px;">
     <div class="container">
         <!-- En-tête de la page -->
         <div class="page-header text-center mb-5">
@@ -71,7 +71,7 @@
                 <div class="empty-icon mb-4">
                     <i class="far fa-calendar-times"></i>
                 </div>
-                <h3 class="mb-3">Aucune participation pour le moment</h3>
+                <h3 class="mb-3" style="color:black">Aucune participation pour le moment</h3>
                 <p class="text-muted mb-4">Vous n'avez pas encore participé à un événement.</p>
                 <a href="{% url 'home' %}" class="btn btn-primary btn-lg">
                     <i class="fas fa-search me-2"></i>
@@ -84,6 +84,57 @@
 
 
 <style>
+
+        /* Navbar specific styles */
+        body.white-navbar .navbar {
+          background: rgba(255, 255, 255, 0.95) !important;
+          backdrop-filter: blur(10px);
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+          padding: 1rem 0;
+          transition: all 0.3s ease;
+        }
+      
+        body.white-navbar .navbar-brand,
+        body.white-navbar .navbar .nav-link {
+          color: #2B2D5E !important;
+          font-family: 'Roboto Mono', monospace;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          position: relative;
+          transition: all 0.3s ease;
+        }
+      
+        body.white-navbar .navbar .nav-link:hover {
+          color: var(--accent-color) !important;
+        }
+      
+        body.white-navbar .navbar .nav-link::after {
+          content: '';
+          position: absolute;
+          width: 0;
+          height: 2px;
+          bottom: -2px;
+          left: 0;
+          background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+          transition: width 0.3s ease;
+        }
+      
+        body.white-navbar .navbar .nav-link:hover::after {
+          width: 100%;
+        }
+      
+        /* Override any other navbar styles */
+        body.white-navbar .navbar-toggler {
+          border-color: rgba(0, 0, 0, 0.2);
+        }
+      
+        body.white-navbar .navbar-toggler-icon {
+          background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(0, 0, 0, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+      
+        /* ...existing styles... */
+
     .history-container {
         background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         min-height: 100vh;
@@ -213,5 +264,10 @@
             font-size: 1.5rem;
         }
     }
+    .btn-logout {
+        background: var(--white-color);
+        
+      }
+    
 </style>
 {% endblock %}
