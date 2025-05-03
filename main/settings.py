@@ -121,34 +121,16 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-
-
-# settings.py
-import os
-
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'gestion_des_evenements/static')
-
+    os.path.join(BASE_DIR, 'gestion_des_evenements', 'static'),
 ]
 
-
-STATIC_URL = '/static/'
-
-# Facultatif, mais utile si tu veux collecter les fichiers pour la production
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
-
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+# Media files (Uploaded files)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Other settings
 LOGIN_URL = '/login/'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

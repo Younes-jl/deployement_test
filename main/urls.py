@@ -25,8 +25,8 @@ urlpatterns = [
     path('', include('gestion_des_evenements.urls')),
     path('', include('crud_event.urls')),
     path('', include('dashboard.urls')),
-]
+] 
 
-
-
-urlpatterns += static(settings.STATIC_URL, document_root=os.path.join(settings.BASE_DIR, 'gestion_des_evenements/static'))
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
