@@ -1,842 +1,955 @@
-{% extends 'base.html' %}
-
-{% block content %}
-        {% if messages %}
-            <div class="messages-container mb-4">
-                {% for message in messages %}
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <i class="fas fa-check-circle me-2"></i>
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
+{% extends 'base.html' %} {% block body_class %}white-navbar{% endblock %} 
+{% block content %} {% if messages %}
+<div class="messages-container mb-4">
+  {% for message in messages %}
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <i class="fas fa-check-circle me-2"></i>
+    {{ message }}
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
 <div class="register-container">
-    <div class="container py-5">
-        <div class="row justify-content-center align-items-center min-vh-100">
-            <div class="col-lg-8">
-                <!-- Card d'information de l'événement -->
-                <div class="event-preview-card mb-4">
-                    <div class="event-preview-content">
-                        <div class="event-preview-icon">
-                            <i class="fas fa-calendar-star"></i>
-                        </div>
-                        <h3 class="event-preview-title">{{ event.nom_event }}</h3>
-                        <p class="event-preview-details">
-                            <span><i class="fas fa-map-marker-alt"></i> {{ event.lieu }}</span>
-                            <span><i class="fas fa-clock"></i> {{ event.date|date:"d/m/Y H:i" }}</span>
-                        </p>
-                    </div>
-                    <div class="event-preview-wave">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-                            <path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-                        </svg>
-                    </div>
-                </div>
-
-                <!-- Formulaire d'inscription -->
-                <div class="register-form-card">
-                    <div class="progress-indicator mb-4">
-                        <div class="progress-step active" data-step="1">
-                            <div class="step-icon">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <span class="step-text">Informations</span>
-                        </div>
-                        <div class="progress-line"></div>
-                        <div class="progress-step" data-step="2">
-                            <div class="step-icon">
-                                <i class="fas fa-credit-card"></i>
-                            </div>
-                            <span class="step-text">Paiement</span>
-                        </div>
-                    </div>
-
-                    <form id="registration-form" method="POST" class="needs-validation" novalidate>
-                        {% csrf_token %}
-                        <input type="hidden" name="event_id" value="{{ event.id }}">
-                        
-                        <!-- Section 1: Informations personnelles -->
-                        <div class="form-section" id="section-1">
-                            <div class="form-floating mb-4 animate-field">
-                                <input type="text" id="name" name="name" class="form-control" placeholder="Votre nom complet" required>
-                                <label for="name">
-                                    <i class="fas fa-user"></i> Nom complet
-                                </label>
-                                <div class="invalid-feedback">Veuillez entrer votre nom complet</div>
-                            </div>
-
-                            <div class="form-floating mb-4 animate-field">
-                                <input type="email" id="email" name="email" class="form-control" placeholder="Votre adresse email" required>
-                                <label for="email">
-                                    <i class="fas fa-envelope"></i> Adresse email
-                                </label>
-                                <div class="invalid-feedback">Veuillez entrer une adresse email valide</div>
-                            </div>
-
-                            <div class="form-floating mb-4 animate-field">
-                                <input type="tel" id="phone_num" name="phone_num" class="form-control" placeholder="Votre numéro de téléphone" required>
-                                <label for="phone_num">
-                                    <i class="fas fa-phone"></i> Numéro de téléphone
-                                </label>
-                                <div class="invalid-feedback">Veuillez entrer un numéro de téléphone valide</div>
-                            </div>
-
-                            <button type="button" class="btn-next w-100" onclick="nextSection()">
-                                Continuer vers le paiement
-                                <i class="fas fa-arrow-right ms-2"></i>
-                            </button>
-                        </div>
-
-                        <!-- Section 2: Informations de paiement -->
-                        <div class="form-section" id="section-2" style="display: none;">
-                            <!-- Carte de paiement interactive -->
-                            <div class="payment-card" id="paymentCard">
-                                <div class="payment-card-inner">
-                                    <div class="payment-card-front">
-                                        <div class="card-chip"></div>
-                                        <div class="card-number" id="cardNumberDisplay">•••• •••• •••• ••••</div>
-                                        <div class="card-details">
-                                            <div class="card-holder">
-                                                <span class="label">Titulaire</span>
-                                                <span id="cardHolderDisplay">NOM DU TITULAIRE</span>
-                                            </div>
-                                            <div class="card-expires">
-                                                <span class="label">Expire</span>
-                                                <span id="cardExpiryDisplay">MM/YY</span>
-                                            </div>
-                                        </div>
-                                        <div class="card-brand">
-                                            <i class="fab fa-cc-visa"></i>
-                                        </div>
-                                    </div>
-                                    <div class="payment-card-back">
-                                        <div class="card-stripe"></div>
-                                        <div class="card-cvv">
-                                            <span class="label">CVV</span>
-                                            <div class="cvv-field" id="cardCvvDisplay">•••</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="payment-form mt-4">
-                                <div class="form-floating mb-4 animate-field">
-                                    <input type="text" id="card_number" name="card_number" 
-                                           class="form-control card-input" placeholder="1234 5678 9012 3456"
-                                           required maxlength="19" 
-                                           oninput="formatCardNumber(this); updateCardDisplay(this, 'cardNumberDisplay')">
-                                    <label for="card_number">
-                                        <i class="far fa-credit-card"></i> Numéro de carte
-                                    </label>
-                                </div>
-
-                                <div class="form-floating mb-4 animate-field">
-                                    <input type="text" id="card_holder_name" name="card_holder_name" 
-                                           class="form-control" placeholder="NOM PRÉNOM"
-                                           required oninput="updateCardDisplay(this, 'cardHolderDisplay')">
-                                    <label for="card_holder_name">
-                                        <i class="fas fa-user"></i> Nom du titulaire
-                                    </label>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-floating mb-4 animate-field">
-                                            <input type="text" id="expiry_date" name="expiry_date" 
-                                                   class="form-control card-input" placeholder="MM/YY"
-                                                   required maxlength="5" 
-                                                   oninput="formatExpiryDate(this); updateCardDisplay(this, 'cardExpiryDisplay')">
-                                            <label for="expiry_date">
-                                                <i class="far fa-calendar"></i> Date d'expiration
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-floating mb-4 animate-field">
-                                            <input type="password" id="cvv" name="cvv" 
-                                                   class="form-control card-input" placeholder="123"
-                                                   required maxlength="4" 
-                                                   onfocus="flipCard(true)" onblur="flipCard(false)"
-                                                   oninput="updateCardDisplay(this, 'cardCvvDisplay')">
-                                            <label for="cvv">
-                                                <i class="fas fa-lock"></i> CVV
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="payment-methods mb-4">
-                                    <div class="payment-method-options">
-                                        <div class="payment-method-card">
-                                            <input type="radio" name="payment_method" id="visa" value="visa" required>
-                                            <label for="visa" class="payment-method-label">
-                                                <i class="fab fa-cc-visa"></i>
-                                                <span>Visa</span>
-                                            </label>
-                                        </div>
-                                        <div class="payment-method-card">
-                                            <input type="radio" name="payment_method" id="mastercard" value="mastercard" required>
-                                            <label for="mastercard" class="payment-method-label">
-                                                <i class="fab fa-cc-mastercard"></i>
-                                                <span>Mastercard</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="d-flex gap-3">
-                                    <button type="button" class="btn-prev" onclick="prevSection()">
-                                        <i class="fas fa-arrow-left me-2"></i>
-                                        Retour
-                                    </button>
-                                    <button type="submit" class="btn-submit flex-grow-1">
-                                        <i class="fas fa-lock me-2"></i>
-                                        Payer et finaliser l'inscription
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+  <div class="container py-5">
+    <div class="row justify-content-center align-items-center min-vh-100">
+      <div class="col-lg-8">
+        <!-- Card d'information de l'événement -->
+        <div class="event-preview-card mb-4">
+          <div class="event-preview-content">
+            <div class="event-preview-icon" style="background-image: url('{{ event.image.url }}'); background-size: cover;">
+              <i class="fas fa-calendar-star"></i>
             </div>
+            
+            <h3 class="event-preview-title">{{ event.nom_event }}</h3>
+            <p class="event-preview-details">
+              <span
+                ><i class="fas fa-map-marker-alt"></i> {{ event.lieu }}</span
+              >
+              <span
+                ><i class="fas fa-clock"></i> {{ event.date }}</span
+              >
+            </p>
+          </div>
+          <div class="event-preview-wave">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+              <path
+                fill="rgba(255,255,255,0.1)"
+                d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+              ></path>
+            </svg>
+          </div>
         </div>
+
+        <!-- Formulaire d'inscription -->
+        <div class="register-form-card">
+          <div class="progress-indicator mb-4">
+            <div class="progress-step active" data-step="1">
+              <div class="step-icon">
+                <i class="fas fa-user"></i>
+              </div>
+              <span class="step-text">Informations</span>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step" data-step="2">
+              <div class="step-icon">
+                <i class="fas fa-credit-card"></i>
+              </div>
+              <span class="step-text">Paiement</span>
+            </div>
+          </div>
+
+          <form
+            id="registration-form"
+            method="POST"
+            class="needs-validation"
+            novalidate
+          >
+            {% csrf_token %}
+            <input type="hidden" name="event_id" value="{{ event.id }}" />
+
+            <!-- Section 1: Informations personnelles -->
+            <div class="form-section" id="section-1">
+              <div class="form-floating mb-4 animate-field">
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  class="form-control"
+                  placeholder="Votre nom complet"
+                  required
+                />
+                <label for="name" style="color: black">
+                  <i class="fas fa-user"></i> Nom complet
+                </label>
+                <div class="invalid-feedback" style="color: black">
+                  Veuillez entrer votre nom complet
+                </div>
+              </div>
+
+              <div class="form-floating mb-4 animate-field">
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  class="form-control"
+                  placeholder="Votre adresse email"
+                  required
+                />
+                <label for="email" style="color: black">
+                  <i class="fas fa-envelope"></i> Adresse email
+                </label>
+                <div class="invalid-feedback">
+                  Veuillez entrer une adresse email valide
+                </div>
+              </div>
+
+              <div class="form-floating mb-4 animate-field">
+                <input
+                  type="tel"
+                  id="phone_num"
+                  name="phone_num"
+                  class="form-control"
+                  placeholder="Votre numéro de téléphone"
+                  required
+                />
+                <label for="phone_num" style="color: black">
+                  <i class="fas fa-phone"></i> Numéro de téléphone
+                </label style="color: black">
+                <div class="invalid-feedback" >
+                  Veuillez entrer un numéro de téléphone valide
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="btn-next w-100"
+                onclick="nextSection()"
+              >
+                Continuer vers le paiement
+                <i class="fas fa-arrow-right ms-2"></i>
+              </button>
+            </div>
+
+            <!-- Section 2: Informations de paiement -->
+            <div class="form-section" id="section-2" style="display: none">
+              <!-- Carte de paiement interactive -->
+              <div class="payment-card" id="paymentCard">
+                <div class="payment-card-inner">
+                  <div class="payment-card-front">
+                    <div class="card-chip"></div>
+                    <div class="card-number" id="cardNumberDisplay">
+                      •••• •••• •••• ••••
+                    </div>
+                    <div class="card-details">
+                      <div class="card-holder">
+                        <span class="label">Titulaire</span>
+                        <span id="cardHolderDisplay">NOM DU TITULAIRE</span>
+                      </div>
+                      <div class="card-expires">
+                        <span class="label">Expire</span>
+                        <span id="cardExpiryDisplay">MM/YY</span>
+                      </div>
+                    </div>
+                    <div class="card-brand">
+                      <i class="fab fa-cc-visa"></i>
+                    </div>
+                  </div>
+                  <div class="payment-card-back">
+                    <div class="card-stripe"></div>
+                    <div class="card-cvv">
+                      <span class="label">CVV</span>
+                      <div class="cvv-field" id="cardCvvDisplay">•••</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="payment-form mt-4">
+                <div class="form-floating mb-4 animate-field">
+                  <input
+                    type="text"
+                    id="card_number"
+                    name="card_number"
+                    class="form-control card-input"
+                    placeholder="1234 5678 9012 3456"
+                    required
+                    maxlength="19"
+                    oninput="formatCardNumber(this); updateCardDisplay(this, 'cardNumberDisplay')"
+                  />
+                  <label for="card_number" style="color: black">
+                    <i class="far fa-credit-card"></i> Numéro de carte
+                  </label>
+                </div>
+
+                <div class="form-floating mb-4 animate-field">
+                  <input
+                    type="text"
+                    id="card_holder_name"
+                    name="card_holder_name"
+                    class="form-control"
+                    placeholder="NOM PRÉNOM"
+                    required
+                    oninput="updateCardDisplay(this, 'cardHolderDisplay')"
+                  />
+                  <label for="card_holder_name" style="color: black">
+                    <i class="fas fa-user"></i> Nom du titulaire
+                  </label>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-floating mb-4 animate-field">
+                      <input
+                        type="text"
+                        id="expiry_date"
+                        name="expiry_date"
+                        class="form-control card-input"
+                        placeholder="MM/YY"
+                        required
+                        maxlength="5"
+                        oninput="formatExpiryDate(this); updateCardDisplay(this, 'cardExpiryDisplay')"
+                      />
+                      <label for="expiry_date" style="color: black">
+                        <i class="far fa-calendar"></i> Date d'expiration
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-floating mb-4 animate-field">
+                      <input
+                        type="password"
+                        id="cvv"
+                        name="cvv"
+                        class="form-control card-input"
+                        placeholder="123"
+                        required
+                        maxlength="4"
+                        onfocus="flipCard(true)"
+                        onblur="flipCard(false)"
+                        oninput="updateCardDisplay(this, 'cardCvvDisplay')"
+                      />
+                      <label for="cvv" style="color: black"> <i class="fas fa-lock"></i> CVV </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="payment-methods mb-4">
+                  <div class="payment-method-options">
+                    <div class="payment-method-card">
+                      <input
+                        type="radio"
+                        name="payment_method"
+                        id="visa"
+                        value="visa"
+                        required
+                      />
+                      <label for="visa" class="payment-method-label" style="color: black">
+                        <i class="fab fa-cc-visa"></i>
+                        <span>Visa</span>
+                      </label>
+                    </div>
+                    <div class="payment-method-card">
+                      <input
+                        type="radio"
+                        name="payment_method"
+                        id="mastercard"
+                        value="mastercard"
+                        required
+                      />
+                      <label for="mastercard" class="payment-method-label" style="color: black">
+                        <i class="fab fa-cc-mastercard"></i>
+                        <span>Mastercard</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex gap-3">
+                  <button
+                    type="button"
+                    class="btn-prev"
+                    onclick="prevSection()"
+                  >
+                    <i class="fas fa-arrow-left me-2"></i>
+                    Retour
+                  </button>
+                  <button type="submit" class="btn-submit flex-grow-1">
+                    <i class="fas fa-lock me-2"></i>
+                    Payer et finaliser l'inscription
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Modal de succès -->
-<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header border-0">
-                <h5 class="modal-title gradient-text" id="successModalLabel">
-                    <i class="fas fa-check-circle text-success me-2"></i>
-                    Inscription réussie !
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center py-4">
-                <div class="success-animation mb-4">
-                    <div class="checkmark-circle">
-                        <i class="fas fa-ticket-alt fa-3x text-primary"></i>
-                    </div>
-                </div>
-                <h4 class="mb-3">Merci pour votre inscription!</h4>
-                <p class="text-muted mb-4">Votre paiement a été traité avec succès. Vous pouvez maintenant télécharger votre ticket.</p>
-                {% if participation_id %}
-                    <a href="{% url 'download_ticket' participation_id %}" class="btn btn-primary btn-lg" target="_blank">
-                        <i class="fas fa-download me-2"></i>
-                        Télécharger mon ticket
-                    </a>
-                {% endif %}
-            </div>
+<div
+  class="modal fade"
+  id="successModal"
+  tabindex="-1"
+  aria-labelledby="successModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title gradient-text" id="successModalLabel">
+          <i class="fas fa-check-circle text-success me-2"></i>
+          Inscription réussie !
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <div class="success-animation mb-4">
+          <div class="checkmark-circle">
+            <i class="fas fa-ticket-alt fa-3x text-primary"></i>
+          </div>
         </div>
+        <h4 class="mb-3">Merci pour votre inscription!</h4>
+        <p class="text-muted mb-4">
+          Votre paiement a été traité avec succès. Vous pouvez maintenant
+          télécharger votre ticket.
+        </p>
+        {% if participation_id %}
+        <a
+          href="{% url 'download_ticket' participation_id %}"
+          class="btn btn-primary btn-lg"
+          target="_blank"
+        >
+          <i class="fas fa-download me-2"></i>
+          Télécharger mon ticket
+        </a>
+        {% endif %}
+      </div>
     </div>
+  </div>
 </div>
 
 <style>
-    .register-container {
-        min-height: 100vh;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 2rem 0;
-    }
+  .navbar .nav-link,
+  .navbar .navbar-brand {
+    color: white;
+    justify-content: center;
+    font-size: 20px;
+  }
 
-    /* Event Preview Card */
-    .event-preview-card {
-        background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
-        border-radius: 20px;
-        padding: 2rem;
-        color: white;
-        position: relative;
-        overflow: hidden;
-        transform: translateY(0);
-        transition: all 0.3s ease;
-    }
+  .register-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 2rem 0;
+  }
 
-    .event-preview-card:hover {
-        transform: translateY(-5px);
-    }
+  /* Event Preview Card */
+  .event-preview-card {
+    background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    transform: translateY(0);
+    transition: all 0.3s ease;
+  }
 
-    .event-preview-content {
-        position: relative;
-        z-index: 1;
-    }
+  .event-preview-card:hover {
+    transform: translateY(-5px);
+  }
 
-    .event-preview-icon {
-        width: 60px;
-        height: 60px;
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 1rem;
-    }
+  .event-preview-content {
+    position: relative;
+    z-index: 1;
+  }
 
-    .event-preview-icon i {
-        font-size: 1.5rem;
-        color: white;
-    }
+  .event-preview-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
 
-    .event-preview-title {
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
-    }
+  .event-preview-icon i {
+    font-size: 1.5rem;
+    color: white;
+  }
 
-    .event-preview-details {
-        display: flex;
-        gap: 1.5rem;
-        font-size: 0.9rem;
-    }
+  .event-preview-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
 
-    .event-preview-details span {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
+  .event-preview-details {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.9rem;
+  }
 
-    .event-preview-wave {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        line-height: 0;
-    }
+  .event-preview-details span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
 
-    /* Register Form Card */
-    .register-form-card {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 2rem;
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-    }
+  .event-preview-wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    line-height: 0;
+  }
 
-    /* Progress Indicator */
-    .progress-indicator {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 2rem;
-        position: relative;
-    }
+  /* Register Form Card */
+  .register-form-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  }
 
-    .progress-step {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
-        position: relative;
-        z-index: 1;
-    }
+  /* Progress Indicator */
+  .progress-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    position: relative;
+  }
 
-    .step-icon {
-        width: 50px;
-        height: 50px;
-        background: #e9ecef;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #6c757d;
-        transition: all 0.3s ease;
-    }
+  .progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 1;
+  }
 
-    .progress-step.active .step-icon {
-        background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
-        color: white;
-    }
+  .step-icon {
+    width: 50px;
+    height: 50px;
+    background: #e9ecef;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    transition: all 0.3s ease;
+  }
 
-    .step-text {
-        font-size: 0.9rem;
-        color: #6c757d;
-        font-weight: 500;
-    }
+  .progress-step.active .step-icon {
+    background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+    color: white;
+  }
 
-    .progress-step.active .step-text {
-        color: #000DFF;
-    }
+  .step-text {
+    font-size: 0.9rem;
+    color: #6c757d;
+    font-weight: 500;
+  }
 
-    .progress-line {
-        flex-grow: 1;
-        height: 2px;
-        background: #e9ecef;
-        position: relative;
-    }
+  .progress-step.active .step-text {
+    color: #000dff;
+  }
 
-    .progress-line::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 0;
-        background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
-        transition: width 0.3s ease;
-    }
+  .progress-line {
+    flex-grow: 1;
+    height: 2px;
+    background: #e9ecef;
+    position: relative;
+  }
 
-    .section-2-active .progress-line::after {
-        width: 100%;
-    }
+  .progress-line::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+    transition: width 0.3s ease;
+  }
 
-    /* Form Controls */
-    .form-floating {
-        position: relative;
-    }
+  .section-2-active .progress-line::after {
+    width: 100%;
+  }
 
-    .form-floating > .form-control {
-        height: calc(3.5rem + 2px);
-        padding: 1rem 0.75rem;
-    }
+  /* Form Controls */
+  .form-floating {
+    position: relative;
+  }
 
-    .form-floating > label {
-        padding: 1rem 0.75rem;
-    }
+  .form-floating > .form-control {
+    height: calc(3.5rem + 2px);
+    padding: 1rem 0.75rem;
+  }
 
-    .form-control {
-        border: 2px solid #e1e1e1;
-        border-radius: 10px;
-        transition: all 0.3s ease;
-        font-size: 1rem;
-    }
+  .form-floating > label {
+    padding: 1rem 0.75rem;
+  }
 
-    .form-control:focus {
-        border-color: #6B73FF;
-        box-shadow: 0 0 0 0.25rem rgba(107, 115, 255, 0.25);
-    }
+  .form-control {
+    border: 2px solid #e1e1e1;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+  }
 
-    /* Buttons */
-    .btn-next,
-    .btn-prev,
-    .btn-submit {
-        border: none;
-        border-radius: 10px;
-        padding: 1rem 2rem;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
+  .form-control:focus {
+    border-color: #6b73ff;
+    box-shadow: 0 0 0 0.25rem rgba(107, 115, 255, 0.25);
+  }
 
-    .btn-next,
-    .btn-submit {
-        background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
-        color: white;
-    }
+  /* Buttons */
+  .btn-next,
+  .btn-prev,
+  .btn-submit {
+    border: none;
+    border-radius: 10px;
+    padding: 1rem 2rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
 
-    .btn-prev {
-        background: #e9ecef;
-        color: #6c757d;
-    }
+  .btn-next,
+  .btn-submit {
+    background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+    color: white;
+  }
 
-    .btn-next:hover,
-    .btn-submit:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(107, 115, 255, 0.4);
-    }
+  .btn-prev {
+    background: #e9ecef;
+    color: #6c757d;
+  }
 
-    .btn-prev:hover {
-        background: #dee2e6;
-        transform: translateY(-2px);
-    }
+  .btn-next:hover,
+  .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(107, 115, 255, 0.4);
+  }
 
-    /* Payment Card */
-    .payment-card {
-        width: 100%;
-        max-width: 400px;
-        height: 250px;
-        margin: 0 auto;
-        perspective: 1000px;
-    }
+  .btn-prev:hover {
+    background: #dee2e6;
+    transform: translateY(-2px);
+  }
 
-    .payment-card-inner {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        transition: transform 0.6s;
-        transform-style: preserve-3d;
-    }
+  /* Payment Card */
+  .payment-card {
+    width: 100%;
+    max-width: 400px;
+    height: 250px;
+    margin: 0 auto;
+    perspective: 1000px;
+  }
 
-    .payment-card.flipped .payment-card-inner {
-        transform: rotateY(180deg);
-    }
+  .payment-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
 
-    .payment-card-front,
-    .payment-card-back {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        backface-visibility: hidden;
-        border-radius: 15px;
-        padding: 25px;
-        background: linear-gradient(45deg, #1a1a1a, #373737);
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-        color: white;
-    }
+  .payment-card.flipped .payment-card-inner {
+    transform: rotateY(180deg);
+  }
 
-    .payment-card-back {
-        transform: rotateY(180deg);
-    }
+  .payment-card-front,
+  .payment-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    padding: 25px;
+    background: linear-gradient(45deg, #1a1a1a, #373737);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    color: white;
+  }
 
-    .card-chip {
-        width: 50px;
-        height: 40px;
-        background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
-        border-radius: 8px;
-        margin-bottom: 25px;
-    }
+  .payment-card-back {
+    transform: rotateY(180deg);
+  }
 
-    .card-number {
-        font-size: 1.4rem;
-        letter-spacing: 3px;
-        margin-bottom: 20px;
-        font-family: 'Courier New', monospace;
-    }
+  .card-chip {
+    width: 50px;
+    height: 40px;
+    background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
+    border-radius: 8px;
+    margin-bottom: 25px;
+  }
 
-    .card-details {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.9rem;
-        text-transform: uppercase;
-    }
+  .card-number {
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    font-family: "Courier New", monospace;
+  }
 
-    .label {
-        display: block;
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 0.8rem;
-        margin-bottom: 5px;
-    }
+  .card-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+  }
 
-    .card-stripe {
-        background: #2a2a2a;
-        height: 50px;
-        margin: 20px 0;
-    }
+  .label {
+    display: block;
+    color: rgba(15, 15, 15, 0.6);
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+  }
 
-    .card-cvv {
-        background: white;
-        color: black;
-        padding: 10px;
-        border-radius: 5px;
-        width: 80px;
-        text-align: center;
-        margin: 0 auto;
-    }
+  .card-stripe {
+    background: #2a2a2a;
+    height: 50px;
+    margin: 20px 0;
+  }
 
-    /* Payment Methods */
-    .payment-method-options {
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-    }
+  .card-cvv {
+    background: white;
+    color: black;
+    padding: 10px;
+    border-radius: 5px;
+    width: 80px;
+    text-align: center;
+    margin: 0 auto;
+  }
 
-    .payment-method-card input[type="radio"] {
-        display: none;
-    }
+  /* Payment Methods */
+  .payment-method-options {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+  }
 
-    .payment-method-label {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 1rem 2rem;
-        border: 2px solid #e1e1e1;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
+  .payment-method-card input[type="radio"] {
+    display: none;
+  }
 
-    .payment-method-label i {
-        font-size: 2rem;
-    }
+  .payment-method-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    border: 2px solid #e1e1e1;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
 
-    .payment-method-label span {
-        font-size: 0.9rem;
-        font-weight: 500;
-    }
+  .payment-method-label i {
+    font-size: 2rem;
+  }
 
-    .payment-method-card input[type="radio"]:checked + .payment-method-label {
-        border-color: #6B73FF;
-        background: rgba(107, 115, 255, 0.1);
-        transform: translateY(-2px);
-    }
+  .payment-method-label span {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
 
-    /* Animations */
-    @keyframes slideUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
+  .payment-method-card input[type="radio"]:checked + .payment-method-label {
+    border-color: #6b73ff;
+    background: rgba(107, 115, 255, 0.1);
+    transform: translateY(-2px);
+  }
 
-    .animate-field {
-        animation: slideUp 0.5s ease forwards;
+  /* Animations */
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
     }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-    .form-section {
-        transition: all 0.3s ease;
-    }
+  .animate-field {
+    animation: slideUp 0.5s ease forwards;
+  }
+
+  .form-section {
+    transition: all 0.3s ease;
+  }
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('registration-form');
-    
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        if (validateForm()) {
-            // Format expiry date before submit
-            const expiryInput = document.getElementById('expiry_date');
-            const [month, year] = expiryInput.value.split('/');
-            expiryInput.value = `${month.padStart(2, '0')}/${year.padStart(2, '0')}`;
-            
-            // Remove spaces from card number
-            const cardNumberInput = document.getElementById('card_number');
-            cardNumberInput.value = cardNumberInput.value.replace(/\s/g, '');
-            
-            form.submit();
-        }
-    });
-});
+  document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('registration-form');
 
-function validateForm() {
-    const requiredFields = [
-        { id: 'name', message: 'Veuillez entrer votre nom complet' },
-        { id: 'email', message: 'Veuillez entrer une adresse email valide' },
-        { id: 'phone_num', message: 'Veuillez entrer votre numéro de téléphone' },
-        { id: 'card_number', message: 'Veuillez entrer un numéro de carte valide' },
-        { id: 'card_holder_name', message: 'Veuillez entrer le nom du titulaire' },
-        { id: 'expiry_date', message: 'Veuillez entrer une date d\'expiration valide' },
-        { id: 'cvv', message: 'Veuillez entrer le code CVV' }
-    ];
+      form.addEventListener('submit', function(e) {
+          e.preventDefault();
 
-    let isValid = true;
+          if (validateForm()) {
+              // Format expiry date before submit
+              const expiryInput = document.getElementById('expiry_date');
+              const [month, year] = expiryInput.value.split('/');
+              expiryInput.value = `${month.padStart(2, '0')}/${year.padStart(2, '0')}`;
 
-    requiredFields.forEach(field => {
-        const input = document.getElementById(field.id);
-        const value = input.value.trim();
-        
-        if (!value) {
-            showError(input, field.message);
-            isValid = false;
-        } else {
-            removeError(input);
-            
-            // Validation spécifique par type
-            if (field.id === 'email' && !validateEmail(value)) {
-                showError(input, 'Format d\'email invalide');
-                isValid = false;
-            }
-            if (field.id === 'card_number' && !validateCardNumber(value)) {
-                showError(input, 'Numéro de carte invalide');
-                isValid = false;
-            }
-            if (field.id === 'expiry_date' && !validateExpiryDate(value)) {
-                showError(input, 'Date d\'expiration invalide');
-                isValid = false;
-            }
-            if (field.id === 'cvv' && !validateCVV(value)) {
-                showError(input, 'CVV invalide');
-                isValid = false;
-            }
-        }
-    });
+              // Remove spaces from card number
+              const cardNumberInput = document.getElementById('card_number');
+              cardNumberInput.value = cardNumberInput.value.replace(/\s/g, '');
 
-    // Validate payment method
-    const paymentMethod = document.querySelector('input[name="payment_method"]:checked');
-    if (!paymentMethod) {
-        const paymentMethodsContainer = document.querySelector('.payment-methods');
-        showError(paymentMethodsContainer, 'Veuillez sélectionner une méthode de paiement');
-        isValid = false;
-    }
+              form.submit();
+          }
+      });
+  });
 
-    return isValid;
-}
+  function validateForm() {
+      const requiredFields = [
+          { id: 'name', message: 'Veuillez entrer votre nom complet' },
+          { id: 'email', message: 'Veuillez entrer une adresse email valide' },
+          { id: 'phone_num', message: 'Veuillez entrer votre numéro de téléphone' },
+          { id: 'card_number', message: 'Veuillez entrer un numéro de carte valide' },
+          { id: 'card_holder_name', message: 'Veuillez entrer le nom du titulaire' },
+          { id: 'expiry_date', message: 'Veuillez entrer une date d\'expiration valide' },
+          { id: 'cvv', message: 'Veuillez entrer le code CVV' }
+      ];
 
-function validateEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
+      let isValid = true;
 
-function validateCardNumber(number) {
-    const num = number.replace(/\s/g, '');
-    return /^\d{16}$/.test(num);
-}
+      requiredFields.forEach(field => {
+          const input = document.getElementById(field.id);
+          const value = input.value.trim();
 
-function validateExpiryDate(date) {
-    if (!/^\d{2}\/\d{2}$/.test(date)) return false;
-    
-    const [month, year] = date.split('/').map(Number);
-    const now = new Date();
-    const currentYear = now.getFullYear() % 100;
-    const currentMonth = now.getMonth() + 1;
-    
-    return month >= 1 && month <= 12 && 
-           year >= currentYear && 
-           (year > currentYear || month >= currentMonth);
-}
+          if (!value) {
+              showError(input, field.message);
+              isValid = false;
+          } else {
+              removeError(input);
 
-function validateCVV(cvv) {
-    return /^\d{3,4}$/.test(cvv);
-}
+              // Validation spécifique par type
+              if (field.id === 'email' && !validateEmail(value)) {
+                  showError(input, 'Format d\'email invalide');
+                  isValid = false;
+              }
+              if (field.id === 'card_number' && !validateCardNumber(value)) {
+                  showError(input, 'Numéro de carte invalide');
+                  isValid = false;
+              }
+              if (field.id === 'expiry_date' && !validateExpiryDate(value)) {
+                  showError(input, 'Date d\'expiration invalide');
+                  isValid = false;
+              }
+              if (field.id === 'cvv' && !validateCVV(value)) {
+                  showError(input, 'CVV invalide');
+                  isValid = false;
+              }
+          }
+      });
 
-function showError(input, message) {
-    input.classList.add('is-invalid');
-    const errorDiv = input.parentElement.querySelector('.invalid-feedback') || 
-                    createElement('div', 'invalid-feedback');
-    errorDiv.textContent = message;
-    if (!input.parentElement.querySelector('.invalid-feedback')) {
-        input.parentElement.appendChild(errorDiv);
-    }
-}
+      // Validate payment method
+      const paymentMethod = document.querySelector('input[name="payment_method"]:checked');
+      if (!paymentMethod) {
+          const paymentMethodsContainer = document.querySelector('.payment-methods');
+          showError(paymentMethodsContainer, 'Veuillez sélectionner une méthode de paiement');
+          isValid = false;
+      }
 
-function removeError(input) {
-    input.classList.remove('is-invalid');
-    const errorDiv = input.parentElement.querySelector('.invalid-feedback');
-    if (errorDiv) {
-        errorDiv.remove();
-    }
-}
+      return isValid;
+  }
 
-function createElement(tag, className) {
-    const element = document.createElement(tag);
-    element.className = className;
-    return element;
-}
+  function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
 
-// Existing functions for card display and formatting
-function nextSection() {
-    const section1 = document.getElementById('section-1');
-    const section2 = document.getElementById('section-2');
-    
-    if (validateSection1()) {
-        section1.style.display = 'none';
-        section2.style.display = 'block';
-        document.querySelector('.progress-step[data-step="2"]').classList.add('active');
-        document.querySelector('.register-container').classList.add('section-2-active');
-        
-        // Reset card animations
-        const fields = section2.querySelectorAll('.animate-field');
-        fields.forEach((field, index) => {
-            field.style.animation = 'none';
-            field.offsetHeight;
-            field.style.animation = `slideUp 0.5s ease forwards ${index * 0.1}s`;
-        });
-    }
-}
+  function validateCardNumber(number) {
+      const num = number.replace(/\s/g, '');
+      return /^\d{16}$/.test(num);
+  }
 
-function prevSection() {
-    const section1 = document.getElementById('section-1');
-    const section2 = document.getElementById('section-2');
-    
-    section2.style.display = 'none';
-    section1.style.display = 'block';
-    document.querySelector('.progress-step[data-step="2"]').classList.remove('active');
-    document.querySelector('.register-container').classList.remove('section-2-active');
-}
+  function validateExpiryDate(date) {
+      if (!/^\d{2}\/\d{2}$/.test(date)) return false;
 
-function validateSection1() {
-    const form = document.getElementById('registration-form');
-    const requiredFields = ['name', 'email', 'phone_num'];
-    let isValid = true;
+      const [month, year] = date.split('/').map(Number);
+      const now = new Date();
+      const currentYear = now.getFullYear() % 100;
+      const currentMonth = now.getMonth() + 1;
 
-    requiredFields.forEach(fieldId => {
-        const field = document.getElementById(fieldId);
-        if (!field.value) {
-            field.classList.add('is-invalid');
-            isValid = false;
-        } else {
-            field.classList.remove('is-invalid');
-        }
-    });
+      return month >= 1 && month <= 12 &&
+             year >= currentYear &&
+             (year > currentYear || month >= currentMonth);
+  }
 
-    return isValid;
-}
+  function validateCVV(cvv) {
+      return /^\d{3,4}$/.test(cvv);
+  }
 
-// Fonctions de la carte de paiement
-function formatCardNumber(input) {
-    let value = input.value.replace(/\D/g, '');
-    let formattedValue = '';
-    for (let i = 0; i < value.length; i++) {
-        if (i > 0 && i % 4 === 0) {
-            formattedValue += ' ';
-        }
-        formattedValue += value[i];
-    }
-    input.value = formattedValue;
-}
+  function showError(input, message) {
+      input.classList.add('is-invalid');
+      const errorDiv = input.parentElement.querySelector('.invalid-feedback') ||
+                      createElement('div', 'invalid-feedback');
+      errorDiv.textContent = message;
+      if (!input.parentElement.querySelector('.invalid-feedback')) {
+          input.parentElement.appendChild(errorDiv);
+      }
+  }
 
-function formatExpiryDate(input) {
-    let value = input.value.replace(/\D/g, '');
-    if (value.length >= 2) {
-        value = value.slice(0, 2) + '/' + value.slice(2);
-    }
-    input.value = value;
-}
+  function removeError(input) {
+      input.classList.remove('is-invalid');
+      const errorDiv = input.parentElement.querySelector('.invalid-feedback');
+      if (errorDiv) {
+          errorDiv.remove();
+      }
+  }
 
-function updateCardDisplay(input, displayId) {
-    const display = document.getElementById(displayId);
-    if (input.value) {
-        display.textContent = input.value;
-    } else {
-        const defaults = {
-            'cardNumberDisplay': '•••• •••• •••• ••••',
-            'cardHolderDisplay': 'NOM DU TITULAIRE',
-            'cardExpiryDisplay': 'MM/YY',
-            'cardCvvDisplay': '•••'
-        };
-        display.textContent = defaults[displayId];
-    }
-}
+  function createElement(tag, className) {
+      const element = document.createElement(tag);
+      element.className = className;
+      return element;
+  }
 
-function flipCard(flip) {
-    const card = document.querySelector('.payment-card');
-    if (flip) {
-        card.classList.add('flipped');
-    } else {
-        card.classList.remove('flipped');
-    }
-}
+  // Existing functions for card display and formatting
+  function nextSection() {
+      const section1 = document.getElementById('section-1');
+      const section2 = document.getElementById('section-2');
 
-// Animation 3D de la carte au survol
-document.addEventListener('DOMContentLoaded', function() {
-    const card = document.querySelector('.payment-card');
-    
-    card.addEventListener('mousemove', function(e) {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        
-        const rotateX = ((y - centerY) / centerY) * 20;
-        const rotateY = ((x - centerX) / centerX) * 20;
-        
-        card.style.transform = `perspective(1000px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg)`;
-    });
-    
-    card.addEventListener('mouseleave', function() {
-        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
-    });
+      if (validateSection1()) {
+          section1.style.display = 'none';
+          section2.style.display = 'block';
+          document.querySelector('.progress-step[data-step="2"]').classList.add('active');
+          document.querySelector('.register-container').classList.add('section-2-active');
 
-    // Animation initiale des champs
-    const fields = document.querySelectorAll('.animate-field');
-    fields.forEach((field, index) => {
-        field.style.animationDelay = `${index * 0.1}s`;
-    });
-});
+          // Reset card animations
+          const fields = section2.querySelectorAll('.animate-field');
+          fields.forEach((field, index) => {
+              field.style.animation = 'none';
+              field.offsetHeight;
+              field.style.animation = `slideUp 0.5s ease forwards ${index * 0.1}s`;
+          });
+      }
+  }
 
-// Afficher la modal si show_success_modal est true
-{% if show_success_modal %}
-    document.addEventListener('DOMContentLoaded', function() {
-        var successModal = new bootstrap.Modal(document.getElementById('successModal'));
-        successModal.show();
-    });
-{% endif %}
+  function prevSection() {
+      const section1 = document.getElementById('section-1');
+      const section2 = document.getElementById('section-2');
+
+      section2.style.display = 'none';
+      section1.style.display = 'block';
+      document.querySelector('.progress-step[data-step="2"]').classList.remove('active');
+      document.querySelector('.register-container').classList.remove('section-2-active');
+  }
+
+  function validateSection1() {
+      const form = document.getElementById('registration-form');
+      const requiredFields = ['name', 'email', 'phone_num'];
+      let isValid = true;
+
+      requiredFields.forEach(fieldId => {
+          const field = document.getElementById(fieldId);
+          if (!field.value) {
+              field.classList.add('is-invalid');
+              isValid = false;
+          } else {
+              field.classList.remove('is-invalid');
+          }
+      });
+
+      return isValid;
+  }
+
+  // Fonctions de la carte de paiement
+  function formatCardNumber(input) {
+      let value = input.value.replace(/\D/g, '');
+      let formattedValue = '';
+      for (let i = 0; i < value.length; i++) {
+          if (i > 0 && i % 4 === 0) {
+              formattedValue += ' ';
+          }
+          formattedValue += value[i];
+      }
+      input.value = formattedValue;
+  }
+
+  function formatExpiryDate(input) {
+      let value = input.value.replace(/\D/g, '');
+      if (value.length >= 2) {
+          value = value.slice(0, 2) + '/' + value.slice(2);
+      }
+      input.value = value;
+  }
+
+  function updateCardDisplay(input, displayId) {
+      const display = document.getElementById(displayId);
+      if (input.value) {
+          display.textContent = input.value;
+      } else {
+          const defaults = {
+              'cardNumberDisplay': '•••• •••• •••• ••••',
+              'cardHolderDisplay': 'NOM DU TITULAIRE',
+              'cardExpiryDisplay': 'MM/YY',
+              'cardCvvDisplay': '•••'
+          };
+          display.textContent = defaults[displayId];
+      }
+  }
+
+  function flipCard(flip) {
+      const card = document.querySelector('.payment-card');
+      if (flip) {
+          card.classList.add('flipped');
+      } else {
+          card.classList.remove('flipped');
+      }
+  }
+
+  // Animation 3D de la carte au survol
+  document.addEventListener('DOMContentLoaded', function() {
+      const card = document.querySelector('.payment-card');
+
+      card.addEventListener('mousemove', function(e) {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+
+          const rotateX = ((y - centerY) / centerY) * 20;
+          const rotateY = ((x - centerX) / centerX) * 20;
+
+          card.style.transform = `perspective(1000px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg)`;
+      });
+
+      card.addEventListener('mouseleave', function() {
+          card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+      });
+
+      // Animation initiale des champs
+      const fields = document.querySelectorAll('.animate-field');
+      fields.forEach((field, index) => {
+          field.style.animationDelay = `${index * 0.1}s`;
+      });
+  });
+
+  // Afficher la modal si show_success_modal est true
+  {% if show_success_modal %}
+      document.addEventListener('DOMContentLoaded', function() {
+          var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+          successModal.show();
+      });
+  {% endif %}
 </script>
 {% endblock %}

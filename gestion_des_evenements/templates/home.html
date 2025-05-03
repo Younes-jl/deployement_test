@@ -4,193 +4,235 @@
 
 <!-- Hero Section -->
 <section id="home" class="hero-section">
-  <div class="container" id="container1">
-    <h1 class="display-3 fw-bold mb-3">Annual Marketing Conference</h1>
-    <p class="lead mb-4">
-      Join industry leaders for three days of networking and learning
+  <div class="glitch-overlay"></div>
+  <div class="container hero-content" id="container1">
+    <h1 class="display-1 fw-bold mb-4 event-title">Alternative<br>Future Events</h1>
+    <p class="lead mb-5 hero-subtitle">
+      Breaking boundaries • Creating experiences • Defining culture
     </p>
-    <a href="#events" class="btn btn-primary btn-lg px-4 me-2" id="btn">View Events</a>
+    <div class="cta-container">
+      <a href="#events" class="btn btn-glow btn-lg px-5">Explore Events</a>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <i class="fas fa-chevron-down pulse"></i>
   </div>
 </section>
 
 <!-- Services Section -->
-<section id="services" class="py-5 bg-light">
+<section id="services" class="py-6">
   <div class="container">
-    <div class="section-title text-center mb-5">
-      <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px">
-        <i class="fas fa-cogs fa-2x text-white"></i>
-      </div>
-      <h2>Our Services</h2>
-      <p class="lead">Discover the solutions we offer to make your events unforgettable</p>
+    <div class="section-header text-center mb-5">
+      <span class="section-tagline">What We Offer</span>
+      <h2 class="section-title">Our Services</h2>
+      <div class="section-divider"></div>
+      <p class="section-subtitle">
+        We create immersive experiences that blur the line between reality and imagination
+      </p>
     </div>
-    <div class="row text-center">
+    
+    <div class="row g-5">
       <div class="col-md-4">
-        <div class="mb-4">
-          <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px">
-            <i class="fas fa-calendar-alt fa-3x text-white"></i>
+        <div class="service-card">
+          <div class="service-icon">
+            <i class="fas fa-calendar-alt"></i>
           </div>
+          <h4 class="service-title">Event Curation</h4>
+          <p class="service-text">
+            We craft conceptual experiences that challenge perceptions and create lasting memories.
+          </p>
         </div>
-        <h4 class="fw-bold">Event Planning</h4>
-        <p>
-          We manage all aspects of your event, from concept to execution,
-          ensuring a seamless experience.
-        </p>
       </div>
+      
       <div class="col-md-4">
-        <div class="mb-4">
-          <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px">
-            <i class="fas fa-laptop fa-3x text-white"></i>
+        <div class="service-card featured">
+          <div class="service-icon">
+            <i class="fas fa-laptop"></i>
           </div>
+          <h4 class="service-title">Digital Experiences</h4>
+          <p class="service-text">
+            Merging physical and virtual worlds through cutting-edge technology and innovative design.
+          </p>
         </div>
-        <h4 class="fw-bold">Virtual Events</h4>
-        <p>
-          Host professional online conferences, webinars, and hybrid events with
-          our advanced tech solutions.
-        </p>
       </div>
+      
       <div class="col-md-4">
-        <div class="mb-4">
-          <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px">
-            <i class="fas fa-shield-alt fa-3x text-white"></i>
+        <div class="service-card">
+          <div class="service-icon">
+            <i class="fas fa-shield-alt"></i>
           </div>
+          <h4 class="service-title">Underground Network</h4>
+          <p class="service-text">
+            Access to exclusive venues, artists, and experiences typically hidden from mainstream culture.
+          </p>
         </div>
-        <h4 class="fw-bold">Security & Support</h4>
-        <p>
-          We provide full technical support and ensure your event’s data and
-          activities are safe and secure.
-        </p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- Events Section -->
-<section id="events" class="py-5">
-  <div class="container-fluid">
-    <div class="section-title text-center mb-5">
-      <div class="d-inline-flex align-items-center mb-3">
-        <i class="fas fa-calendar-alt fa-3x text-primary me-3"></i>
-        <h2>Upcoming Events</h2>
-      </div>
-      <p class="lead">Discover our exciting lineup of events and workshops</p>
+<section id="events" class="py-6 bg-gradient">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <span class="section-tagline">What's Happening</span>
+      <h2 class="section-title">Upcoming Events</h2>
+      <div class="section-divider"></div>
+      <p class="section-subtitle">Discover our carefully curated lineup of alternative experiences</p>
     </div>
-    <div class="row" id="event">
+    
+    <div class="event-grid" id="event">
       {% for event in evenements %}
-      <div class="col-md-4 mb-4">
-        <div class="card event-card h-100 position-relative overflow-hidden">
-          {% if event.image %}
-          <img src="{{ event.image.url }}" class="card-img-top event-img" alt="{{ event.nom_event }}" />
-          {% endif %}
-
-          <!-- Hover overlay -->
-          <div class="hover-overlay d-flex align-items-center justify-content-center">
-            <a href="{% url 'register_event' event.id %}" class="btn btn-light" id="btn">Register Now</a>
+      <div class="event-item">
+        <div class="event-card">
+          <div class="event-image">
+            {% if event.image %}
+            <img src="{{ event.image.url }}" alt="{{ event.nom_event }}" />
+            {% endif %}
           </div>
-
-          <div class="card-body text-center">
-            <h5 class="card-title">{{ event.nom_event }}</h5>
-            <p class="card-text">
-              <strong>Date:</strong> {{ event.date }}<br />
-              <strong>Lieu:</strong> {{ event.lieu }}<br />
-              <strong>Catégorie:</strong> {{ event.categorie }}
-            </p>
+          
+          <div class="event-date">
+            <span class="day">{{ event.date|date:"d" }}</span>
+            <span class="month">{{ event.date|date:"M" }}</span>
+          </div>
+          
+          <div class="event-content">
+            <div class="event-category">{{ event.categorie }}</div>
+            <h3 class="event-title">{{ event.nom_event }}</h3>
+            <div class="event-location">
+              <i class="fas fa-map-marker-alt"></i> {{ event.lieu }}
+            </div>
+            
+            <a href="{% url 'register_event' event.id %}" class="btn-register">
+              Register
+              <i class="fas fa-arrow-right"></i>
+            </a>
           </div>
         </div>
       </div>
       {% empty %}
-      <p class="text-center">Aucun événement trouvé.</p>
+      <div class="no-events">
+        <i class="fas fa-calendar-times"></i>
+        <p>No events scheduled at the moment. Check back soon.</p>
+      </div>
       {% endfor %}
     </div>
   </div>
 </section>
 
 <!-- Sponsors Section -->
-<section id="sponsors" class="py-5 bg-light">
+<section id="sponsors" class="py-6">
   <div class="container">
-    <div class="section-title">
-      <div class="d-inline-flex align-items-center mb-3">
-        <i class="fas fa-handshake fa-3x text-primary me-3"></i>
-        <h2>Our Sponsors</h2>
-      </div>
-      <p class="lead">Thank you to our amazing sponsors who make this event possible</p>
+    <div class="section-header text-center mb-5">
+      <span class="section-tagline">Our Collaborators</span>
+      <h2 class="section-title">Partners & Sponsors</h2>
+      <div class="section-divider"></div>
+      <p class="section-subtitle">Forward-thinking brands that make our vision possible</p>
     </div>
-    <div class="row align-items-center justify-content-center g-4">
-      <div class="col-6 col-md-3 col-lg-2">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/2560px-Amazon_logo.svg.png" class="img-fluid sponsor-img" alt="Amazon" />
+    
+    <div class="sponsors-container">
+      <div class="sponsor">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/2560px-Amazon_logo.svg.png" alt="Amazon" />
       </div>
-      <div class="col-6 col-md-3 col-lg-2">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/1667px-Apple_logo_black.svg.png" class="img-fluid sponsor-img" alt="Apple" />
+      <div class="sponsor">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/1667px-Apple_logo_black.svg.png" alt="Apple" />
       </div>
-      <div class="col-6 col-md-3 col-lg-2">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/2048px-Microsoft_logo.svg.png" class="img-fluid sponsor-img" alt="Microsoft" />
+      <div class="sponsor">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/2048px-Microsoft_logo.svg.png" alt="Microsoft" />
       </div>
-      <div class="col-6 col-md-3 col-lg-2">
-        <img src="media/uploads/google_logo.jpeg" class="img-fluid sponsor-img" alt="Google" />
+      <div class="sponsor">
+        <img src="media/uploads/google_logo.jpeg" alt="Google" />
       </div>
-      <div class="col-6 col-md-3 col-lg-2">
-        <img src="media/uploads/ibm.jpeg" class="img-fluid sponsor-img" alt="IBM" />
+      <div class="sponsor">
+        <img src="media/uploads/ibm.jpeg" alt="IBM" />
       </div>
-      <div class="col-6 col-md-3 col-lg-2">
-        <img src="media/uploads/Samsung-Logo-1993.png" class="img-fluid sponsor-img" alt="Samsung" />
+      <div class="sponsor">
+        <img src="media/uploads/Samsung-Logo-1993.png" alt="Samsung" />
       </div>
     </div>
   </div>
 </section>
 
 <!-- Contact Section -->
-<section id="contact" class="py-5">
+<section id="contact" class="py-6">
   <div class="container">
-    <div class="section-title">
-      <div class="d-inline-flex align-items-center mb-3">
-        <i class="fas fa-phone-alt fa-3x text-primary me-3"></i>
-        <h2>Contact Us</h2>
-      </div>
-      <p class="lead">Have questions? Get in touch with our team</p>
+    <div class="section-header text-center mb-5">
+      <span class="section-tagline">Get In Touch</span>
+      <h2 class="section-title">Contact Us</h2>
+      <div class="section-divider"></div>
+      <p class="section-subtitle">Have a question or want to collaborate? Reach out to our team</p>
     </div>
-    <div class="row">
-      <div class="col-md-6">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title">Send us a message</h5>
-            <form>
-              <div class="mb-3">
-                <input type="text" class="form-control" placeholder="Your Name" required />
-              </div>
-              <div class="mb-3">
-                <input type="email" class="form-control" placeholder="Your Email" required />
-              </div>
-              <div class="mb-3">
-                <textarea class="form-control" rows="4" placeholder="Your Message" required></textarea>
-              </div>
-              <button type="submit" class="btn btn-primary">Send Message</button>
-            </form>
-          </div>
+    
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="contact-form">
+          <h3 class="form-title">Send a Message</h3>
+          <form>
+            <div class="form-floating mb-4">
+              <input type="text" class="form-control" id="nameInput" placeholder="Your Name" required />
+              <label for="nameInput">Your Name</label>
+            </div>
+            
+            <div class="form-floating mb-4">
+              <input type="email" class="form-control" id="emailInput" placeholder="Your Email" required />
+              <label for="emailInput">Your Email</label>
+            </div>
+            
+            <div class="form-floating mb-4">
+              <textarea class="form-control" id="messageInput" placeholder="Your Message" style="height: 150px" required></textarea>
+              <label for="messageInput">Your Message</label>
+            </div>
+            
+            <button type="submit" class="btn btn-send">
+              <span>Send Message</span>
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </form>
         </div>
       </div>
-
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Contact Information</h5>
-            <ul class="list-unstyled">
-              <li class="mb-3">
-                <i class="fas fa-map-marker-alt me-2 text-primary"></i> 123 Conference Center, New York, NY 10001
-              </li>
-              <li class="mb-3">
-                <i class="fas fa-phone me-2 text-primary"></i> +1 (555) 123-4567
-              </li>
-              <li class="mb-3">
-                <i class="fas fa-envelope me-2 text-primary"></i> info@eventpro.com
-              </li>
-            </ul>
-            <div class="mt-4">
-              <h6>Follow Us</h6>
-              <div class="social-links">
-                <a href="#" class="text-decoration-none me-3"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="text-decoration-none me-3"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="text-decoration-none me-3"><i class="fab fa-instagram"></i></a>
-                <a href="#" class="text-decoration-none me-3"><i class="fab fa-linkedin-in"></i></a>
-              </div>
+      
+      <div class="col-lg-6">
+        <div class="contact-info">
+          <h3 class="info-title">Connect With Us</h3>
+          
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div class="info-content">
+              <h4>Our Location</h4>
+              <p>123 Underground Complex, New York, NY 10001</p>
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-phone-alt"></i>
+            </div>
+            <div class="info-content">
+              <h4>Phone Number</h4>
+              <p>+1 (555) 123-4567</p>
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="info-content">
+              <h4>Email Address</h4>
+              <p>connect@eventwave.com</p>
+            </div>
+          </div>
+          
+          <div class="social-links">
+            <h4>Follow Our Journey</h4>
+            <div class="social-icons">
+              <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="social-icon"><i class="fab fa-spotify"></i></a>
+              <a href="#" class="social-icon"><i class="fab fa-discord"></i></a>
             </div>
           </div>
         </div>
@@ -200,141 +242,1092 @@
 </section>
 
 <!-- Footer Section -->
-<footer class="bg-dark text-light py-4 mt-5">
-  <div class="container text-center">
+<footer class="footer-area">
+  <div class="container">
     <div class="row">
-      <div class="col-md-6 mb-3 mb-md-0">
-        <h5>Eventify</h5>
-        <p>Bringing people together through amazing events.</p>
+      <div class="col-lg-4 col-md-6">
+        <div class="footer-widget">
+          <h5 class="widget-title">Eventwave</h5>
+          <p>Pushing the boundaries of conventional events. Creating immersive experiences that challenge perceptions.</p>
+          <div class="newsletter">
+            <input type="email" placeholder="Your email for updates" />
+            <button type="submit"><i class="fas fa-paper-plane"></i></button>
+          </div>
+        </div>
       </div>
-      <div class="col-md-6">
-        <ul class="list-inline">
-          <li class="list-inline-item mx-2">
-            <a href="#" class="text-light text-decoration-none">Home</a>
-          </li>
-          <li class="list-inline-item mx-2">
-            <a href="#events" class="text-light text-decoration-none">Events</a>
-          </li>
-          <li class="list-inline-item mx-2">
-            <a href="#about" class="text-light text-decoration-none">About</a>
-          </li>
-          <li class="list-inline-item mx-2">
-            <a href="#contact" class="text-light text-decoration-none">Contact</a>
-          </li>
-        </ul>
+      
+      <div class="col-lg-2 col-md-6">
+        <div class="footer-widget">
+          <h5 class="widget-title">Links</h5>
+          <ul class="footer-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#events">Events</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-widget">
+          <h5 class="widget-title">Upcoming</h5>
+          <ul class="footer-events">
+            <li>
+              <span class="event-date">May 15</span>
+              <a href="#">Digital Art Exhibition</a>
+            </li>
+            <li>
+              <span class="event-date">Jun 22</span>
+              <a href="#">Underground Music Fest</a>
+            </li>
+            <li>
+              <span class="event-date">Jul 10</span>
+              <a href="#">Immersive Tech Showcase</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-widget">
+          <h5 class="widget-title">Community</h5>
+          <p>Join our Discord server to connect with like-minded individuals and stay updated on exclusive events.</p>
+          <a href="#" class="discord-btn">
+            <i class="fab fa-discord me-2"></i> Join Our Discord
+          </a>
+        </div>
       </div>
     </div>
-    <hr class="bg-light" />
-    <p class="mb-0">&copy; 2025 Eventify. All rights reserved.</p>
+    
+    <div class="footer-bottom">
+      <div class="copyright">
+        <p>&copy; 2025 Eventwave. All rights reserved.</p>
+      </div>
+      <div class="footer-nav">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
   </div>
 </footer>
-<style>
-  body {
-    font-family: "Roboto", sans-serif;
-  }
-  .navbar {
-    background-color: transparent;
-    box-shadow: none;
-  }
-  #logo {
-    font-size: 50px;
-    font-family: "Playwrite AU SA", cursive;
-  }
 
-  .navbar .nav-link,
-  .navbar .navbar-brand {
-    color: white;
-    justify-content: center;
-    font-size: 20px;
+<style>
+  /* General Styles */
+  :root {
+    --primary-color: #7209b7;
+    --secondary-color: #3a0ca3;
+    --accent-color: #f72585;
+    --dark-color: #121212;
+    --light-color: #f8f9fa;
+    --neon-glow: 0 0 5px rgba(114, 9, 183, 0.8), 0 0 10px rgba(114, 9, 183, 0.6), 0 0 15px rgba(114, 9, 183, 0.4);
   }
-  .navbar-brand {
-    margin-right: 0px;
+  
+  .py-6 {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
   }
-  .navbar .nav-link {
-    margin-left: 15px;
-    margin-right: 15px;
-  }
+  
+  /* Hero Section */
   .hero-section {
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: linear-gradient(rgba(18, 18, 18, 0.7), rgba(18, 18, 18, 0.7)),
       url("media/uploads/pexels-photo-3866658.jpeg") no-repeat center center;
     background-size: cover;
-    background-position: center;
-    color: white;
-    height: 103vh;
-    width: 100%;
-    margin-top: -110px;
-    text-align: center;
-  }
-  #btn {
-    background-color: #007bff;
-    color: white;
-    border-radius: 30px;
-    padding: 10px 20px;
-    font-size: 28px;
-    transition: background-color 0.3s, transform 0.3s;
-  }
-  #btn:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
-  }
-  #container1 {
-    justify-content: center;
-    align-items: center;
-    padding-top: 20%;
-  }
-
-  .section-title {
-    text-align: center;
-    padding: 60px 0 30px;
-  }
-  .event-card {
-    margin-bottom: 30px;
-    border: none;
+    padding-top: 0;
+    margin-top: 0;
     overflow: hidden;
-    transition: transform 0.4s, box-shadow 0.4s;
-
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   }
-  .event-card:hover {
-    transform: scale(1.03);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  }
-  .event-img {
-    height: 250px;
-    object-fit: cover;
-  }
-  .sponsor-img {
-    height: 80px;
-    object-fit: contain;
-    filter: grayscale(100%);
-    opacity: 0.7;
-    transition: all 0.3s;
-  }
-  .sponsor-img:hover {
-    filter: grayscale(0);
-    opacity: 1;
-  }
-  footer {
-    background-color: #343a40;
-    color: white;
-    padding: 40px 0;
-  }
-  .hover-overlay {
+  
+  .glitch-overlay {
     position: absolute;
     top: 0;
     left: 0;
-    height: 100%;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(114, 9, 183, 0.2), rgba(58, 12, 163, 0.2));
+    mix-blend-mode: overlay;
+    z-index: 1;
+  }
+  
+  .glitch-overlay::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.1;
+    z-index: -1;
+  }
+  
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    margin-top: 0;
+    padding-top: 0;
+  }
+  
+  .event-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    margin-bottom: 2rem;
+    position: relative;
+    display: inline-block;
+    color: white;
+    text-shadow: 2px 2px 0px var(--accent-color), 
+                 4px 4px 0px var(--primary-color);
+  }
+  
+  .hero-subtitle {
+    font-family: 'Roboto Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 3rem;
+    font-weight: 300;
+  }
+  
+  .btn-glow {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 0;
+    font-family: 'Roboto Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 1rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    font-size: 1.1rem;
+    z-index: 1;
+  }
+  
+  .btn-glow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    background-color: rgba(0, 123, 255, 0.6); /* Blue with transparency */
-    opacity: 0;
-    transition: opacity 0.4s;
+    height: 100%;
+    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    z-index: -1;
+    transition: all 0.4s ease;
   }
-  .event-card:hover .hover-overlay {
+  
+  .btn-glow:hover {
+    color: white;
+    box-shadow: var(--neon-glow);
+    transform: translateY(-5px);
+  }
+  
+  .btn-glow:hover::before {
+    opacity: 0.8;
+  }
+  
+  .scroll-indicator {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    text-align: center;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    opacity: 0.7;
+    z-index: 2;
+  }
+  
+  .scroll-indicator span {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .pulse {
+    animation: pulse-animation 2s infinite;
+  }
+  
+  @keyframes pulse-animation {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(10px);
+      opacity: 0.7;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Section Headers */
+  .section-header {
+    margin-bottom: 4rem;
+  }
+  
+  .section-tagline {
+    font-family: 'Roboto Mono', monospace;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    color: var(--light-color);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+  
+  .section-divider {
+    height: 3px;
+    width: 60px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    margin: 1rem auto 1.5rem;
+  }
+  
+  .section-subtitle {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  /* Services Section */
+  #services {
+    background-color: #1a1a1a;
+    position: relative;
+  }
+  
+  #services::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    z-index: 0;
+  }
+  
+  .service-card {
+    background-color: rgba(30, 30, 30, 0.7);
+    border: 1px solid rgba(114, 9, 183, 0.2);
+    border-radius: 8px;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    overflow: hidden;
+    backdrop-filter: blur(5px);
+  }
+  
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    transition: all 0.4s ease;
+    z-index: -1;
+  }
+  
+  .service-card:hover::before {
+    height: 100%;
+    opacity: 0.1;
+  }
+  
+  .service-card.featured {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 20px rgba(247, 37, 133, 0.2);
+  }
+  
+  .service-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    font-size: 2rem;
+    position: relative;
+    z-index: 1;
+    box-shadow: var(--neon-glow);
+  }
+  
+  .service-icon::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border: 2px solid rgba(114, 9, 183, 0.3);
+    border-radius: 50%;
+    z-index: -1;
+    animation: pulse-border 2s infinite;
+  }
+  
+  @keyframes pulse-border {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 0.5;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  .service-title {
+    color: var(--light-color);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+  
+  .service-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  
+  /* Events Section */
+  #events {
+    background: linear-gradient(135deg, #10002b, #240046);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  #events::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.07;
+    z-index: 0;
+  }
+  
+  .event-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .event-card {
+    background-color: rgba(30, 30, 30, 0.8);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s ease;
+    height: 100%;
+    backdrop-filter: blur(10px);
+  }
+  
+  .event-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(114, 9, 183, 0.4);
+  }
+  
+  .event-image {
+    height: 220px;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .event-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.5s ease;
+  }
+  
+  .event-card:hover .event-image img {
+    transform: scale(1.1);
+    filter: brightness(0.7) contrast(1.2);
+  }
+  
+  .event-date {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--accent-color);
+    color: white;
+    padding: 0.5rem;
+    border-radius: 5px;
+    text-align: center;
+    font-family: 'Space Grotesk', sans-serif;
+    box-shadow: 0 5px 15px rgba(247, 37, 133, 0.4);
+    z-index: 1;
+  }
+  
+  .event-date .day {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+  
+  .event-date .month {
+    display: block;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .event-content {
+    padding: 1.5rem;
+    position: relative;
+  }
+  
+  .event-category {
+    display: inline-block;
+    background: rgba(114, 9, 183, 0.2);
+    color: var(--primary-color);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+    font-family: 'Roboto Mono', monospace;
+  }
+  
+  .event-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--light-color);
+    line-height: 1.3;
+  }
+  
+  .event-location {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .event-location i {
+    color: var(--accent-color);
+    margin-right: 0.5rem;
+  }
+  
+  .btn-register {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: transparent;
+    color: var(--accent-color);
+    padding: 0.7rem 1.5rem;
+    border: 1px solid var(--accent-color);
+    border-radius: 4px;
+    font-family: 'Roboto Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+  
+  .btn-register i {
+    transform: translateX(0);
+    transition: transform 0.3s ease;
+  }
+  
+  .btn-register:hover {
+    background: var(--accent-color);
+    color: white;
+  }
+  
+  .btn-register:hover i {
+    transform: translateX(5px);
+  }
+  
+  .no-events {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    background: rgba(30, 30, 30, 0.5);
+    border-radius: 8px;
+    border: 1px solid rgba(114, 9, 183, 0.2);
+  }
+  
+  .no-events i {
+    font-size: 3rem;
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+    opacity: 0.6;
+  }
+  
+  .no-events p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+  }
+  
+  /* Sponsors Section */
+  #sponsors {
+    background-color: #1a1a1a;
+    position: relative;
+  }
+  
+  .sponsors-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2.5rem;
+    margin-top: 3rem;
+  }
+  
+  .sponsor {
+    width: 150px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s ease;
+    filter: brightness(0) invert(1) opacity(0.6);
+  }
+  
+  .sponsor img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: all 0.4s ease;
+  }
+  
+  .sponsor:hover {
+    filter: brightness(1) invert(0) opacity(1);
+    transform: scale(1.1);
+  }
+  
+  /* Contact Section */
+  #contact {
+    background-color: #121212;
+    position: relative;
+  }
+  
+  #contact::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(114, 9, 183, 0.05), rgba(247, 37, 133, 0.05));
+    z-index: 0;
+  }
+  
+  .contact-form {
+    background: rgba(30, 30, 30, 0.7);
+    padding: 2.5rem;
+    border-radius: 8px;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(114, 9, 183, 0.2);
+    backdrop-filter: blur(10px);
+    height: 100%;
+  }
+  
+  .form-title {
+    color: var(--light-color);
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    position: relative;
+    padding-bottom: 1rem;
+  }
+  
+  .form-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+  }
+  
+  .form-control {
+    background: rgba(18, 18, 18, 0.7);
+    border: 1px solid rgba(114, 9, 183, 0.2);
+    color: var(--light-color);
+    border-radius: 4px;
+    padding: 1.2rem 1rem;
+  }
+  
+  .form-control:focus {
+    box-shadow: 0 0 0 3px rgba(114, 9, 183, 0.3);
+    border-color: var(--primary-color);
+    background: rgba(30, 30, 30, 0.8);
+  }
+  
+  .form-floating > .form-control:focus ~ label,
+  .form-floating > .form-control:not(:placeholder-shown) ~ label {
+    color: var(--accent-color);
     opacity: 1;
+    transform: scale(0.85) translateY(-0.75rem) translateX(0.15rem);
   }
-  body.white-navbar .navbar .nav-link,
-  body.white-navbar .navbar .navbar-brand {
-    color: black !important;
+  
+  .form-floating > label {
+    color: rgba(255, 255, 255, 0.6);
   }
-</style>
-{% endblock %}
+  
+  .btn-send {
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 1rem 2rem;
+    font-family: 'Roboto Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .btn-send::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.6s ease;
+  }
+  
+  .btn-send:hover {
+    box-shadow: 0 5px 15px rgba(114, 9, 183, 0.4);
+    transform: translateY(-3px);
+  }
+  
+  .btn-send:hover::before {
+    left: 100%;
+  }
+  
+  .contact-info {
+    background: rgba(30, 30, 30, 0.7);
+    padding: 2.5rem;
+    border-radius: 8px;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(114, 9, 183, 0.2);
+    backdrop-filter: blur(10px);
+    height: 100%;
+  }
+  
+  .info-title {
+    color: var(--light-color);
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    position: relative;
+    padding-bottom: 1rem;
+  }
+  
+  .info-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+  }
+  
+  .info-item {
+    display: flex;
+    margin-bottom: 2rem;
+  }
+  
+  .info-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-right: 1rem;
+    color: white;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    box-shadow: var(--neon-glow);
+  }
+  
+  .info-content h4 {
+    color: var(--light-color);
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .info-content p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+  }
+  
+  .social-links {
+    margin-top: 2.5rem;
+  }
+  
+  .social-links h4 {
+    color: var(--light-color);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .social-icons {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .social-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(18, 18, 18, 0.7);
+    border: 1px solid rgba(114, 9, 183, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--light-color);
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+  }
+  
+  .social-icon:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: var(--neon-glow);
+  }
+  
+  /* Footer */
+  .footer-area {
+    background-color: #0c0c0c;
+    padding: 5rem 0 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .footer-area::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+  }
+  
+  .footer-widget {
+    margin-bottom: 3rem;
+  }
+  
+  .widget-title {
+    color: var(--accent-color);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .widget-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--accent-color);
+  }
+  
+  .footer-widget p {
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  
+  .newsletter {
+    display: flex;
+    margin-top: 1.5rem;
+  }
+  
+  .newsletter input {
+    flex: 1;
+    background: rgba(30, 30, 30, 0.8);
+    border: 1px solid rgba(114, 9, 183, 0.2);
+    padding: 0.75rem 1rem;
+    color: white;
+    font-size: 0.9rem;
+    outline: none;
+  }
+  
+  .newsletter button {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 0 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .newsletter button:hover {
+    background: var(--primary-color);
+  }
+  
+  .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .footer-links li {
+    margin-bottom: 0.8rem;
+  }
+  
+  .footer-links a {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    padding-left: 15px;
+    display: inline-block;
+  }
+  
+  .footer-links a::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--accent-color);
+    transition: all 0.3s ease;
+  }
+  
+  .footer-links a:hover {
+    color: var(--accent-color);
+    transform: translateX(5px);
+  }
+  
+  .footer-events {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .footer-events li {
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  .event-date {
+    background: rgba(114, 9, 183, 0.2);
+    color: var(--accent-color);
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    font-family: 'Roboto Mono', monospace;
+    margin-right: 0.8rem;
+  }
+  
+  .footer-events a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+  }
+  
+  .footer-events a:hover {
+    color: var(--accent-color);
+  }
+  
+  .discord-btn {
+    display: inline-flex;
+    align-items: center;
+    background: #5865F2;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+  }
+  
+  .discord-btn:hover {
+    background: #4752c4;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(88, 101, 242, 0.4);
+  }
+  
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1.5rem;
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .copyright p {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+  
+  .footer-nav {
+    display: flex;
+    gap: 1.5rem;
+  }
+  
+  .footer-nav a {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  
+  .footer-nav a:hover {
+    color: var(--accent-color);
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 992px) {
+    .hero-section {
+      height: 90vh;
+    }
+    
+    .event-title {
+      font-size: 3rem;
+    }
+    
+    .service-card {
+      margin-bottom: 2rem;
+    }
+    
+    .contact-info {
+      margin-top: 2rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .py-6 {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+    
+    .hero-section {
+      height: 80vh;
+    }
+    
+    .event-title {
+      font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1rem;
+      letter-spacing: 2px;
+    }
+    
+    .btn-glow {
+      padding: 0.8rem 2rem;
+      font-size: 1rem;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+    }
+    
+    .section-subtitle {
+      font-size: 1rem;
+    }
+    
+    .event-grid {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+    
+    .footer-bottom {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .footer-nav {
+      justify-content: center;
+      margin-top: 1rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .event-title {
+      font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+    }
+    
+    .section-title {
+      font-size: 1.8rem;
+    }
+    
+    .contact-form,
+    .contact-info {
+      padding: 1.5rem;
+    }
+    
+    .info-item {
+      flex-direction: column;
+    }
+    
+    .info-icon {
+      margin-bottom: 1rem;
+      margin-right: 0;
+    }
+  }
+  {% endblock content %}
