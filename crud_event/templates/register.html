@@ -1,20 +1,38 @@
 {% extends 'base.html' %} {% block body_class %}white-navbar{% endblock %} 
-{% block content %} {% if messages %}
-<div class="messages-container mb-4">
-  {% for message in messages %}
-  <div class="alert alert-success alert-dismissible fade show" role="alert">
-    <i class="fas fa-check-circle me-2"></i>
-    {{ message }}
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="alert"
-      aria-label="Close"
-    ></button>
-  </div>
-  {% endfor %}
+{% block content %}
+
+{% if already_registered %}
+<div class="alert alert-warning alert-dismissible fade show mb-0" role="alert" style="border-radius: 0;">
+    <div class="container">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-exclamation-circle me-2"></i>
+             <strong>Vous êtes déjà inscrit à cet événement.</strong> 
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
 </div>
 {% endif %}
+
+<!-- Message Modal -->
+{% if messages %}
+<div class="message-modal modal fade" id="messageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body p-4">
+                {% for message in messages %}
+                <div class="text-center">
+                    <div class="success-icon mb-3">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h4 class="message-text mb-0">{{ message }}</h4>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 <div class="register-container">
   <div class="container py-5">
     <div class="row justify-content-center align-items-center min-vh-100">
@@ -735,7 +753,82 @@
     transition: all 0.3s ease;
   }
 
-  
+  /* Ajouter le style pour l'animation */
+  .animate-alert {
+    animation: slideDown 0.5s ease forwards;
+    margin-bottom: 1rem;
+  }
+
+  @keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+  }
+
+  .alert {
+    background: rgba(25, 135, 84, 0.1);
+    border: none;
+    border-radius: 10px;
+    color: #198754;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .alert i {
+    font-size: 1.2rem;
+  }
+
+  .alert .btn-close {
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+  }
+
+  .alert .btn-close:hover {
+    opacity: 1;
+  }
+
+  /* Message Modal Styles */
+  .message-modal .modal-content {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: none;
+    border-radius: 20px;
+  }
+
+  .message-modal .success-icon {
+    font-size: 3rem;
+    color: #198754;
+    animation: scaleIn 0.5s ease forwards;
+  }
+
+  .message-modal .message-text {
+    color: #333;
+    font-weight: 500;
+    animation: fadeIn 0.5s ease 0.2s forwards;
+    opacity: 0;
+  }
+
+  @keyframes scaleIn {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+  }
+
+  @keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+  }
 </style>
 
 <script>
@@ -758,6 +851,15 @@
               form.submit();
           }
       });
+
+      // Fermer automatiquement l'alerte après 5 secondes
+      setTimeout(function() {
+          const alerts = document.querySelectorAll('.alert');
+          alerts.forEach(alert => {
+              const bsAlert = new bootstrap.Alert(alert);
+              bsAlert.close();
+          });
+      }, 5000);
   });
 
   function validateForm() {
@@ -993,6 +1095,19 @@
           var successModal = new bootstrap.Modal(document.getElementById('successModal'));
           successModal.show();
       });
+  {% endif %}
+
+  // Afficher automatiquement la modale de message
+  {% if messages %}
+  document.addEventListener('DOMContentLoaded', function() {
+      const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+      messageModal.show();
+      
+      // Fermer automatiquement après 3 secondes
+      setTimeout(function() {
+          messageModal.hide();
+      }, 3000);
+  });
   {% endif %}
 </script>
 {% endblock %}

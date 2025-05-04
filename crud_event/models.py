@@ -29,7 +29,7 @@ def file_path(instance, filename):
 class evenement(models.Model):
     id = models.AutoField(primary_key=True)
     nom_event = models.CharField(max_length=200)
-    image = models.ImageField(upload_to=file_path, blank=True, null=True)
+    image = models.ImageField(upload_to=file_path, blank=True, null=True,default='media/ibm.jpg')
     date = models.DateTimeField()
     lieu = models.CharField(max_length=200)
     categorie = models.CharField(max_length=200)

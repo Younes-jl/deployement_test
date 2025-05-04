@@ -164,14 +164,14 @@
 
 <div class="dashboard-sidebar">
     <div class="sidebar-header">
-        <a href="{% url 'dashboard' %}" class="sidebar-brand">
+        <a href="{% url 'mon_dashboard' %}" class="sidebar-brand">
             <i class="fas fa-chart-line me-2"></i>
             Dashboard
         </a>
     </div>
     <ul class="nav flex-column">
         <li class="nav-item">
-            <a href="{% url 'dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+            <a href="{% url 'mon_dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
                 <i class="bi bi-house-door"></i>
                 Vue d'ensemble
             </a>

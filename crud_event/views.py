@@ -68,11 +68,15 @@ def home(request):
 def register_event(request, event_id):
     event = get_object_or_404(evenement, id=event_id)
     
-    if request.method == 'POST':
-        if participation.objects.filter(participan=request.user, event=event).exists():
-            messages.error(request, "Vous êtes déjà inscrit à cet événement.")
-            return redirect('register_event', event_id=event.id)
+    # Vérifier si l'utilisateur est déjà inscrit
+    if participation.objects.filter(participan=request.user, event=event).exists():
+        messages.warning(request, f"Vous êtes déjà inscrit à l'événement '{event.nom_event}'.")
+        return render(request, 'register.html', {
+            'event': event,
+            'already_registered': True
+        })
 
+    if request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email')  
         phone_num = request.POST.get('phone_num')  

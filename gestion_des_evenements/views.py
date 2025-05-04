@@ -49,9 +49,9 @@ def user_login(request):
 
 
 
-@staff_member_required
-def dashboard(request):
-        return render(request, 'dashboard.html')
+# @staff_member_required
+# def dashboard(request):
+#         return render(request, 'dashboard.html')
 
 
 
