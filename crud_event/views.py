@@ -30,7 +30,7 @@ from PIL import Image as PILImage
 
 # Create your views here.
 
-from django.contrib import messages
+
 
 
 @login_required
@@ -67,6 +67,14 @@ def home(request):
 @login_required
 def register_event(request, event_id):
     event = get_object_or_404(evenement, id=event_id)
+    
+    # Vérifier s'il reste des places disponibles
+    if event.nombre_places <= 0:
+        messages.error(request, "Désolé, il n'y a plus de places disponibles pour cet événement.")
+        return render(request, 'register.html', {
+            'event': event,
+            'no_places_available': True
+        })
     
     # Vérifier si l'utilisateur est déjà inscrit
     if participation.objects.filter(participan=request.user, event=event).exists():
@@ -108,6 +116,11 @@ def register_event(request, event_id):
             return render(request, 'register.html', {'event': event})
 
         try:
+            # Vérifier à nouveau le nombre de places avant de créer la participation
+            if event.nombre_places <= 0:
+                messages.error(request, "Désolé, il n'y a plus de places disponibles pour cet événement.")
+                return render(request, 'register.html', {'event': event})
+
             # Save participation
             participation_instance = participation.objects.create(
                 participan=request.user,
@@ -130,8 +143,11 @@ def register_event(request, event_id):
                 payment_method=payment_method
             )
 
+            # Décrémenter le nombre de places
+            event.nombre_places -= 1
+            event.save()
+
             messages.success(request, "Paiement et inscription réussis.")
-            # Rediriger vers la même page avec un paramètre pour afficher la modal
             return render(request, 'register.html', {
                 'event': event,
                 'show_success_modal': True,
@@ -315,6 +331,11 @@ def participation_history(request):
 @login_required
 def annuler_participation(request, participation_id):
     participation_instance = get_object_or_404(participation, id=participation_id, participan=request.user)
+    # Réincrémenter le nombre de places
+    event = participation_instance.event
+    event.nombre_places += 1
+    event.save()
+    # Supprimer la participation
     participation_instance.delete()
     messages.success(request, "Votre participation a été annulée avec succès.")
-    return redirect('history')  # Redirection vers la liste après
+    return redirect('history')

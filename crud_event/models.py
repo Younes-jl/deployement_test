@@ -32,11 +32,13 @@ class evenement(models.Model):
     image = models.ImageField(upload_to=file_path, blank=True, null=True,default='media/ibm.jpg')
     date = models.DateTimeField()
     lieu = models.CharField(max_length=200)
+    nombre_places = models.IntegerField(default=2)
     categorie = models.CharField(max_length=200)
     description = models.TextField(max_length=2000 , blank=True, null=True)
     organisateur = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     organisateur_name = models.CharField(max_length=200, blank=True, null=True)
     is_validated = models.BooleanField(default=False)
+    
     
     def __str__(self):
         return self.nom_event
@@ -109,13 +111,23 @@ def save(self, commit=True):
             user.save()
         return user
 
+
+
 class EvenementForm(forms.ModelForm):
     class Meta:
         model = evenement
         exclude = ['organisateur', 'organisateur_name', 'is_validated']
         widgets = {
             'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'nombre_places': forms.NumberInput(attrs={'min': '2'}),
                   }
+    def clean_nombre_places(self):
+        nombre_places = self.cleaned_data.get('nombre_places')
+        if nombre_places < 2:
+            raise forms.ValidationError("Le nombre minimum de places doit être 2")
+        return nombre_places
+        
+   
 
  
  
