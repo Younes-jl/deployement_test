@@ -49,11 +49,17 @@ class EventCreateView(CreateView):
     fields = ['nom_event', 'image', 'date', 'lieu', 'categorie', 'description']
     template_name = 'event_form.html'
     success_url = reverse_lazy('event_list')
-    # def get_form(self, form_class=None):
-    #     form = super().get_form(form_class)
-    #     form.fields['date'].widget = forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
-    #     return form   
-
+    def form_valid(self, form):
+        # Check if the user is admin/staff
+        if self.request.user.is_staff:
+            form.instance.is_validated = True
+        else:
+            form.instance.is_validated = False
+        
+        form.instance.created_by = self.request.user
+        messages.success(self.request, 'Event created successfully!')
+        return super().form_valid(form)
+    
 class EventUpdateView(UpdateView):
     model = evenement
     fields = ['nom_event', 'image', 'date', 'lieu', 'categorie', 'description']
@@ -66,8 +72,12 @@ class EventUpdateView(UpdateView):
 
 class EventDeleteView(DeleteView):
     model = evenement
-    template_name = 'event_confirm_delete.html'
     success_url = reverse_lazy('event_list')
+
+    def get(self, request, *args, **kwargs):
+        return self.delete(request, *args, **kwargs)
+    # success_url = reverse_lazy('event_list')
+
 
 
 # CRUD for Users
@@ -84,9 +94,10 @@ class UserUpdateView(UpdateView):
 
 class UserDeleteView(DeleteView):
     model = User
-    template_name = 'supprimer_utilisateur.html'
-    success_url = reverse_lazy('admin_users')  # ou 'user_list' selon ce que tu veux
+    success_url = reverse_lazy('admin_users')
 
+    def get(self, request, *args, **kwargs):
+        return self.delete(request, *args, **kwargs)
 
 class AjouterUtilisateurView(CreateView):
     model = User

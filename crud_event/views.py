@@ -41,12 +41,19 @@ def creer_evenement(request):
             event = form.save(commit=False)  
             event.organisateur = request.user
             event.fullname = request.user.username
-            event.is_validated = False  # L'événement n'est pas encore validé par l'admin
-            event.save()  # Sauvegarder l'événement dans la base de données
-            messages.success(request, "Votre événement a été créé avec succès, en attente de validation par l'administrateur.")
-            return redirect('creerEvent')  # Rediriger vers la page d'accueil après la création        
+            # Auto-validate if user is admin/staff
+            event.is_validated = True if request.user.is_staff else False
+            event.save()
+            
+            # Custom success message based on user role
+            if request.user.is_staff:
+                messages.success(request, "Votre événement a été créé avec succès.")
+            else:
+                messages.success(request, "Votre événement a été créé avec succès, en attente de validation par l'administrateur.")
+                
+            return redirect('creerEvent')
         else:
-            messages.error(request, "Données invalides")  # Afficher un message d'erreur si le formulaire est invalide
+            messages.error(request, "Données invalides")
     else:
         form = EvenementForm()
 

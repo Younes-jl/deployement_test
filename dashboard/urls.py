@@ -2,6 +2,7 @@
 
 from django.urls import path
 from . import views 
+from django.contrib.auth.decorators import login_required
 from .views import (
    EventListView, EventCreateView, EventUpdateView, EventDeleteView,
     ParticipationListView, ParticipationDeleteView, UserDeleteView,
@@ -22,7 +23,7 @@ urlpatterns = [
     # path('admin_participations/', views.admin_participations, name='admin_participations'),
 # Event URLs
     path('events/', EventListView.as_view(), name='event_list'),
-    path('events/create/', EventCreateView.as_view(), name='event_create'),
+    path('events/create/', login_required(EventCreateView.as_view()), name='event_create'),
     path('events/update/<int:pk>/', EventUpdateView.as_view(), name='event_update'),
     path('events/delete/<int:pk>/', EventDeleteView.as_view(), name='event_delete'),
 
