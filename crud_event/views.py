@@ -74,9 +74,10 @@ def home(request):
 @login_required
 def register_event(request, event_id):
     event = get_object_or_404(evenement, id=event_id)
-    
+    if request.user.is_staff:
+        return redirect('home')
     # Vérifier s'il reste des places disponibles
-    if event.nombre_places <= 0:
+    if event.nombre_places <= 0  :
         messages.error(request, "Désolé, il n'y a plus de places disponibles pour cet événement.")
         return render(request, 'register.html', {
             'event': event,
@@ -310,20 +311,6 @@ def generate_ticket(request, participation_id):
     response['Content-Disposition'] = f'attachment; filename="{filename}"'
     
     return response
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 @login_required

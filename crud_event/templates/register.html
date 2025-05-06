@@ -56,6 +56,8 @@
                 ><i  class="fas fa-chair"></i> {{ event.nombre_places }}</span
               >
             </p>
+            <p class="event-preview-description">
+              {{ event.description|truncatewords:20 }}
           </div>
           <div class="event-preview-wave">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
@@ -836,6 +838,19 @@
   #logout-button{
     background-color: white;
   }
+
+  .event-description {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 1rem 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 4.8em;
+}
 </style>
 
 <script>
