@@ -77,7 +77,7 @@ def register_event(request, event_id):
     if request.user.is_staff:
         return redirect('home')
     # Vérifier s'il reste des places disponibles
-    if event.nombre_places <= 0  :
+    if event.nombre_places <= 0:
         messages.error(request, "Désolé, il n'y a plus de places disponibles pour cet événement.")
         return render(request, 'register.html', {
             'event': event,
@@ -139,7 +139,7 @@ def register_event(request, event_id):
                 email=email
             )
 
-            # Save payment
+            # Save payment with amount
             paiement_instance = paiement.objects.create(
                 user_id=request.user,
                 event=event,
@@ -148,14 +148,15 @@ def register_event(request, event_id):
                 card_holder_name=card_holder_name,
                 expiry_date=expiry_date_obj,
                 cvv=cvv,
-                payment_method=payment_method
+                payment_method=payment_method,
+                amount=event.price  # Ajouter le montant du paiement
             )
 
             # Décrémenter le nombre de places
             event.nombre_places -= 1
             event.save()
 
-            messages.success(request, "Paiement et inscription réussis.")
+            messages.success(request, f"Paiement de {event.price}$ et inscription réussis.")
             return render(request, 'register.html', {
                 'event': event,
                 'show_success_modal': True,

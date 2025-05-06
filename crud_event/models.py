@@ -37,9 +37,12 @@ class evenement(models.Model):
     description = models.TextField(max_length=2000 , blank=True, null=True)
     organisateur = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     organisateur_name = models.CharField(max_length=200, blank=True, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=2.00)
     is_validated = models.BooleanField(default=False)
     
+        
     
+
     def __str__(self):
         return self.nom_event
     def save(self, *args, **kwargs):
@@ -85,7 +88,7 @@ class paiement(models.Model):
     expiry_date = models.DateField(blank=True, null=True)  
     cvv = models.CharField(max_length=3, blank=True, null=True) 
     payment_method = models.CharField(max_length=200, blank=True, null=True)
-
+    amount = models.DecimalField(max_digits=10, decimal_places=2, null=True)  # Nouveau champ pour le montant
 
 
 
@@ -126,8 +129,7 @@ class EvenementForm(forms.ModelForm):
         if nombre_places < 2:
             raise forms.ValidationError("Le nombre minimum de places doit être 2")
         return nombre_places
-        
-   
 
- 
- 
+
+
+
