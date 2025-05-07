@@ -83,7 +83,7 @@ def register_event(request, event_id):
             'event': event,
             'no_places_available': True
         })
-    
+
     # Vérifier si l'utilisateur est déjà inscrit
     if participation.objects.filter(participan=request.user, event=event).exists():
         messages.warning(request, f"Vous êtes déjà inscrit à l'événement '{event.nom_event}'.")
@@ -149,11 +149,12 @@ def register_event(request, event_id):
                 expiry_date=expiry_date_obj,
                 cvv=cvv,
                 payment_method=payment_method,
-                amount=event.price  # Ajouter le montant du paiement
+                amount=event.price
             )
 
-            # Décrémenter le nombre de places
+            # Décrémenter le nombre de places et incrémenter le nombre de participants
             event.nombre_places -= 1
+            event.nombre_participants += 1
             event.save()
 
             messages.success(request, f"Paiement de {event.price}$ et inscription réussis.")
@@ -329,8 +330,16 @@ def annuler_participation(request, participation_id):
     # Réincrémenter le nombre de places
     event = participation_instance.event
     event.nombre_places += 1
+    event.nombre_participants -= 1
     event.save()
     # Supprimer la participation
     participation_instance.delete()
     messages.success(request, "Votre participation a été annulée avec succès.")
     return redirect('history')
+
+
+@login_required
+def my_events(request):
+    # Récupérer les événements créés par l'utilisateur connecté
+    events = evenement.objects.filter(organisateur=request.user).order_by('-date')
+    return render(request, 'Myevents.html', {'events': events})

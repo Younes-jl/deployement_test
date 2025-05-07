@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+{% block body_class %}white-navbar{% endblock %}
+{% block content %}
+
+<div class="my-events-container py-5" style="margin-top: 80px;">
+    <div class="container">
+        <!-- En-tête de la page -->
+        <div class="page-header text-center mb-5">
+            <div class="header-icon mb-3">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+            <h2 class="gradient-text">Mes Événements</h2>
+            <p class="text-muted">Gérez vos événements créés</p>
+        </div>
+
+        <!-- Liste des événements -->
+        {% if events %}
+        <div class="row">
+            {% for event in events %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="event-card">
+                    <div class="event-image">
+                        {% if event.image %}
+                        <img src="{{ event.image.url }}" alt="{{ event.nom_event }}" />
+                        {% endif %}
+                        <div class="event-status {% if event.is_validated %}status-validated{% else %}status-pending{% endif %}">
+                            {% if event.is_validated %}
+                            <i class="fas fa-check-circle"></i> Validé
+                            {% else %}
+                            <i class="fas fa-clock"></i> En attente
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="event-content">
+                        <h3 class="event-title">{{ event.nom_event }}</h3>
+                        <div class="event-info">
+                            <p><i class="fas fa-map-marker-alt"></i> {{ event.lieu }}</p>
+                            <p><i class="far fa-calendar-alt"></i> {{ event.date|date:"d/m/Y H:i" }}</p>
+                            <p><i class="fas fa-users"></i> Places disponibles : {{ event.nombre_places }}</p>
+                            <p><i class="fas fa-user-check"></i> Participants : {{ event.nombre_participants }}</p>
+                            <p><i class="fas fa-tag"></i> {{ event.categorie }}</p>
+                            <p><i class="fas fa-coins"></i> {{ event.price }}$</p>
+                        </div>
+                        <div class="event-description">
+                            {{ event.description|truncatechars:100 }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state text-center">
+            <div class="empty-icon mb-4">
+                <i class="far fa-calendar-plus"></i>
+            </div>
+            <h3 class="mb-3">Aucun événement créé</h3>
+            <p class="text-muted mb-4">Vous n'avez pas encore créé d'événement</p>
+            <a href="{% url 'creerEvent' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus me-2"></i>
+                Créer un événement
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .my-events-container {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+
+    .header-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    .header-icon i {
+        font-size: 2rem;
+        color: white;
+    }
+
+    .gradient-text {
+        background: linear-gradient(135deg, #2B2D5E 0%, #4F46E5 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: bold;
+    }
+
+    .event-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+    .event-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .event-image {
+        height: 200px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .event-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .event-status {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        color: white;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .status-validated {
+        background-color: #10B981;
+    }
+
+    .status-pending {
+        background-color: #F59E0B;
+    }
+
+    .event-content {
+        padding: 1.5rem;
+    }
+
+    .event-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #2B2D5E;
+        margin-bottom: 1rem;
+    }
+
+    .event-info {
+        color: #6B7280;
+        font-size: 0.9rem;
+    }
+
+    .event-info p {
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .event-info i {
+        color: #4F46E5;
+        width: 20px;
+    }
+
+    .event-description {
+        margin-top: 1rem;
+        color: #6B7280;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    .empty-state {
+        padding: 4rem 0;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        color: #6B7280;
+        opacity: 0.5;
+    }
+
+    .empty-icon i {
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    @media (max-width: 768px) {
+        .event-card {
+            margin-bottom: 1rem;
+        }
+    }
+</style>
+{% endblock %}

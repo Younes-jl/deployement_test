@@ -10,8 +10,9 @@ urlpatterns = [
     path('creerEvent/', views.creer_evenement, name='creerEvent'),
     path('register_evenements/<int:event_id>/', views.register_event, name='register_event'),
     path('history/', views.participation_history, name='history'),
-     path('annuler/<int:participation_id>/', views.annuler_participation, name='cancel_participation'),
+    path('annuler/<int:participation_id>/', views.annuler_participation, name='cancel_participation'),
     path('ticket/<int:participation_id>/', generate_ticket, name='download_ticket'),
+    path('my-events/', views.my_events, name='my_events'),  # Nouvelle URL pour mes événements
 
 ]
 
