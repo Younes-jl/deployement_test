@@ -116,7 +116,7 @@ def save(self, commit=True):
 class EvenementForm(forms.ModelForm):
     class Meta:
         model = evenement
-        exclude = ['organisateur', 'organisateur_name', 'is_validated']
+        exclude = ['organisateur', 'organisateur_name', 'is_validated','nombre_participants']
         widgets = {
             'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'nombre_places': forms.NumberInput(attrs={'min': '2'}),

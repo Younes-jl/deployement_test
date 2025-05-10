@@ -13,6 +13,18 @@
             <p class="text-muted">Gérez vos événements créés</p>
         </div>
 
+        <!-- Messages de notification -->
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
         <!-- Liste des événements -->
         {% if events %}
         <div class="row">
@@ -43,6 +55,15 @@
                         </div>
                         <div class="event-description">
                             {{ event.description|truncatechars:100 }}
+                        </div>
+                        <div class="event-actions mt-3">
+                            <form method="POST" action="{% url 'annuler_evenement' event.id %}" class="d-inline"
+                                onsubmit="return confirm('Êtes-vous sûr de vouloir annuler cet événement ? Cette action est irréversible et supprimera toutes les participations associées.');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-trash"></i> Annuler l'événement
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -177,6 +198,11 @@
         line-height: 1.5;
     }
 
+    .event-actions {
+        display: flex;
+        justify-content: flex-end;
+    }
+
     .empty-state {
         padding: 4rem 0;
     }
@@ -189,6 +215,39 @@
 
     .empty-icon i {
         animation: pulse 2s ease-in-out infinite;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+    .messages {
+        margin-bottom: 2rem;
+    }
+
+    .alert {
+        border-radius: 10px;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .alert-success {
+        background-color: #d1e7dd;
+        color: #0f5132;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #842029;
     }
 
     @keyframes float {

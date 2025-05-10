@@ -31,6 +31,7 @@
                             <th>Lieu</th>
                             <th>Catégorie</th>
                             <th>Organisateur</th>
+                            <th>nombre de place </th>
                             <th>nombre_participants</th>
                             <th>Status</th>
                             <th>Actions</th>
@@ -56,6 +57,7 @@
                             <td>{{ event.lieu }}</td>
                             <td>{{ event.categorie }}</td>
                             <td>{{ event.organisateur_name }}</td>
+                             <td>{{ event.nombre_places }}</td>
                             <td>{{ event.nombre_participants }}</td>
                             <td>
                                 {% if event.nombre_places > 0 %}

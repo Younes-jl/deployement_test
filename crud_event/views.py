@@ -343,3 +343,21 @@ def my_events(request):
     # Récupérer les événements créés par l'utilisateur connecté
     events = evenement.objects.filter(organisateur=request.user).order_by('-date')
     return render(request, 'Myevents.html', {'events': events})
+
+@login_required
+def annuler_evenement(request, event_id):
+    # Récupérer l'événement
+    event = get_object_or_404(evenement, id=event_id, organisateur=request.user)
+    
+    if request.method == 'POST':
+        # Supprimer toutes les participations associées
+        participations = participation.objects.filter(event=event)
+        for p in participations:
+            p.delete()
+        
+        # Supprimer l'événement
+        event.delete()
+        messages.success(request, "L'événement a été annulé avec succès.")
+        return redirect('my_events')
+    
+    return redirect('my_events')
