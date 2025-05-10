@@ -53,7 +53,7 @@ class EventCreateView(CreateView):
         # Check if the user is admin/staff
         if self.request.user.is_staff:
             form.instance.is_validated = True
-        else:
+        else:   
             form.instance.is_validated = False
         
         form.instance.created_by = self.request.user
