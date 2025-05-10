@@ -26,6 +26,7 @@ from reportlab.lib.utils import ImageReader
 import os
 from io import BytesIO
 import qrcode
+from .models import Organisateur
 from PIL import Image as PILImage
 
 # Create your views here.
@@ -38,19 +39,31 @@ def creer_evenement(request):
     if request.method == 'POST':
         form = EvenementForm(request.POST, request.FILES)
         if form.is_valid():
-            event = form.save(commit=False)  
+            event = form.save(commit=False)
             event.organisateur = request.user
             event.fullname = request.user.username
-            # Auto-validate if user is admin/staff
+
+            # Vérifier si l'utilisateur est déjà un organisateur
+            if not Organisateur.objects.filter(user=request.user).exists() and not request.user.is_staff:
+                # Créer un nouvel organisateur
+                Organisateur.objects.create(
+                    user=request.user,
+                    nom=request.user.last_name,
+                    prenom=request.user.first_name,
+                    email=request.user.email,
+                    description="Organisateur automatique"
+                )
+
+            # Auto-valider si l'utilisateur est admin/staff
             event.is_validated = True if request.user.is_staff else False
             event.save()
-            
-            # Custom success message based on user role
+
+            # Message de succès
             if request.user.is_staff:
                 messages.success(request, "Votre événement a été créé avec succès.")
             else:
                 messages.success(request, "Votre événement a été créé avec succès, en attente de validation par l'administrateur.")
-                
+
             return redirect('creerEvent')
         else:
             messages.error(request, "Données invalides")

@@ -88,8 +88,15 @@ class paiement(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2, null=True)  # Nouveau champ pour le montant
 
 
+class Organisateur(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="organisateur")
+    nom = models.CharField(max_length=200)
+    prenom = models.CharField(max_length=200)
+    email = models.EmailField(max_length=200, unique=True)
+    description = models.TextField(blank=True, null=True)
 
-
+    def __str__(self):
+        return f"{self.nom} {self.prenom}"
 
 
 
