@@ -51,7 +51,7 @@ def creer_evenement(request):
                     nom=request.user.last_name,
                     prenom=request.user.first_name,
                     email=request.user.email,
-                    description="Organisateur automatique"
+                    # description="Organisateur"
                 )
 
             # Auto-valider si l'utilisateur est admin/staff

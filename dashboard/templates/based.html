@@ -183,6 +183,12 @@
             </a>
         </li>
         <li class="nav-item">
+            <a href="{% url 'admin_org' %}" class="nav-link {% if request.resolver_match.url_name == 'admin_org' %}active{% endif %}">
+                <i class="bi bi-people"></i>
+                Organisateur
+            </a>
+        </li>
+        <li class="nav-item">
             <a href="{% url 'event_list' %}" class="nav-link {% if request.resolver_match.url_name == 'event_list' %}active{% endif %}">
                 <i class="bi bi-calendar-event"></i>
                 Événements

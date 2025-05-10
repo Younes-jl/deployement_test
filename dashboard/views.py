@@ -9,17 +9,17 @@ from django.shortcuts import redirect, render
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import UpdateView
 from django.urls import reverse_lazy
-from crud_event.models import evenement,participation
+from crud_event.models import evenement,participation,Organisateur
 from django import forms
 from django.contrib import messages
-# from crud_event.models import ParticipationCustomForm
 
 @staff_member_required
 def mon_dashboard(request):
     nb_users = User.objects.count()
     nb_events = evenement.objects.count()
     nb_participations = participation.objects.count()
-    return render(request,'dashboard.html',{'nb_users':nb_users,'nb_events':nb_events,'nb_participations':nb_participations})
+    org=Organisateur.objects.count()
+    return render(request,'dashboard.html',{'nb_users':nb_users,'nb_events':nb_events,'nb_participations':nb_participations,'nb_org':org})
 
 # @staff_member_required
 # def admin_events(request):
@@ -31,13 +31,11 @@ def admin_users(request):
     utilisateurs = User.objects.all()
     return render(request, 'admin_users.html', {'utilisateurs': utilisateurs})
 
-# @staff_member_required
-# def admin_participations(request):
-#     participations = participation.objects.all  # Use select_related for optimization
-#     return render(request, 'admin_participations.html', {'participations': participations})
-
-
-# -------------------------------------------------------------
+@staff_member_required
+def admin_organisateur(request):
+    
+    organisateur = Organisateur.objects.all()
+    return render(request, 'list_organisateur.html', {'Organisateurs': organisateur})
 # CRUD for events 
 class EventListView(ListView):
     model = evenement

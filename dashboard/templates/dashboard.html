@@ -33,6 +33,28 @@
             <div class="dashboard-card">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="rounded-circle bg-primary bg-opacity-10 p-3">
+                            <i class="bi bi-people-fill fs-4 text-primary"></i>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-link" type="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'admin_users' %}">Voir détails</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3 class="mb-1">{{ nb_org }}</h3>
+                    <p class="mb-0 text-muted">Organisateurs</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="dashboard-card">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
                         <div class="rounded-circle bg-success bg-opacity-10 p-3">
                             <i class="bi bi-calendar-event-fill fs-4 text-success"></i>
                         </div>
