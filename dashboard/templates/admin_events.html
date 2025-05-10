@@ -60,11 +60,10 @@
                              <td>{{ event.nombre_places }}</td>
                             <td>{{ event.nombre_participants }}</td>
                             <td>
-                                {% if event.nombre_places > event.nombre_participants %}
+                                {% if event.nombre_places > 0 %}
                                     <span class="badge bg-success">Disponible</span>
                                 {% else %}
-                                    {% comment %} {% if event.nombre_places == event.nombre_participants %} {% endcomment %}
-                                    <span class="badge bg-danger">Plein</span>
+                                    <span class="badge bg-danger">Complet</span>
                                 {% endif %}
                             <td>
                                 {% if event.is_validated %}
