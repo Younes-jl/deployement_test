@@ -374,3 +374,5 @@ def annuler_evenement(request, event_id):
         return redirect('my_events')
     
     return redirect('my_events')
+
+

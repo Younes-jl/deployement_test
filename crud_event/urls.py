@@ -14,5 +14,6 @@ urlpatterns = [
     path('ticket/<int:participation_id>/', generate_ticket, name='download_ticket'),
     path('my-events/', views.my_events, name='my_events'),  # Nouvelle URL pour mes événements
     path('annuler-evenement/<int:event_id>/', views.annuler_evenement, name='annuler_evenement'),
+    
 ]
 
