@@ -209,6 +209,12 @@ class ParticipationCreateView(CreateView):
     success_url = reverse_lazy('participations')
 
     def form_valid(self, form):
+        event = form.cleaned_data['event']
+
+        if event.nombre_places <= 0:
+            messages.error(self.request, "Cet événement est complet.")
+            return redirect('participation_add')
+        
         # Vérifier si l'utilisateur est déjà inscrit à cet événement
         existing_participation = participation.objects.filter(
             participan=form.cleaned_data['participan'],
@@ -219,12 +225,19 @@ class ParticipationCreateView(CreateView):
             messages.error(self.request, "Cet utilisateur est déjà inscrit à cet événement.")
             return redirect('participation_add')  # Redirige vers le formulaire d'ajout
 
+        # Réduire le nombre de places disponibles
+        event.nombre_places -= 1
+        event.nombre_participants += 1
+        event.save()
+
         # Remplir automatiquement name_event
         form.instance.name_event = form.instance.event.nom_event
         # Remplir automatiquement participant avec le nom complet ou le username
         form.instance.participant = (
             form.instance.participan.get_full_name() or form.instance.participan.username
         )
+            
+
         return super().form_valid(form)
 
 
@@ -267,6 +280,15 @@ def valider_evenement(request, id):
         evt = get_object_or_404(evenement, id=id)
         evt.is_validated = True
         evt.save()
+        if not Organisateur.objects.filter(user=evt.organisateur).exists():
+            Organisateur.objects.create(
+                user=evt.organisateur,
+                nom=evt.organisateur.last_name,
+                prenom=evt.organisateur.first_name,
+                email=evt.organisateur.email,
+            )
+
+        messages.success(request, f"L'événement '{evt.nom_event}' a été validé avec succès.")
     return redirect('evenements_en_attente')
 
 def refuser_evenement(request, id):

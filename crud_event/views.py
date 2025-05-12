@@ -44,15 +44,17 @@ def creer_evenement(request):
             event.fullname = request.user.username
 
             # Vérifier si l'utilisateur est déjà un organisateur
-            if not Organisateur.objects.filter(user=request.user).exists() and not request.user.is_staff:
-                # Créer un nouvel organisateur
-                Organisateur.objects.create(
-                    user=request.user,
-                    nom=request.user.last_name,
-                    prenom=request.user.first_name,
-                    email=request.user.email,
-                    # description="Organisateur"
-                )
+            # if not Organisateur.objects.filter(user=request.user).exists() and not request.user.is_staff:
+            #  if event.is_validated==True:
+            #     # Créer un nouvel organisateur
+            #     Organisateur.objects.create(
+            #         user=request.user,
+            #         nom=request.user.last_name,
+            #         prenom=request.user.first_name,
+            #         email=request.user.email,
+            #         # description="Organisateur"
+            #     )
+                
 
             # Auto-valider si l'utilisateur est admin/staff
             event.is_validated = True if request.user.is_staff else False

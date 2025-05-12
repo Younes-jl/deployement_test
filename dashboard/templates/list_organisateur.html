@@ -35,6 +35,20 @@
                                     <td>{{ Organisateurs.email }}</td>
                                     <td>{{ Organisateurs.nom }}</td>
                                     <td>{{ Organisateurs.prenom }}</td>
+                                    {% comment %} <td>
+                                        <div class="btn-group">
+                                            <a href="{% url 'modifier_utilisateur' utilisateur.id %}" 
+                                               class="btn btn-sm btn-warning me-2">
+                                                <i class="fas fa-edit me-1"></i>
+                                                Modifier
+                                            </a>
+                                            <a href="{% url 'supprimer_utilisateur' utilisateur.pk %}" 
+                                                class="btn btn-sm btn-danger"
+                                                onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
+                                                <i class="fas fa-trash-alt"></i> Supprimer
+                                            </a>
+                                        </div>
+                                    </td> {% endcomment %}
                                     
                                    
                             
