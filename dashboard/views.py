@@ -15,11 +15,93 @@ from django.contrib import messages
 
 @staff_member_required
 def mon_dashboard(request):
+    from django.db.models import Count, Avg, Sum
+    from django.utils import timezone
+    from datetime import timedelta
+    
+    # Date actuelle et début du mois
+    now = timezone.now()
+    start_of_month = now.replace(day=1, hour=0, minute=0, second=0)
+    
+    # Statistiques de base
     nb_users = User.objects.count()
     nb_events = evenement.objects.count()
     nb_participations = participation.objects.count()
-    org=Organisateur.objects.count()
-    return render(request,'dashboard.html',{'nb_users':nb_users,'nb_events':nb_events,'nb_participations':nb_participations,'nb_org':org})
+    org = Organisateur.objects.count()
+    
+    # Nouvelles statistiques
+    upcoming_events = evenement.objects.filter(date__gt=now).count()
+    monthly_revenue = participation.objects.filter(
+        date_inscription__gte=start_of_month
+    ).count() * 100  # Exemple: 100€ par participation
+    
+    # Calcul du taux de remplissage
+    total_places = evenement.objects.aggregate(Sum('nombre_places'))['nombre_places__sum'] or 0
+    avg_fill_rate = (nb_participations / total_places * 100) if total_places > 0 else 0
+    
+    # Top catégories
+    top_categories = evenement.objects.values('categorie').annotate(
+        count=Count('id')
+    ).order_by('-count')[:5]
+    
+    # Moyenne des participants par événement
+    avg_participants = evenement.objects.aggregate(
+        Avg('nombre_participants')
+    )['nombre_participants__avg'] or 0
+      # Données pour le graphique des catégories
+    categories_data = list(top_categories)
+    categories_labels = [cat['categorie'] for cat in categories_data]
+    categories_counts = [cat['count'] for cat in categories_data]
+
+    # Données pour l'évolution des inscriptions sur 6 mois
+    last_6_months = []
+    months_data = []
+    for i in range(5, -1, -1):
+        date = start_of_month - timedelta(days=30 * i)
+        month_name = date.strftime('%B')
+        count = participation.objects.filter(
+            date_inscription__year=date.year,
+            date_inscription__month=date.month
+        ).count()
+        last_6_months.append(month_name)
+        months_data.append(count)
+
+    # Données pour le taux de participation par événement (top 5)
+    events_participation = evenement.objects.annotate(
+        participation_rate=Count('participation') * 100.0 / Sum('nombre_places')
+    ).order_by('-participation_rate')[:5]
+    events_labels = [event.nom_event for event in events_participation]
+    events_rates = [round(event.participation_rate or 0, 1) for event in events_participation]
+    
+    # Dernières activités
+    derniers_utilisateurs = User.objects.order_by('-date_joined')[:3]
+    derniers_evenements = evenement.objects.filter(date__gte=now - timedelta(days=7)).order_by('-date')[:3]
+    dernieres_participations = participation.objects.select_related('participan', 'event').order_by('-date_inscription')[:3]
+
+    context = {
+        'nb_users': nb_users,
+        'nb_events': nb_events,
+        'nb_participations': nb_participations,
+        'nb_org': org,
+        'upcoming_events': upcoming_events,
+        'monthly_revenue': monthly_revenue,
+        'avg_fill_rate': round(avg_fill_rate, 1),
+        'avg_participants': round(avg_participants, 1),
+        'top_categories': top_categories,
+        # Données pour les graphiques
+        'categories_labels': categories_labels,
+        'categories_counts': categories_counts,
+        'months_labels': last_6_months,
+        'months_data': months_data,
+        'events_labels': events_labels,
+        'events_rates': events_rates,
+        # Dernières activités
+        'derniers_utilisateurs': derniers_utilisateurs,
+        'derniers_evenements': derniers_evenements,
+        'dernieres_participations': dernieres_participations,
+    }
+    
+    return render(request, 'dashboard.html', context)
 
 # @staff_member_required
 # def admin_events(request):

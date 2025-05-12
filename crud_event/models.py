@@ -40,6 +40,7 @@ class evenement(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, default=2.00)
     is_validated = models.BooleanField(default=False)
     nombre_participants = models.IntegerField(default=0)
+   
     def __str__(self):
         return self.nom_event
     def save(self, *args, **kwargs):
