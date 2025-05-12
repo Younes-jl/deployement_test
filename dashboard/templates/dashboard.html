@@ -4,6 +4,41 @@
 {% block page_title %}Vue d'ensemble{% endblock %}
 
 {% block content %}
+<style>
+    .dashboard-card {
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s;
+    }
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+    }
+    .activity-item {
+        padding: 1rem;
+        border-left: 3px solid #4F46E5;
+        margin-bottom: 1rem;
+        background: #f8f9fa;
+        border-radius: 0 10px 10px 0;
+    }
+    .activity-time {
+        color: #6c757d;
+        font-size: 0.875rem;
+    }
+    .stat-icon {
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .chart-container {
+        position: relative;
+        margin: auto;
+        height: 300px;
+    }
+</style>
+
 <div class="container-fluid p-0">
     <!-- Statistiques -->
     <div class="row g-4 mb-4">
@@ -94,116 +129,268 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="col-12 col-sm-6 col-xl-3">
+    <!-- Section des graphiques -->
+    <div class="row g-4 mb-4">
+        <!-- Graphique des catégories -->
+        <div class="col-md-4">
+            <div class="dashboard-card h-100">
+                <div class="card-header border-0 bg-transparent p-4">
+                    <h5 class="card-title mb-0">Répartition des Catégories</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="categoriesChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Graphique de l'évolution des inscriptions -->
+        <div class="col-md-4">
+            <div class="dashboard-card h-100">
+                <div class="card-header border-0 bg-transparent p-4">
+                    <h5 class="card-title mb-0">Évolution des Inscriptions</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="inscriptionsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Graphique du taux de participation -->
+        <div class="col-md-4">
+            <div class="dashboard-card h-100">
+                <div class="card-header border-0 bg-transparent p-4">
+                    <h5 class="card-title mb-0">Top 5 Taux de Participation</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="participationChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dernières activités et statistiques complémentaires -->
+    <div class="row g-4">
+        <!-- Dernières activités -->
+        <div class="col-12 col-xl-6">
             <div class="dashboard-card">
+                <div class="card-header border-0 bg-transparent p-4">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-clock-history me-2"></i>
+                        Dernières Activités
+                    </h5>
+                </div>
                 <div class="card-body p-4">
-                    <div class="d-flex align-items-center justify-content-between mb-2">
-                        <div class="rounded-circle bg-info bg-opacity-10 p-3">
-                            <i class="bi bi-graph-up fs-4 text-info"></i>
+                    <!-- Nouveaux utilisateurs -->
+                    {% for user in derniers_utilisateurs %}
+                    <div class="activity-item">
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle bg-primary bg-opacity-10 p-2 me-3">
+                                <i class="bi bi-person-plus text-primary"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-1">Nouvel utilisateur inscrit</h6>
+                                <p class="mb-0">{{ user.username }}</p>
+                                <small class="activity-time">{{ user.date_joined|timesince }}</small>
+                            </div>
                         </div>
+                    </div>
+                    {% endfor %}
+
+                    <!-- Nouveaux événements -->
+                    {% for event in derniers_evenements %}
+                    <div class="activity-item">
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle bg-success bg-opacity-10 p-2 me-3">
+                                <i class="bi bi-calendar-plus text-success"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-1">Nouvel événement créé</h6>
+                                <p class="mb-0">{{ event.nom_event }}</p>
+                                <small class="activity-time">{{ event.date|timesince }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <!-- Dernières participations -->
+                    {% for participation in dernieres_participations %}
+                    <div class="activity-item">
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle bg-warning bg-opacity-10 p-2 me-3">
+                                <i class="bi bi-person-check text-warning"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-1">Nouvelle participation</h6>
+                                <p class="mb-0">{{ participation.participan.username }} → {{ participation.event.nom_event }}</p>
+                                <small class="activity-time">{{ participation.date_inscription|timesince }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>        <!-- Top Catégories d'Événements -->
+        <div class="col-12 col-xl-6">
+            <div class="dashboard-card h-100">
+                <div class="card-header border-0 bg-transparent p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-trophy-fill text-warning me-2"></i>
+                            Top Catégories d'Événements
+                        </h5>
                         <div class="dropdown">
-                            <button class="btn btn-link" type="button" data-bs-toggle="dropdown">
+                            <button class="btn btn-link p-0" type="button" data-bs-toggle="dropdown">
                                 <i class="bi bi-three-dots-vertical"></i>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Voir rapports</a></li>
+                                <li><a class="dropdown-item" href="{% url 'event_list' %}">Voir tous</a></li>
                             </ul>
                         </div>
                     </div>
-                    <h3 class="mb-1">85%</h3>
-                    <p class="mb-0 text-muted">Taux de participation</p>
+                </div>
+                <div class="card-body p-4">
+                    <div class="category-list">
+                        {% for category in top_categories %}
+                        <div class="category-item mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="mb-0">{{ category.categorie }}</h6>
+                                <span class="badge bg-primary rounded-pill">{{ category.count }}</span>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-primary bg-opacity-75" role="progressbar" 
+                                     style="width: {% widthratio category.count top_categories.0.count 100 %}%">
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Statistiques rapides -->
+                    <div class="row g-4 mt-3">
+                        <div class="col-6">
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle bg-success bg-opacity-10 p-2 me-3">
+                                    <i class="bi bi-calendar2-event text-success"></i>
+                                </div>
+                                <div>
+                                    <small class="text-muted d-block">À venir</small>
+                                    <h6 class="mb-0">{{ upcoming_events }} événements</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle bg-primary bg-opacity-10 p-2 me-3">
+                                    <i class="bi bi-people text-primary"></i>
+                                </div>
+                                <div>
+                                    <small class="text-muted d-block">Moyenne</small>
+                                    <h6 class="mb-0">{{ avg_participants }} participants</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Top Catégories en liste -->
     
-    <!-- Dernières activités -->
-    <div class="dashboard-card">
-        <div class="card-header border-0 bg-transparent p-4">
-            <h5 class="card-title mb-0">Dernières activités</h5>
-        </div>
-        <div class="card-body p-0">
-            <div class="list-group list-group-flush">
-                <div class="list-group-item p-4">
-                    <div class="d-flex align-items-center">
-                        <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
-                            <i class="bi bi-person-plus text-primary"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-1">Nouvel utilisateur inscrit</h6>
-                            <small class="text-muted">Il y a 2 heures</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item p-4">
-                    <div class="d-flex align-items-center">
-                        <div class="rounded-circle bg-success bg-opacity-10 p-3 me-3">
-                            <i class="bi bi-calendar-plus text-success"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-1">Nouvel événement créé</h6>
-                            <small class="text-muted">Il y a 5 heures</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item p-4">
-                    <div class="d-flex align-items-center">
-                        <div class="rounded-circle bg-warning bg-opacity-10 p-3 me-3">
-                            <i class="bi bi-person-check text-warning"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-1">Nouvelle participation</h6>
-                            <small class="text-muted">Il y a 1 jour</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 {% endblock %}
 
 {% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Graphique des événements
-    const eventsChart = new Chart(document.getElementById('eventsChart'), {
-        type: 'line',
+    // Graphique des catégories (Donut)
+    new Chart(document.getElementById('categoriesChart'), {
+        type: 'doughnut',
         data: {
-            labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin'],
+            labels: {{ categories_labels|safe }},
             datasets: [{
-                label: 'Événements',
-                data: [12, 19, 3, 5, 2, 3],
-                borderColor: '#4F46E5',
-                tension: 0.4
+                data: {{ categories_counts|safe }},
+                backgroundColor: [
+                    '#4F46E5', '#10B981', '#F59E0B', '#6B7280', '#EC4899',
+                    '#8B5CF6', '#14B8A6', '#F43F5E', '#8B5CF6', '#06B6D4'
+                ]
             }]
         },
         options: {
             responsive: true,
             plugins: {
                 legend: {
-                    position: 'top',
+                    position: 'bottom',
+                    labels: {
+                        padding: 20
+                    }
                 }
             }
         }
     });
 
-    // Graphique des catégories
-    const categoriesChart = new Chart(document.getElementById('categoriesChart'), {
-        type: 'doughnut',
+    // Graphique de l'évolution des inscriptions (Line)
+    new Chart(document.getElementById('inscriptionsChart'), {
+        type: 'line',
         data: {
-            labels: ['Conférences', 'Ateliers', 'Séminaires', 'Autres'],
+            labels: {{ months_labels|safe }},
             datasets: [{
-                data: [30, 25, 20, 25],
-                backgroundColor: ['#4F46E5', '#10B981', '#F59E0B', '#6B7280']
+                label: 'Inscriptions',
+                data: {{ months_data|safe }},
+                borderColor: '#4F46E5',
+                backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                tension: 0.4,
+                fill: true
             }]
         },
         options: {
             responsive: true,
             plugins: {
                 legend: {
-                    position: 'bottom'
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+
+    // Graphique du taux de participation (Bar)
+    new Chart(document.getElementById('participationChart'), {
+        type: 'bar',
+        data: {
+            labels: {{ events_labels|safe }},
+            datasets: [{
+                label: 'Taux de participation (%)',
+                data: {{ events_rates|safe }},
+                backgroundColor: [
+                    '#4F46E5', '#10B981', '#F59E0B', '#EC4899', '#8B5CF6'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
                 }
             }
         }
