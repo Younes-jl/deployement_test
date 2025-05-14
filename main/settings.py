@@ -143,4 +143,3 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'yassinetouli35@gmail.com'  # Remplacez par votre email
 EMAIL_HOST_PASSWORD = 'ijre ruwg ruoi qcic'  
 
-allowed_hosts = ['.vercel.app']
