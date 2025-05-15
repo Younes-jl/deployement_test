@@ -65,6 +65,14 @@
                                 </button>
                             </form>
                         </div>
+                        <div class="event-actions mt-3">
+                            <form method="POST" action="{% url 'liste' event.id %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-trash"></i> liste des participants
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

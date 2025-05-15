@@ -1,9 +1,15 @@
-{% extends "based.html" %}
+{% extends 'base.html' %}
+
 {% block title %}Liste des Participations{% endblock %}
 
+{% block body_class %}white-navbar{% endblock %}
+
 {% block content %}
+
+
+
 <div class="participation-container">
-    <div class="container-fluid">
+    <div class="container-fluid p-4">
         <div class="card custom-card">
             <div class="card-header bg-white py-3">
                 <div class="d-flex justify-content-between align-items-center">
@@ -12,16 +18,7 @@
                             <i class="fas fa-users me-2"></i>Liste des Participations
                         </h2>
                     </div>
-                    <div>
-                        <a href="{% url 'participation_add' %}" class="btn-add me-2">
-                            <i class="fas fa-plus me-2"></i>
-                            Ajouter une Participation
-                        </a>
-                        <a href="{% url 'download_participants_csv' %}" class="btn-download">
-                            <i class="fas fa-download me-2"></i>
-                            Télécharger CSV
-                        </a>
-                    </div>
+                   
                 </div>
             </div>
             <div class="card-body">
@@ -33,11 +30,11 @@
                                 <th>Événement</th>
                                 <th>Date de participation</th>
                                 <th>Téléphone</th>
-                                <th>Actions</th>
+                              
                             </tr>
                         </thead>
                         <tbody>
-                            {% for participation in participations %}
+                            {% for participation in participants %}
                             <tr class="align-middle animate-row">
                                 <td>
                                     <div class="d-flex align-items-center">
@@ -62,18 +59,7 @@
                                         {{ participation.phone_num }}
                                     </div>
                                 </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <a href="{% url 'participation_edit' participation.pk %}" class="btn-edit" title="Modifier">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <button type="button" class="btn-delete" 
-                                                onclick="confirmDelete('{% url 'participation_delete' participation.pk %}')"
-                                                title="Supprimer">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </div>
-                                </td>
+                               
                             </tr>
                             {% empty %}
                             <tr>
@@ -93,18 +79,18 @@
     </div>
 </div>
 
-<button id="backToTop" class="shadow" title="Retour en haut">
-    <i class="fas fa-chevron-up"></i>
+<!-- Bouton retour en haut -->
+<button id="backToTop" title="Retour en haut">
+    <i class="fas fa-arrow-up"></i>
 </button>
 
-<style>
-    .participation-container {
+<style>    .participation-container {
         padding: 2rem;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        background: #f0f2f5;
         min-height: calc(100vh - 2rem);
         display: flex;
         justify-content: center;
-        align-items: flex-start;
+        align-items: center;
     }
 
     .container-fluid {
@@ -113,19 +99,55 @@
         margin-top: 1rem;
     }
 
+    #backToTop {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        opacity: 0;
+        transition: all 0.3s ease;
+        z-index: 1000;
+    }
+
+    #backToTop.visible {
+        opacity: 1;
+    }
+
+    #backToTop:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+
     .custom-card {
         border: none;
-        border-radius: 15px;
-        box-shadow: 0 0 30px rgba(0,0,0,0.1);
+        border-radius: 20px;
+        box-shadow: 0 8px 24px rgba(149, 157, 165, 0.2);
         overflow: hidden;
-        background: white;
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.95);
     }
 
     .gradient-text {
-        background: linear-gradient(135deg, #2B2D5E 0%, #4F46E5 100%);
+        color: #1a1f36;
+        font-size: 1.75rem;
+        font-weight: 600;
+        position: relative;
+    }
+
+    .gradient-text i {
+        background: linear-gradient(45deg, #4F46E5, #06B6D4);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        font-weight: bold;
     }
 
     .btn-add, .btn-download {
@@ -161,35 +183,37 @@
 
     .custom-table {
         margin-bottom: 0;
-    }
-
-    .custom-table thead th {
-        background: #f8f9fa;
-        color: #6B7280;
+    }    .custom-table thead th {
+        background: #f8fafc;
+        color: #64748b;
         font-weight: 600;
         text-transform: uppercase;
         font-size: 0.75rem;
         letter-spacing: 0.05em;
         padding: 1.25rem 1rem;
-        border-bottom: 2px solid #e5e7eb;
+        border-bottom: 2px solid #e2e8f0;
+        white-space: nowrap;
     }
 
     .custom-table tbody td {
         padding: 1.25rem 1rem;
         vertical-align: middle;
-        border-bottom: 1px solid #e5e7eb;
+        border-bottom: 1px solid #e2e8f0;
+        transition: all 0.3s ease;
     }
 
     .user-avatar {
-        width: 40px;
-        height: 40px;
-        background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
-        border-radius: 50%;
+        width: 42px;
+        height: 42px;
+        background: linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%);
+        border-radius: 12px;
         color: white;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-weight: bold;
+        font-weight: 600;
+        font-size: 1rem;
+        box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
     }
 
     .event-name {
@@ -265,37 +289,6 @@
         }
     }
 
-    /* Back to Top Button */
-    #backToTop {
-        position: fixed;
-        bottom: 25px;
-        right: 25px;
-        width: 50px;
-        height: 50px;
-        background: linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%);
-        border: none;
-        border-radius: 50%;
-        color: white;
-        cursor: pointer;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
-        z-index: 1000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    #backToTop.visible {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    #backToTop:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
-    }
-
     /* Animation séquentielle pour les lignes */
     .animate-row:nth-child(1) { animation-delay: 0.1s; }
     .animate-row:nth-child(2) { animation-delay: 0.2s; }
@@ -313,7 +306,7 @@
         transform: translateX(5px);
     }
 
-    /* Responsive adjustments */
+    /* Responsive */
     @media (max-width: 768px) {
         .action-buttons {
             flex-direction: column;
@@ -340,23 +333,6 @@
 </style>
 
 <script>
-// Back to Top Button functionality
-window.onscroll = function() {
-    const backToTopButton = document.getElementById('backToTop');
-    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-        backToTopButton.classList.add('visible');
-    } else {
-        backToTopButton.classList.remove('visible');
-    }
-};
-
-document.getElementById('backToTop').addEventListener('click', function() {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-});
-
 function confirmDelete(url) {
     if (confirm('Êtes-vous sûr de vouloir supprimer cette participation ?')) {
         const form = document.createElement('form');
@@ -373,5 +349,22 @@ function confirmDelete(url) {
         form.submit();
     }
 }
+
+// Script pour le bouton retour en haut
+window.onscroll = function() {
+    const backToTopButton = document.getElementById('backToTop');
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        backToTopButton.classList.add('visible');
+    } else {
+        backToTopButton.classList.remove('visible');
+    }
+};
+
+document.getElementById('backToTop').addEventListener('click', function() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
 </script>
 {% endblock %}

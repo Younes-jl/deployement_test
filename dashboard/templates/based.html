@@ -33,10 +33,11 @@
             top: 0;
             bottom: 0;
             width: var(--sidebar-width);
-            background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+            background: #1a1a1a;
             padding: 1rem;
             transition: all 0.3s ease;
             z-index: 1000;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
         }
 
         .sidebar-header {
@@ -44,6 +45,7 @@
             color: white;
             text-align: center;
             margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
         .sidebar-brand {
@@ -62,7 +64,7 @@
         }
 
         .nav-link {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.7);
             padding: 0.8rem 1rem;
             border-radius: 8px;
             transition: all 0.3s ease;
@@ -77,7 +79,7 @@
 
         .nav-link:hover, .nav-link.active {
             background: rgba(255, 255, 255, 0.1);
-            color: white;
+            color: #fff;
             transform: translateX(5px);
         }
 
@@ -87,6 +89,7 @@
             min-height: 100vh;
             padding: 2rem;
             transition: all 0.3s ease;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         }
 
         .dashboard-header {
@@ -106,13 +109,22 @@
         .user-avatar {
             width: 40px;
             height: 40px;
+            background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
             border-radius: 50%;
-            background: var(--primary-color);
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
+        }
+
+        .user-info h6 {
+            margin: 0;
+            color: #2B2D5E;
+        }
+
+        .text-muted {
+            color: #6B7280 !important;
         }
 
         /* Card Styles */
@@ -128,7 +140,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        /* Responsive Design */
+        /* Responsive */
         @media (max-width: 768px) {
             .dashboard-sidebar {
                 transform: translateX(-100%);
@@ -202,11 +214,11 @@
       </li>
       <li class="nav-item">
         <a href="{% url 'evenements_en_attente' %}" class="nav-link {% if request.resolver_match.url_name == 'evenements_en_attente' %}active{% endif %}">
-            <i class="bi bi-calendar-event"></i>
+            <i class="bi bi-clock-history"></i>
             Evenements_en_attente
         </a>
     </li>
-        <li class="nav-item">
+        <li class="nav-item mt-4">
             <a href="{% url 'home' %}" class="nav-link">
                 <i class="bi bi-house"></i>
                 Retour au site
@@ -240,17 +252,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 {% block extra_scripts %}{% endblock %}
-
-<script>
-    // Animation des cartes au chargement
-    document.addEventListener('DOMContentLoaded', function() {
-        const cards = document.querySelectorAll('.dashboard-card');
-        cards.forEach((card, index) => {
-            card.style.animationDelay = `${index * 0.1}s`;
-            card.classList.add('animate-slide-in');
-        });
-    });
-</script>
 
 </body>
 </html>

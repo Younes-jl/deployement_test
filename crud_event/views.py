@@ -43,19 +43,6 @@ def creer_evenement(request):
             event.organisateur = request.user
             event.fullname = request.user.username
 
-            # Vérifier si l'utilisateur est déjà un organisateur
-            # if not Organisateur.objects.filter(user=request.user).exists() and not request.user.is_staff:
-            #  if event.is_validated==True:
-            #     # Créer un nouvel organisateur
-            #     Organisateur.objects.create(
-            #         user=request.user,
-            #         nom=request.user.last_name,
-            #         prenom=request.user.first_name,
-            #         email=request.user.email,
-            #         # description="Organisateur"
-            #     )
-                
-
             # Auto-valider si l'utilisateur est admin/staff
             event.is_validated = True if request.user.is_staff else False
             event.save()
@@ -358,6 +345,16 @@ def my_events(request):
     # Récupérer les événements créés par l'utilisateur connecté
     events = evenement.objects.filter(organisateur=request.user).order_by('-date')
     return render(request, 'Myevents.html', {'events': events})
+
+@login_required
+def liste_participants(request,event_id):
+      Event = get_object_or_404(evenement, id=event_id, organisateur=request.user)
+      participants = participation.objects.filter(event=Event)
+      return render (request,'list_of_participation.html',{'participants':participants}) 
+
+
+
+
 
 @login_required
 def annuler_evenement(request, event_id):
