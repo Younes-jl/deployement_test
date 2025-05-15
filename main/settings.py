@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-63h=2(iadm)8!3t(v4tald2p@$t*qi9qb&md83=7zsna73n4rg
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.vercel.app']
 
 
 # Application definition
@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     "gestion_des_evenements",
     "crud_event",
     "dashboard",
-    
+    "white_noise.runserver_nostatic",
 ]
 
 MIDDLEWARE = [
@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'white_noise.middleware.WhiteNoiseMiddleware',
 ]
 
 from django.contrib.messages import constants as messages
@@ -122,6 +123,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
+#hadi zedthaaaaaaaaaaaa
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'gestion_des_evenements', 'static'),
