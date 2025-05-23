@@ -142,3 +142,13 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'yassinetouli35@gmail.com'  # Remplacez par votre email
 EMAIL_HOST_PASSWORD = 'ijre ruwg ruoi qcic'  
+
+
+
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 

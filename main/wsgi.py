@@ -21,7 +21,7 @@ import sys
 import os
 
 # Chemin vers le dossier contenant manage.py (ton projet principal)
-project_home = '/home/younes123/Event-management-final-version-'
+project_home = '/home/younesachlouj/deployement_test'
 if project_home not in sys.path:
     sys.path.insert(0, project_home)
 
